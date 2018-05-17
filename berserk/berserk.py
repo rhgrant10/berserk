@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-# import json
+import json
 import urllib
 
 import requests
 
 
-# class NdJsonDecoder(json.JSONDecoder):
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
+class NdJsonDecoder(json.JSONDecoder):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-#     def decode(self, *args, **kwargs):
+    def decode(self, s, *args, **kwargs):
+        lines = ','.join(s.splitlines())
+        return super().decode(f'[{lines}]', *args, **kwargs)
 
 
 class LiSession:
@@ -32,9 +34,9 @@ class LiSession:
         response = self.session.get(*args, **kwargs)
         return response.json()
 
-    # def get_ndjson(self, *args, **kwargs):
-    #     response = self.session.get(*args, **kwargs)
-    #     return json.loads()
+    def get_ndjson(self, *args, **kwargs):
+        response = self.session.get(*args, **kwargs)
+        return json.loads(response.text, cls=NdJsonDecoder)
 
 
 class TokenSession(LiSession):
@@ -90,9 +92,9 @@ class Client:
         url = urllib.parse.urljoin(self.url, f'user/{username}/activity')
         return self.session.get(url)
 
-    # def get_team_users(self, team_id):
-    #     url = urllib.parse.urljoin(self.base_url, f'team/{team_id}/users')
-    #     return self.session.get(url)
+    def get_team_users(self, team_id):
+        url = urllib.parse.urljoin(self.base_url, f'team/{team_id}/users')
+        return self.session.get_ndjson(url)
 
     def get_stream_event(self):
         url = urllib.parse.urljoin(self.url, 'stream/event')
@@ -101,6 +103,7 @@ class Client:
     def get_bot_game_stream(self, game_id):
         url = urllib.parse.urljoin(self.url, f'bot/game/stream/{game_id}')
         return self.session.get(url)
+
 
 class TokenClient(Client):
     def __init__(self, token):
