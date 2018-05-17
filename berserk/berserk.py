@@ -47,9 +47,10 @@ class TokenSession(LiSession):
 class Client:
     base_url = 'https://lichess.org/'
 
-    def __init__(self, session):
+    def __init__(self, session, base_url=None):
+        self.base_url = base_url or self.base_url
         self.session = session
-        self.url = urllib.parse.urljoin(self.__class__.base_url, 'api/')
+        self.url = urllib.parse.urljoin(self.base_url, 'api/')
 
     def get_account(self):
         url = urllib.parse.urljoin(self.url, 'account')
