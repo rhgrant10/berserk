@@ -35,7 +35,7 @@ class LiSession:
     # use json mixin instead?
     def get_json(self, *args, headers=None, **kwargs):
         headers = headers or {}
-        headers['Accept'] = 'application/json'
+        headers['Accept'] = 'application/vnd.lichess.v3+json'
         response = self.session.get(*args, headers=headers, **kwargs)
         return response.json()
 
@@ -94,15 +94,13 @@ class Client:
         return self.session.get_json(url, params={'ids': ','.join(user_ids)})
 
     def get_player(self):
-        headers = {'Accept': 'application/vnd.lichess.v3+json'}
         url = urllib.parse.urljoin(self.base_url, 'player')
-        return self.session.get_json(url, headers=headers)
+        return self.session.get_json(url)
 
     def get_player_top(self, perf_type, count=10):
-        headers = {'Accept': 'application/vnd.lichess.v3+json'}
         path = f'player/top/{count}/{perf_type}'
         url = urllib.parse.urljoin(self.base_url, path)
-        return self.session.get_json(url, headers=headers)
+        return self.session.get_json(url)
 
     def get_user(self, username):
         url = urllib.parse.urljoin(self.base_url, f'api/user/{username}')
