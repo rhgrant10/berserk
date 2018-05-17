@@ -34,6 +34,13 @@ class LiSession:
         response = self.session.get(*args, **kwargs)
         return response.json()
 
+    def get_stream(self, *args, **kwargs):
+        with self.session.get(*args, stream=True, **kwargs) as r:
+            for line in r.iter_lines():
+                if line:
+                    decoded_line = line.decode('utf-8')
+                    yield json.loads(decoded_line)
+
     def get_ndjson(self, *args, **kwargs):
         response = self.session.get(*args, **kwargs)
         return json.loads(response.text, cls=NdJsonDecoder)
@@ -98,15 +105,19 @@ class Client:
 
     def get_stream_event(self):
         url = urllib.parse.urljoin(self.base_url, 'api/stream/event')
-        return self.session.get(url)
+        stream = self.session.get_stream(url)
+        for line in stream:
+            yield line
 
     def get_bot_game_stream(self, game_id):
         url = urllib.parse.urljoin(self.base_url,
                                    f'api/bot/game/stream/{game_id}')
-        return self.session.get(url)
+        stream = self.session.get_stream(url)
+        for line in stream:
+            yield line
 
     def get_tournament(self):
-        url = urllib.parse.urljoin(self.base_url, '/api/tournament')
+        url = urllib.parse.urljoin(self.base_url, 'api/tournament')
         return self.session.get(url)
 
 
