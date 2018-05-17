@@ -52,26 +52,25 @@ class Client:
     def __init__(self, session, base_url=None):
         self.base_url = base_url or self.base_url
         self.session = session
-        self.url = urllib.parse.urljoin(self.base_url, 'api/')
 
     def get_account(self):
-        url = urllib.parse.urljoin(self.url, 'account')
+        url = urllib.parse.urljoin(self.base_url, 'api/account')
         return self.session.get(url)
 
     def get_account_email(self):
-        url = urllib.parse.urljoin(self.url, 'account/email')
+        url = urllib.parse.urljoin(self.base_url, 'api/account/email')
         return self.session.get(url)
 
     def get_account_preferences(self):
-        url = urllib.parse.urljoin(self.url, 'account/preferences')
+        url = urllib.parse.urljoin(self.base_url, 'api/account/preferences')
         return self.session.get(url)
 
     def get_account_kid(self):
-        url = urllib.parse.urljoin(self.url, 'account/kid')
+        url = urllib.parse.urljoin(self.base_url, 'api/account/kid')
         return self.session.get(url)
 
     def get_users_status(self, *user_ids):
-        url = urllib.parse.urljoin(self.url, 'users/status')
+        url = urllib.parse.urljoin(self.base_url, 'api/users/status')
         return self.session.get(url, params={'ids': ','.join(user_ids)})
 
     def get_player(self):
@@ -85,11 +84,12 @@ class Client:
         return self.session.get(url, headers=headers)
 
     def get_user(self, username):
-        url = urllib.parse.urljoin(self.url, f'user/{username}')
+        url = urllib.parse.urljoin(self.base_url, f'api/user/{username}')
         return self.session.get(url)
 
     def get_user_activity(self, username):
-        url = urllib.parse.urljoin(self.url, f'user/{username}/activity')
+        url = urllib.parse.urljoin(self.base_url,
+                                   f'api/user/{username}/activity')
         return self.session.get(url)
 
     def get_team_users(self, team_id):
@@ -97,11 +97,16 @@ class Client:
         return self.session.get_ndjson(url)
 
     def get_stream_event(self):
-        url = urllib.parse.urljoin(self.url, 'stream/event')
+        url = urllib.parse.urljoin(self.base_url, 'api/stream/event')
         return self.session.get(url)
 
     def get_bot_game_stream(self, game_id):
-        url = urllib.parse.urljoin(self.url, f'bot/game/stream/{game_id}')
+        url = urllib.parse.urljoin(self.base_url,
+                                   f'api/bot/game/stream/{game_id}')
+        return self.session.get(url)
+
+    def get_tournament(self):
+        url = urllib.parse.urljoin(self.base_url, '/api/tournament')
         return self.session.get(url)
 
 
@@ -115,7 +120,7 @@ class TokenClient(Client):
 import berserk
 
 
-with open('/Users/rgrant/.lichess.org') as f:
+with open('.lichess.org') as f:
     token = f.read().strip()
 
 client = berserk.TokenClient(token=token)
