@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
+# import json
 import urllib
 
 import requests
+
+
+# class NdJsonDecoder(json.JSONDecoder):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+
+#     def decode(self, *args, **kwargs):
 
 
 class LiSession:
@@ -19,10 +27,13 @@ class LiSession:
         # response.raise_for_status()
         return response
 
-    # use json mixin instead?
-    def get(self, *args, **kwargs):
+    def get_json(self, *args, **kwargs):
         response = self.session.get(*args, **kwargs)
         return response.json()
+
+    # def get_ndjson(self, *args, **kwargs):
+    #     response = self.session.get(*args, **kwargs)
+    #     return json.loads()
 
 
 class TokenSession(LiSession):
@@ -33,11 +44,11 @@ class TokenSession(LiSession):
 
 
 class Client:
-    base_url = 'https://lichess.org/api/'
+    base_url = 'https://lichess.org/'
 
     def __init__(self, session):
         self.session = session
-        self.url = self.__class__.base_url
+        self.url = urllib.parse.urljoin(self.__class__.base_url, 'api/')
 
     def get_account(self):
         url = urllib.parse.urljoin(self.url, 'account')
@@ -54,6 +65,32 @@ class Client:
     def get_account_kid(self):
         url = urllib.parse.urljoin(self.url, 'account/kid')
         return self.session.get(url)
+
+    def get_users_status(self, *user_ids):
+        url = urllib.parse.urljoin(self.url, 'users/status')
+        return self.session.get(url, params={'ids': ','.join(user_ids)})
+
+    def get_player(self):
+        headers = {'Accept': 'application/vnd.lichess.v3+json'}
+        url = urllib.parse.urljoin(self.base_url, 'player')
+        return self.session.get(url, headers=headers)
+
+    def get_player_top(self, perf, count=10):
+        headers = {'Accept': 'application/vnd.lichess.v3+json'}
+        url = urllib.parse.urljoin(self.base_url, f'player/top/{count}/{perf}')
+        return self.session.get(url, headers=headers)
+
+    def get_user(self, username):
+        url = urllib.parse.urljoin(self.url, f'user/{username}')
+        return self.session.get(url)
+
+    def get_user_activity(self, username):
+        url = urllib.parse.urljoin(self.url, f'user/{username}/activity')
+        return self.session.get(url)
+
+    # def get_team_users(self, team_id):
+    #     url = urllib.parse.urljoin(self.base_url, f'team/{team_id}/users')
+    #     return self.session.get(url)
 
 
 class TokenClient(Client):
