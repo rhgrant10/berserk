@@ -27,7 +27,8 @@ class LiSession:
         # response.raise_for_status()
         return response
 
-    def get_json(self, *args, **kwargs):
+    # use json mixin instead?
+    def get(self, *args, **kwargs):
         response = self.session.get(*args, **kwargs)
         return response.json()
 
@@ -92,6 +93,13 @@ class Client:
     #     url = urllib.parse.urljoin(self.base_url, f'team/{team_id}/users')
     #     return self.session.get(url)
 
+    def get_stream_event(self):
+        url = urllib.parse.urljoin(self.url, 'stream/event')
+        return self.session.get(url)
+
+    def get_bot_game_stream(self, game_id):
+        url = urllib.parse.urljoin(self.url, f'bot/game/stream/{game_id}')
+        return self.session.get(url)
 
 class TokenClient(Client):
     def __init__(self, token):
