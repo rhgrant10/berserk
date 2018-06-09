@@ -3,6 +3,8 @@ import urllib
 
 import requests
 
+from .formats import JSON
+
 
 class LiSession(requests.Session):
     def __init__(self, *args, base_url='https://lichess.org/', **kwargs):
@@ -10,7 +12,7 @@ class LiSession(requests.Session):
         self.base_url = base_url
 
     def request(self, method, path, *args, headers=None, **kwargs):
-        fmt = kwargs.pop('fmt')
+        fmt = kwargs.pop('fmt', JSON)
         kwargs['headers'] = fmt.headers
         url = urllib.parse.urljoin(self.base_url, path)
         response = super().request(method, url, *args, **kwargs)
