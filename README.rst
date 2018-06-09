@@ -24,9 +24,10 @@ Python client for the lichess API
 Features
 --------
 
-* both oauth and token authentication supported
+* handles JSON and PGN formats at user's discretion
+* _all_ endpoints implemented
 * token auth support provided
-* all endpoints implemented
+* easy integration with oauth2
 
 Usage
 -----
