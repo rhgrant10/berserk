@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from . import session
+from .session import LiSessionAdapter
 from .formats import JSON, LIJSON, PGN, NDJSON
 
 
 class Client:
-    def __init__(self, session):
-        self.session = session
+    def __init__(self, session, base_url='https://lichess.org/'):
+        self.session = LiSessionAdapter(session)
+        self.session.base_url = base_url
 
     # # # Account
 
@@ -198,9 +199,3 @@ class Client:
             'password': password,
         }
         return self.session.post(path, json=payload)
-
-
-class TokenClient(Client):
-    def __init__(self, token):
-        token_session = session.TokenSession(token=token)
-        super().__init__(session=token_session)

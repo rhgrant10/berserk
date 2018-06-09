@@ -14,8 +14,6 @@ berserk
         :alt: Documentation Status
 
 
-
-
 Python client for the lichess API
 
 
@@ -26,7 +24,26 @@ Python client for the lichess API
 Features
 --------
 
-* TODO
+* both oauth and token authentication supported
+* token auth support provided
+* all endpoints implemented
+
+Usage
+-----
+
+.. code-block::python
+
+    import berserk
+
+    session = berserk.TokenSession('personal-api-token')
+    client = berserk.Client(session)
+
+    all_top10 = client.get_all_top10()
+
+.. note::
+
+    Any ``requests.Session``-like object can be used for a session, including one from ``requests_oauth``. A simple token session is included, as shown above.
+
 
 Credits
 -------
