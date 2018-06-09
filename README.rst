@@ -25,7 +25,7 @@ Features
 --------
 
 * handles JSON and PGN formats at user's discretion
-* _all_ endpoints implemented
+* *all* endpoints implemented
 * token auth support provided
 * easy integration with oauth2
 
