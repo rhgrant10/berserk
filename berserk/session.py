@@ -38,16 +38,28 @@ class LiSession:
         response = self.session.get(*args, headers=headers, **kwargs)
         return response.text
 
-    def get_stream(self, *args, **kwargs):
-        with self.session.get(*args, stream=True, **kwargs) as r:
-            for line in r.iter_lines():
+    def get_json_stream(self, *args, headers=None, **kwargs):
+        headers = headers or {}
+        headers.setdefault('Accept', 'application/x-ndjson')
+        kwargs['headers'] = headers
+        with self.session.get(*args, stream=True, **kwargs) as response:
+            for line in response.iter_lines():
                 if line:
                     decoded_line = line.decode('utf-8')
                     yield json.loads(decoded_line)
 
-
-class TokenSession(LiSession):
-    def __init__(self, token):
-        super().__init__()
-        self.token = token
-        self.session.headers = {'Authorization': f'Bearer {token}'}
+    def get_pgn_stream(self, *args, headers=None, **kwargs):
+        headers = headers or {}
+        headers.setdefault('Accept', 'application/x-chess-pgn')
+        kwargs['headers'] = headers
+        with self.session.get(*args, stream=True, **kwargs) as response:
+            lines = []
+            last_line = True
+            for line in response.iter_lines():
+                line = line.decode('utf-8')
+                if last_line or line:
+                    lines.append(line)
+                else:
+                    yield '\n'.join(lines)
+                    lines = []
+                last_line = line

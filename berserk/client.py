@@ -60,27 +60,31 @@ class Client:
     def get_bot_game_stream(self, game_id):
         url = urllib.parse.urljoin(self.base_url,
                                    f'api/bot/game/stream/{game_id}')
-        return self.session.get_stream(url)
+        yield from self.session.get_json_stream(url)
 
     def get_tournament(self):
         url = urllib.parse.urljoin(self.base_url, 'api/tournament')
         return self.session.get_json(url)
 
-    def get_game_export(self, game_id, as_pgn=True, **params):
+    def get_game_export(self, game_id, as_pgn=False, **params):
         url = urllib.parse.urljoin(self.base_url, f'game/export/{game_id}')
         if as_pgn:
             return self.session.get_pgn(url, params=params)
         else:
-            return self.session.get_ndjson(url, params=params)
+            return self.session.get_json(url, params=params)
 
-    def get_games_export(self, username, **params):
+    def get_games_export_stream(self, username, as_pgn=False, **params):
         url = urllib.parse.urljoin(self.base_url, f'games/export/{username}')
-        return self.session.get_ndjson(url, params=params)
+        if as_pgn:
+            yield from self.session.get_pgn_stream(url, params=params)
+        else:
+            yield from self.session.get_json_stream(url, params=params)
 
 
 class TokenClient(Client):
     def __init__(self, token):
-        token_session = session.TokenSession(token=token)
+        token_session = session.Session(token=token)
+        token_session.headers = {'Authorization': f'Bearer {token}'}
         super().__init__(session=token_session)
 
 
