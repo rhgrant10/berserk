@@ -32,6 +32,8 @@ Features
 Usage
 -----
 
+You can use any ``requests.Session``-like object as a session, including those from ``requests_oauth``. A simple token session is included, as shown below:
+
 .. code-block:: python
 
     import berserk
@@ -40,11 +42,6 @@ Usage
     client = berserk.Client(session)
 
     all_top10 = client.get_all_top10()
-
-.. note::
-
-    Any ``requests.Session``-like object can be used for a session, including one from ``requests_oauth``. A simple token session is included, as shown above.
-
 
 Credits
 -------
