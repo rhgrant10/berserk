@@ -55,7 +55,7 @@ class Client:
 
     def get_stream_event(self):
         url = urllib.parse.urljoin(self.base_url, 'api/stream/event')
-        return self.session.get_stream(url)
+        return self.session.get_json_stream(url)
 
     def get_bot_game_stream(self, game_id):
         url = urllib.parse.urljoin(self.base_url,
