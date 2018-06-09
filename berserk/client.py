@@ -1,69 +1,7 @@
 # -*- coding: utf-8 -*-
-import json
 import urllib
 
-import requests
-
-
-class NdJsonDecoder(json.JSONDecoder):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def _transform(self, s):
-        lines = ','.join(s.splitlines())
-        return f'[{lines}]'
-
-    def decode(self, s, *args, **kwargs):
-        return super().decode(self._transform(s), *args, **kwargs)
-
-
-class LiSession:
-    def __init__(self, session=None):
-        if session is None:
-            session = requests.Session()
-        self.session = session
-
-    def __getattr__(self, name):
-        return getattr(self.session, name)
-
-    # hook into here to log exceptions
-    def request(self, *args, **kwargs):
-        response = self.session.request(*args, **kwargs)
-        # response.raise_for_status()
-        return response
-
-    # use json mixin instead?
-    def get_json(self, *args, headers=None, **kwargs):
-        headers = headers or {}
-        headers['Accept'] = 'application/vnd.lichess.v3+json'
-        response = self.session.get(*args, headers=headers, **kwargs)
-        return response.json()
-
-    def get_stream(self, *args, **kwargs):
-        with self.session.get(*args, stream=True, **kwargs) as r:
-            for line in r.iter_lines():
-                if line:
-                    decoded_line = line.decode('utf-8')
-                    yield json.loads(decoded_line)
-
-    def get_ndjson(self, *args, headers=None, **kwargs):
-        headers = headers or {}
-        headers['Accept'] = 'application/x-ndjson'
-        response = self.session.get(*args, headers=headers, **kwargs)
-        return json.loads(response.text, cls=NdJsonDecoder)
-
-    def get_pgn(self, *args, headers=None, **kwargs):
-        headers = headers or {}
-        headers['Accept'] = 'application/x-chess-pgn'
-        response = self.session.get(*args, headers=headers, **kwargs)
-        return response.text
-
-
-class TokenSession(LiSession):
-    def __init__(self, token):
-        super().__init__()
-        self.token = token
-        self.session.headers = {'Authorization': f'Bearer {token}'}
+from . import session
 
 
 class Client:
@@ -95,12 +33,12 @@ class Client:
 
     def get_player(self):
         url = urllib.parse.urljoin(self.base_url, 'player')
-        return self.session.get_json(url)
+        return self.session.get_lichessjson(url)
 
     def get_player_top(self, perf_type, count=10):
         path = f'player/top/{count}/{perf_type}'
         url = urllib.parse.urljoin(self.base_url, path)
-        return self.session.get_json(url)
+        return self.session.get_lichessjson(url)
 
     def get_user(self, username):
         url = urllib.parse.urljoin(self.base_url, f'api/user/{username}')
@@ -128,9 +66,12 @@ class Client:
         url = urllib.parse.urljoin(self.base_url, 'api/tournament')
         return self.session.get_json(url)
 
-    def get_game_export(self, game_id, **params):
+    def get_game_export(self, game_id, as_pgn=True, **params):
         url = urllib.parse.urljoin(self.base_url, f'game/export/{game_id}')
-        return self.session.get_pgn(url, params=params)
+        if as_pgn:
+            return self.session.get_pgn(url, params=params)
+        else:
+            return self.session.get_ndjson(url, params=params)
 
     def get_games_export(self, username, **params):
         url = urllib.parse.urljoin(self.base_url, f'games/export/{username}')
@@ -139,7 +80,7 @@ class Client:
 
 class TokenClient(Client):
     def __init__(self, token):
-        token_session = TokenSession(token=token)
+        token_session = session.TokenSession(token=token)
         super().__init__(session=token_session)
 
 

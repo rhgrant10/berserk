@@ -7,4 +7,5 @@ __email__ = 'rhgrant10@gmail.com'
 __version__ = '0.1.0'
 
 
-from .berserk import TokenClient  # noqa: F401
+from .client import TokenClient  # noqa: F401
+from .constants import GameType  # noqa: F401
