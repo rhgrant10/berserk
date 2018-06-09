@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 import json
+import urllib
 
 import ndjson
 import requests
 
 
 class LiSession:
-    def __init__(self, session=None):
-        if session is None:
-            session = requests.Session()
-        self.session = session
+    def __init__(self, base_url='https://lichess.org/', session=None):
+        self.base_url = base_url
+        self.session = session or requests.Session()
 
     def __getattr__(self, name):
         return getattr(self.session, name)
+
+    def request(self, method, path, *args, **kwargs):
+        url = urllib.parse.urljoin(self.base_url, path)
+        return super().request(method, url, *args, **kwargs)
 
     def get_json(self, *args, headers=None, **kwargs):
         headers = headers or {}
@@ -63,3 +67,16 @@ class LiSession:
                     yield '\n'.join(lines)
                     lines = []
                 last_line = line
+
+    def post_json(self, *args, headers=None, **kwargs):
+        headers = headers or {}
+        headers.setdefault('Accept', 'application/json')
+        response = self.session.post(*args, headers=headers, **kwargs)
+        return response.json()
+
+
+class TokenSession(LiSession):
+    def __init__(self, token, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.token = token
+        self.session.headers = {'Authorization': f'Bearer {token}'}

@@ -5,86 +5,86 @@ from . import session
 
 
 class Client:
-    base_url = 'https://lichess.org/'
-
-    def __init__(self, session, base_url=None):
-        self.base_url = base_url or self.base_url
+    def __init__(self, session):
         self.session = session
 
     def get_account(self):
-        url = urllib.parse.urljoin(self.base_url, 'api/account')
-        return self.session.get_json(url)
+        path = 'api/account'
+        return self.session.get_json(path)
 
     def get_account_email(self):
-        url = urllib.parse.urljoin(self.base_url, 'api/account/email')
-        return self.session.get_json(url)
+        path = 'api/account/email'
+        return self.session.get_json(path)
 
     def get_account_preferences(self):
-        url = urllib.parse.urljoin(self.base_url, 'api/account/preferences')
-        return self.session.get_json(url)
+        path = 'api/account/preferences'
+        return self.session.get_json(path)
 
     def get_account_kid(self):
-        url = urllib.parse.urljoin(self.base_url, 'api/account/kid')
-        return self.session.get_json(url)
+        path = 'api/account/kid'
+        return self.session.get_json(path)
 
     def get_users_status(self, *user_ids):
-        url = urllib.parse.urljoin(self.base_url, 'api/users/status')
-        return self.session.get_json(url, params={'ids': ','.join(user_ids)})
+        path = 'api/users/status'
+        params = {'ids': ','.join(user_ids)}
+        return self.session.get_json(path, params=params)
 
     def get_player(self):
-        url = urllib.parse.urljoin(self.base_url, 'player')
-        return self.session.get_lichessjson(url)
+        path = 'player'
+        return self.session.get_lichessjson(path)
 
     def get_player_top(self, perf_type, count=10):
         path = f'player/top/{count}/{perf_type}'
-        url = urllib.parse.urljoin(self.base_url, path)
-        return self.session.get_lichessjson(url)
+        return self.session.get_lichessjson(path)
 
     def get_user(self, username):
-        url = urllib.parse.urljoin(self.base_url, f'api/user/{username}')
-        return self.session.get_json(url)
+        path = f'api/user/{username}'
+        return self.session.get_json(path)
+
+    def get_users_by_id(self, *usernames):
+        path = 'api/users'
+        payload = {'usernames': ','.join(usernames)}
+        response = self.session.post(path, json=payload)
+        return response.json()
 
     def get_user_activity(self, username):
         path = f'api/user/{username}/activity'
-        url = urllib.parse.urljoin(self.base_url, path)
-        return self.session.get_json(url)
+        return self.session.get_json(path)
 
     def get_team_users(self, team_id):
-        url = urllib.parse.urljoin(self.base_url, f'team/{team_id}/users')
-        return self.session.get_ndjson(url)
+        path = f'team/{team_id}/users'
+        return self.session.get_ndjson(path)
 
     def get_stream_event(self):
-        url = urllib.parse.urljoin(self.base_url, 'api/stream/event')
-        return self.session.get_json_stream(url)
+        path = 'api/stream/event'
+        return self.session.get_json_stream(path)
 
     def get_bot_game_stream(self, game_id):
-        url = urllib.parse.urljoin(self.base_url,
-                                   f'api/bot/game/stream/{game_id}')
-        yield from self.session.get_json_stream(url)
+        path = f'api/bot/game/stream/{game_id}'
+        yield from self.session.get_json_stream(path)
 
     def get_tournament(self):
-        url = urllib.parse.urljoin(self.base_url, 'api/tournament')
-        return self.session.get_json(url)
+        path = 'api/tournament'
+        return self.session.get_json(path)
 
     def get_game_export(self, game_id, as_pgn=False, **params):
-        url = urllib.parse.urljoin(self.base_url, f'game/export/{game_id}')
+        path = f'game/export/{game_id}'
         if as_pgn:
-            return self.session.get_pgn(url, params=params)
+            return self.session.get_pgn(path, params=params)
         else:
-            return self.session.get_json(url, params=params)
+            return self.session.get_json(path, params=params)
 
     def get_games_export_stream(self, username, as_pgn=False, **params):
-        url = urllib.parse.urljoin(self.base_url, f'games/export/{username}')
+        path = f'games/export/{username}'
         if as_pgn:
-            yield from self.session.get_pgn_stream(url, params=params)
+            yield from self.session.get_pgn_stream(path, params=params)
         else:
-            yield from self.session.get_json_stream(url, params=params)
+            yield from self.session.get_json_stream(path, params=params)
 
 
 class TokenClient(Client):
     def __init__(self, token):
-        token_session = session.Session(token=token)
-        token_session.headers = {'Authorization': f'Bearer {token}'}
+        token_session = session.TokenSession(token=token)
         super().__init__(session=token_session)
 
 
