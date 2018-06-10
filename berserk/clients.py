@@ -3,10 +3,25 @@ from .session import Requestor
 from .formats import JSON, LIJSON, PGN, NDJSON
 
 
-class Client:
+class BaseClient:
+
+    def __init__(self, session, base_url):
+        self._r = Requestor(session, base_url, default_fmt=JSON)
+
+
+class Client(BaseClient):
+    """Main touchpoint for the API that houses the other clients.
+
+    :param session: request session, authenticated as needed
+    :type session: :class:`requests.Session`
+    :param str base_url: base URL for the API
+    :param bool pgn_as_default: ``True`` if PGN should be the default format
+                                for game exports when possible
+    """
+
     def __init__(self, session, base_url='https://lichess.org/',
                  pgn_as_default=False):
-        self._r = Requestor(session, base_url, default_fmt=JSON)
+        super().__init__(session, base_url)
         self.account = Account(session, base_url)
         self.users = Users(session, base_url)
         self.games = Games(session, base_url, pgn_as_default=pgn_as_default)
@@ -14,9 +29,15 @@ class Client:
         self.tournaments = Tournaments(session, base_url)
 
 
-class Account(Client):
+class Account(BaseClient):
+    """Client for account-related endpoints."""
+
     def get(self):
-        """Get your public information."""
+        """Get your public information.
+
+        :return: public information about the authenticated user
+        :rtype: dict
+        """
         path = 'api/account'
         return self._r.get(path)
 
@@ -47,7 +68,9 @@ class Account(Client):
         return self._r.post(path)
 
 
-class Users(Client):
+class Users(BaseClient):
+    """Client for user-related endpoints."""
+
     def get_realtime_statuses(self, *user_ids):
         """Get the online, playing, and streaming statuses of players."""
         path = 'api/users/status'
@@ -91,7 +114,16 @@ class Users(Client):
         return self._r.get(path)
 
 
-class Games(Client):
+class Games(BaseClient):
+    """Client for games-related endpoints.
+
+    :param session: request session, authenticated as needed
+    :type session: :class:`requests.Session`
+    :param str base_url: base URL for the API
+    :param bool pgn_as_default: ``True`` if PGN should be the default format
+                                for game exports when possible
+    """
+
     def __init__(self, session, base_url='https://lichess.org/',
                  pgn_as_default=False):
         super().__init__(session, base_url)
@@ -172,7 +204,9 @@ class Games(Client):
         return self._r.get(path)
 
 
-class Bots(Client):
+class Bots(BaseClient):
+    """Client for bot-related endpoints."""
+
     def stream_incoming_events(self):
         """Get your realtime stream of incoming events."""
         path = 'api/stream/event'
@@ -216,7 +250,9 @@ class Bots(Client):
         return self._r.post(path)
 
 
-class Tournaments(Client):
+class Tournaments(BaseClient):
+    """Client for tournament-related endpoints."""
+
     def get(self):
         """Get recently finished, ongoing, and upcoming tournaments."""
         path = 'api/tournament'
