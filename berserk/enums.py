@@ -7,14 +7,14 @@ class PerfType:
     CHESS960 = 'chess960'
     CRAZYHOUSE = 'crazyhouse'
     HORDE = 'horde'
-    KINGOFTHEHILL = 'kingOfTheHill'
-    RACINGKINGS = 'racingKings'
-    THREECHECK = 'threeCheck'
+    KING_OF_THE_HILL = 'kingOfTheHill'
+    RACING_KINGS = 'racingKings'
+    THREE_CHECK = 'threeCheck'
     BULLET = 'bullet'
     BLITZ = 'blitz'
     RAPID = 'rapid'
     CLASSICAL = 'classical'
-    ULTRABULLET = 'ultraBullet'
+    ULTRA_BULLET = 'ultraBullet'
 
 
 class Variant:
@@ -23,9 +23,9 @@ class Variant:
     CHESS960 = 'chess960'
     CRAZYHOUSE = 'crazyhouse'
     HORDE = 'horde'
-    KINGOFTHEHILL = 'kingOfTheHill'
-    RACINGKINGS = 'racingKings'
-    THREECHECK = 'threeCheck'
+    KING_OF_THE_HILL = 'kingOfTheHill'
+    RACING_KINGS = 'racingKings'
+    THREE_CHECK = 'threeCheck'
     STANDARD = 'standard'
 
 
