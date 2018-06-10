@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-"""The setup script."""
-
 from setuptools import setup, find_packages
+
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -11,7 +9,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['ndjson==0.1.0', 'requests==2.18.4']
+with open('requirements.txt') as requirements_file:
+    requirements = requirements_file.read().splitlines()
 
 setup_requirements = ['pytest-runner', ]
 

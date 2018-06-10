@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class _GameVariation:
+class PerfType:
     ANTICHESS = 'antichess'
     ATOMIC = 'atomic'
     CHESS960 = 'chess960'
@@ -10,9 +10,6 @@ class _GameVariation:
     KINGOFTHEHILL = 'kingOfTheHill'
     RACINGKINGS = 'racingKings'
     THREECHECK = 'threeCheck'
-
-
-class PerfType(_GameVariation):
     BULLET = 'bullet'
     BLITZ = 'blitz'
     RAPID = 'rapid'
@@ -20,7 +17,15 @@ class PerfType(_GameVariation):
     ULTRABULLET = 'ultraBullet'
 
 
-class Variant(_GameVariation):
+class Variant:
+    ANTICHESS = 'antichess'
+    ATOMIC = 'atomic'
+    CHESS960 = 'chess960'
+    CRAZYHOUSE = 'crazyhouse'
+    HORDE = 'horde'
+    KINGOFTHEHILL = 'kingOfTheHill'
+    RACINGKINGS = 'racingKings'
+    THREECHECK = 'threeCheck'
     STANDARD = 'standard'
 
 

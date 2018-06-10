@@ -3,47 +3,52 @@ import urllib
 
 import requests
 
-from .formats import JSON
 
+class Requestor:
+    """Encapsulates the logic for making a request.
 
-class LiSessionAdapter:
-    def __init__(self, session, base_url=None):
+    :param session: the authenticated session object
+    :type session: :class:`requests.Session`
+    :param str base_url: the base URL for requests
+    :param fmt: default format handler to use
+    :type fmt: :class:`~berserk.formats.FormatHandler`
+    """
+
+    def __init__(self, session, base_url, default_fmt):
         self.session = session
         self.base_url = base_url
+        self.default_fmt = default_fmt
 
-    def __getattr__(self, name):
-        return getattr(self.session, name)
+    def request(self, method, path, *args, fmt=None, **kwargs):
+        """Make a request for a resource in a paticular format.
 
-    def request(self, method, path, *args, headers=None, **kwargs):
-        fmt = kwargs.pop('fmt', JSON)
+        :param str method: HTTP verb
+        :param str path: the URL suffix
+        :param fmt: the format handler
+        :type fmt: :class:`~berserk.formats.FormatHandler`
+        :return: response
+        """
+        fmt = fmt or self.default_fmt
         kwargs['headers'] = fmt.headers
         url = urllib.parse.urljoin(self.base_url, path)
         response = self.session.request(method, url, *args, **kwargs)
         return fmt.handle(response, is_stream=kwargs.get('stream'))
 
     def get(self, *args, **kwargs):
+        """Convenience method to make a GET request."""
         return self.request('GET', *args, **kwargs)
 
     def post(self, *args, **kwargs):
+        """Convenience method to make a POST request."""
         return self.request('POST', *args, **kwargs)
-
-    def put(self, *args, **kwargs):
-        return self.request('PUT', *args, **kwargs)
-
-    def patch(self, *args, **kwargs):
-        return self.request('PATCH', *args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        return self.request('DELETE', *args, **kwargs)
-
-    def options(self, *args, **kwargs):
-        return self.request('OPTIONS', *args, **kwargs)
-
-    def head(self, *args, **kwargs):
-        return self.request('HEAD', *args, **kwargs)
 
 
 class TokenSession(requests.Session):
+    """Session capable of personal API token authentication.
+
+    :param str token: personal API token
+    """
+
     def __init__(self, token):
         super().__init__()
         self.token = token

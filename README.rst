@@ -38,10 +38,45 @@ You can use any ``requests.Session``-like object as a session, including those f
 
     import berserk
 
-    session = berserk.TokenSession('personal-api-token')
-    client = berserk.Client(session)
 
-    all_top10 = client.get_all_top10()
+    session = berserk.TokenSession('token')
+    lichess = berserk.Client(session)
+
+    lichess.account.get()
+    lichess.account.get_email()
+    lichess.account.get_preferences()
+    lichess.account.get_kid_mode()
+    lichess.account.set_kid_mode()
+    lichess.account.upgrade_to_bot()
+
+    lichess.users.get_realtime_statuses()
+    lichess.users.get_all_top_10()
+    lichess.users.get_leaderboard()
+    lichess.users.get_public_data()
+    lichess.users.get_activity_feed()
+    lichess.users.get_by_id()
+    lichess.users.get_by_team()
+    lichess.users.get_live_streamers()
+
+    lichess.games.get_export()
+    lichess.games.stream_exports()
+    lichess.games.stream_exports_by_id()
+    lichess.games.stream_by_users()
+    lichess.games.get_ongoing()
+    lichess.games.get_tv_channels()
+
+    lichess.bots.stream_incoming_events()
+    lichess.bots.stream_game_state()
+    lichess.bots.make_move()
+    lichess.bots.post_message()
+    lichess.bots.abort_game()
+    lichess.bots.resign_game()
+    lichess.bots.accept_challenge()
+    lichess.bots.decline_challenge()
+
+    lichess.tournaments.get()
+    lichess.tournaments.create()
+
 
 Credits
 -------

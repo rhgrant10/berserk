@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-
 """Top-level package for berserk."""
+
 
 __author__ = """Robert Grant"""
 __email__ = 'rhgrant10@gmail.com'
 __version__ = '0.1.0'
 
 
-from .client import Client  # noqa: F401
+from .clients import Client  # noqa: F401
 from .session import TokenSession  # noqa: F401
-from .session import LiSessionAdapter  # noqa: F401
+from .session import Requestor  # noqa: F401
 from .enums import PerfType  # noqa: F401
 from .enums import Variant  # noqa: F401
 from .enums import Color  # noqa: F401
