@@ -27,11 +27,16 @@ class Requestor:
         :param fmt: the format handler
         :type fmt: :class:`~berserk.formats.FormatHandler`
         :return: response
+        :raises requests.exceptions.RequestException: if the status is >=400
         """
         fmt = fmt or self.default_fmt
         kwargs['headers'] = fmt.headers
         url = urllib.parse.urljoin(self.base_url, path)
+
         response = self.session.request(method, url, *args, **kwargs)
+        if not response.ok:
+            response.raise_for_status()
+
         return fmt.handle(response, is_stream=kwargs.get('stream'))
 
     def get(self, *args, **kwargs):
