@@ -42,74 +42,140 @@ class Account(BaseClient):
         return self._r.get(path)
 
     def get_email(self):
-        """Get your email address."""
+        """Get your email address.
+
+        :return: email address of the authenticated user
+        :rtype: str
+        """
         path = 'api/account/email'
-        return self._r.get(path)
+        return self._r.get(path)['email']
 
     def get_preferences(self):
-        """Get your account preferences."""
+        """Get your account preferences.
+
+        :return: preferences of the authenticated user
+        :rtype: dict
+        """
         path = 'api/account/preferences'
-        return self._r.get(path)
+        return self._r.get(path)['prefs']
 
     def get_kid_mode(self):
-        """Get your kid mode status."""
+        """Get your kid mode status.
+
+        :return: current kid mode status
+        :rtype: bool
+        """
         path = 'api/account/kid'
-        return self._r.get(path)
+        return self._r.get(path)['kid']
 
     def set_kid_mode(self, value):
-        """Set your kid mode status."""
+        """Set your kid mode status.
+
+        :param bool value: whether to enable or disable kid mode
+        :return: success
+        :rtype: bool
+        """
         path = 'api/account/kid'
         params = {'v': value}
-        return self._r.post(path, params=params)
+        return self._r.post(path, params=params)['ok']
 
     def upgrade_to_bot(self):
-        """Upgrade your account to a bot account."""
+        """Upgrade your account to a bot account.
+
+        Requires bot:play oauth scope. User cannot have any previously played
+        games.
+
+        :return: success
+        :rtype: bool
+        """
         path = 'api/bot/account/upgrade'
-        return self._r.post(path)
+        return self._r.post(path)['ok']
 
 
 class Users(BaseClient):
     """Client for user-related endpoints."""
 
     def get_realtime_statuses(self, *user_ids):
-        """Get the online, playing, and streaming statuses of players."""
+        """Get the online, playing, and streaming statuses of players.
+
+        Only id and name fields are returned for offline users.
+
+        :param user_ids: one or more user IDs (names)
+        :return: statuses of given players
+        :rtype: list
+        """
         path = 'api/users/status'
         params = {'ids': ','.join(user_ids)}
         return self._r.get(path, params=params)
 
     def get_all_top_10(self):
-        """Get the top 10 players for each speed and variant."""
+        """Get the top 10 players for each speed and variant.
+
+        :return: top 10 players in each speed and variant
+        :rtype: dict
+        """
         path = 'player'
         return self._r.get(path, fmt=LIJSON)
 
     def get_leaderboard(self, perf_type, count=10):
-        """Get the leaderboard for one speed or variant."""
+        """Get the leaderboard for one speed or variant.
+
+        :param perf_type: speed or variant
+        :type perf_type: :class:`~berserk.enums.PerfType`
+        :param int count: number of players to get
+        :return: top players for one speed or variant
+        :rtype: list
+        """
         path = f'player/top/{count}/{perf_type}'
-        return self._r.get(path, fmt=LIJSON)
+        return self._r.get(path, fmt=LIJSON)['users']
 
     def get_public_data(self, username):
-        """Get the public data for a user."""
+        """Get the public data for a user.
+
+        :param str username: username
+        :return: public data available for the given user
+        :rtype: dict
+        """
         path = f'api/user/{username}'
         return self._r.get(path)
 
     def get_activity_feed(self, username):
-        """Get the activity feed of a user."""
+        """Get the activity feed of a user.
+
+        :param str username: username
+        :return: activity feed of the given user
+        :rtype: list
+        """
         path = f'api/user/{username}/activity'
         return self._r.get(path)
 
     def get_by_id(self, *usernames):
-        """Get multiple users by their IDs."""
+        """Get multiple users by their IDs.
+
+        :param usernames: one or more usernames
+        :return: user data for the given usernames
+        :rtype: list
+        """
         path = 'api/users'
         payload = {'usernames': ','.join(usernames)}
         return self._r.post(path, json=payload)
 
     def get_by_team(self, team_id):
-        """Get members of a team."""
+        """Get members of a team.
+
+        :param str team_id: ID of a team
+        :return: users on the given team
+        :rtype: list
+        """
         path = f'team/{team_id}/users'
         return self._r.get(path, fmt=NDJSON)
 
     def get_live_streamers(self):
-        """Get basic information about currently streaming users."""
+        """Get basic information about currently streaming users.
+
+        :return: users currently streaming a game
+        :rtype: list
+        """
         path = 'streamer/live'
         return self._r.get(path)
 
