@@ -204,12 +204,14 @@ class Games(BaseClient):
 
         :param str game_id: the ID of the game to export
         :param bool as_pgn: whether to return the game in PGN format
-        :param bool moves: whether to include the moves
-        :param bool tags: whether to include the tags
-        :param bool clocks: whether to include the clocks
-        :param bool evals: whether to include the evals
-        :param bool opening: whether to include the opening
-        :param bool literate: whether to include the literate
+        :param bool moves: whether to include the PGN moves
+        :param bool tags: whether to include the PGN tags
+        :param bool clocks: whether to include clock comments in the PGN moves
+        :param bool evals: whether to include analysis evaluation comments in
+                           the PGN moves when available
+        :param bool opening: whether to include the opening name
+        :param bool literate: whether to include literate the PGN
+        :return: exported game, as JSON or PGN
         """
         path = f'game/export/{game_id}'
         params = {
@@ -227,7 +229,30 @@ class Games(BaseClient):
                        max=None, vs=None, rated=None, perf_type=None,
                        color=None, analysed=None, moves=None, tags=None,
                        evals=None, opening=None):
-        """Get all games of any user as PGN or JSON."""
+        """Get all games of any user as PGN or JSON.
+
+        :param str username: which player's games to return
+        :param bool as_pgn: whether to return the game in PGN format
+        :param int since: lowerbound on the game timestamp
+        :param int until: upperbound on the game timestamp
+        :param int max: limit the number of games returned
+        :param str vs: filter by username of the opponent
+        :param bool rated: filter by game mode (``True`` for rated, ``False``
+                           for casual)
+        :param perf_type: filter by speed or variant
+        :type perf_type: :class:`~berserk.enums.PerfType`
+        :param color: filter by the color of the player
+        :type color: :class:`~berserk.enums.Color`
+        :param bool analysed: filter by analysis availability
+        :param bool moves: whether to include the PGN moves
+        :param bool tags: whether to include the PGN tags
+        :param bool clocks: whether to include clock comments in the PGN moves
+        :param bool evals: whether to include analysis evaluation comments in
+                           the PGN moves when available
+        :param bool opening: whether to include the opening name
+        :param bool literate: whether to include literate the PGN
+        :return: iterator over the exported games, as JSON or PGN
+        """
         path = f'games/export/{username}'
         params = {
             'since': since,
