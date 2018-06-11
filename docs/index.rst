@@ -5,7 +5,7 @@ Welcome to berserk's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   readme
+   Introduction <readme>
    installation
    usage
    api
