@@ -200,7 +200,17 @@ class Games(BaseClient):
 
     def get_export(self, game_id, as_pgn=None, moves=None, tags=None,
                    clocks=None, evals=None, opening=None, literate=None):
-        """Get one finished game as PGN or JSON."""
+        """Get one finished game as PGN or JSON.
+
+        :param str game_id: the ID of the game to export
+        :param bool as_pgn: whether to return the game in PGN format
+        :param bool moves: whether to include the moves
+        :param bool tags: whether to include the tags
+        :param bool clocks: whether to include the clocks
+        :param bool evals: whether to include the evals
+        :param bool opening: whether to include the opening
+        :param bool literate: whether to include the literate
+        """
         path = f'game/export/{game_id}'
         params = {
             'moves': moves,
