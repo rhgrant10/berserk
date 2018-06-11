@@ -3,6 +3,9 @@ from .session import Requestor
 from .formats import JSON, LIJSON, PGN, NDJSON
 
 
+__all__ = ['Client', 'Account', 'Users', 'Games', 'Bots', 'Tournaments']
+
+
 class BaseClient:
 
     def __init__(self, session, base_url):
@@ -10,13 +13,25 @@ class BaseClient:
 
 
 class Client(BaseClient):
-    """Main touchpoint for the API that houses the other clients.
+    """Main touchpoint for the API.
+
+    The client contains all the endpoints in logical (hopefully) namespaces.
+
+    - :class:`account <berserk.clients.Account>` - managing account information
+    - :class:`users <berserk.clients.Users>` - getting information about users
+    - :class:`games <berserk.clients.Games>` - getting and exporting games
+    - :class:`bots <berserk.clients.Bots>` - performing bot operations
+    - :class:`tournaments <berserk.clients.Tournaments>` - getting and creating
+      tournaments
 
     :param session: request session, authenticated as needed
     :type session: :class:`requests.Session`
     :param str base_url: base URL for the API
     :param bool pgn_as_default: ``True`` if PGN should be the default format
-                                for game exports when possible
+                                for game exports when possible. This defaults
+                                to ``False`` and is used as a fallback when
+                                ``as_pgn`` is left as ``None`` for methods that
+                                support it.
     """
 
     def __init__(self, session, base_url='https://lichess.org/',
@@ -187,7 +202,10 @@ class Games(BaseClient):
     :type session: :class:`requests.Session`
     :param str base_url: base URL for the API
     :param bool pgn_as_default: ``True`` if PGN should be the default format
-                                for game exports when possible
+                                for game exports when possible. This defaults
+                                to ``False`` and is used as a fallback when
+                                ``as_pgn`` is left as ``None`` for methods that
+                                support it.
     """
 
     def __init__(self, session, base_url='https://lichess.org/',
@@ -198,18 +216,20 @@ class Games(BaseClient):
     def _use_pgn(self, as_pgn):
         return as_pgn if as_pgn is not None else self.pgn_as_default
 
-    def get_export(self, game_id, as_pgn=None, moves=None, tags=None,
-                   clocks=None, evals=None, opening=None, literate=None):
+    def export(self, game_id, as_pgn=None, moves=None, tags=None, clocks=None,
+               evals=None, opening=None, literate=None):
         """Get one finished game as PGN or JSON.
 
         :param str game_id: the ID of the game to export
         :param bool as_pgn: whether to return the game in PGN format
-        :param bool moves: whether to include the moves
-        :param bool tags: whether to include the tags
-        :param bool clocks: whether to include the clocks
-        :param bool evals: whether to include the evals
-        :param bool opening: whether to include the opening
-        :param bool literate: whether to include the literate
+        :param bool moves: whether to include the PGN moves
+        :param bool tags: whether to include the PGN tags
+        :param bool clocks: whether to include clock comments in the PGN moves
+        :param bool evals: whether to include analysis evaluation comments in
+                           the PGN moves when available
+        :param bool opening: whether to include the opening name
+        :param bool literate: whether to include literate the PGN
+        :return: exported game, as JSON or PGN
         """
         path = f'game/export/{game_id}'
         params = {
@@ -223,11 +243,34 @@ class Games(BaseClient):
         fmt = PGN if self._use_pgn(as_pgn) else JSON
         return self._r.get(path, params=params, fmt=fmt)
 
-    def stream_exports(self, username, as_pgn=None, since=None, until=None,
-                       max=None, vs=None, rated=None, perf_type=None,
-                       color=None, analysed=None, moves=None, tags=None,
-                       evals=None, opening=None):
-        """Get all games of any user as PGN or JSON."""
+    def export_by_player(self, username, as_pgn=None, since=None, until=None,
+                         max=None, vs=None, rated=None, perf_type=None,
+                         color=None, analysed=None, moves=None, tags=None,
+                         evals=None, opening=None):
+        """Get games by player.
+
+        :param str username: which player's games to return
+        :param bool as_pgn: whether to return the game in PGN format
+        :param int since: lowerbound on the game timestamp
+        :param int until: upperbound on the game timestamp
+        :param int max: limit the number of games returned
+        :param str vs: filter by username of the opponent
+        :param bool rated: filter by game mode (``True`` for rated, ``False``
+                           for casual)
+        :param perf_type: filter by speed or variant
+        :type perf_type: :class:`~berserk.enums.PerfType`
+        :param color: filter by the color of the player
+        :type color: :class:`~berserk.enums.Color`
+        :param bool analysed: filter by analysis availability
+        :param bool moves: whether to include the PGN moves
+        :param bool tags: whether to include the PGN tags
+        :param bool clocks: whether to include clock comments in the PGN moves
+        :param bool evals: whether to include analysis evaluation comments in
+                           the PGN moves when available
+        :param bool opening: whether to include the opening name
+        :param bool literate: whether to include literate the PGN
+        :return: iterator over the exported games, as JSON or PGN
+        """
         path = f'games/export/{username}'
         params = {
             'since': since,
@@ -246,9 +289,20 @@ class Games(BaseClient):
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
         yield from self._r.get(path, params=params, fmt=fmt, stream=True)
 
-    def stream_exports_by_id(self, *game_ids, as_pgn=None, moves=None,
-                             tags=None, clocks=None, evals=None, opening=None):
-        """Get games by ID in PGN or JSON."""
+    def export_multi(self, *game_ids, as_pgn=None, moves=None, tags=None,
+                     clocks=None, evals=None, opening=None):
+        """Get multiple games by ID.
+
+        :param game_ids: one or more game IDs to export
+        :param bool as_pgn: whether to return the game in PGN format
+        :param bool moves: whether to include the PGN moves
+        :param bool tags: whether to include the PGN tags
+        :param bool clocks: whether to include clock comments in the PGN moves
+        :param bool evals: whether to include analysis evaluation comments in
+                           the PGN moves when available
+        :param bool opening: whether to include the opening name
+        :return: iterator over the exported games, as JSON or PGN
+        """
         path = 'games/export/_ids'
         params = {
             'moves': moves,
@@ -259,23 +313,40 @@ class Games(BaseClient):
         }
         payload = ','.join(game_ids)
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
-        yield self._r.post(path, params=params, data=payload, fmt=fmt,
-                           stream=True)
+        yield from self._r.post(path, params=params, data=payload, fmt=fmt,
+                                stream=True)
 
-    def stream_by_users(self, *usernames):
-        """Get the games currently being played between players."""
+    def get_among_players(self, *usernames):
+        """Get the games currently being played among players.
+
+        Note this will not includes games where only one player is in the given
+        list of usernames.
+
+        :param usernames: two or more usernames
+        :return: iterator over all games played among the given players
+        """
         path = 'api/stream/games-by-users'
         payload = ','.join(usernames)
-        yield self._r.post(path, data=payload, fmt=NDJSON, stream=True)
+        yield from self._r.post(path, data=payload, fmt=NDJSON, stream=True)
 
+    # move this to Account?
     def get_ongoing(self, count=10):
-        """Get your currently ongoing games."""
+        """Get your currently ongoing games.
+
+        :param int count: number of games to get
+        :return: some number of currently ongoing games
+        :rtype: list
+        """
         path = 'api/account/playing'
         params = {'nb': count}
-        return self._r.get(path, params=params)
+        return self._r.get(path, params=params)['nowPlaying']
 
     def get_tv_channels(self):
-        """Get basic information about the best games being played."""
+        """Get basic information about the best games being played.
+
+        :return: best ongoing games in each speed and variant
+        :rtype: dict
+        """
         path = 'tv/channels'
         return self._r.get(path)
 

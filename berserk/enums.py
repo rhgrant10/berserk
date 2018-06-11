@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
-class PerfType:
+__all__ = ['PerfType', 'Variant', 'Color', 'Room', 'Mode']
+
+
+class GameType:
     ANTICHESS = 'antichess'
     ATOMIC = 'atomic'
     CHESS960 = 'chess960'
@@ -10,6 +13,9 @@ class PerfType:
     KING_OF_THE_HILL = 'kingOfTheHill'
     RACING_KINGS = 'racingKings'
     THREE_CHECK = 'threeCheck'
+
+
+class PerfType(GameType):
     BULLET = 'bullet'
     BLITZ = 'blitz'
     RAPID = 'rapid'
@@ -17,15 +23,7 @@ class PerfType:
     ULTRA_BULLET = 'ultraBullet'
 
 
-class Variant:
-    ANTICHESS = 'antichess'
-    ATOMIC = 'atomic'
-    CHESS960 = 'chess960'
-    CRAZYHOUSE = 'crazyhouse'
-    HORDE = 'horde'
-    KING_OF_THE_HILL = 'kingOfTheHill'
-    RACING_KINGS = 'racingKings'
-    THREE_CHECK = 'threeCheck'
+class Variant(GameType):
     STANDARD = 'standard'
 
 

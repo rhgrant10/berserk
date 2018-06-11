@@ -23,6 +23,7 @@ Enums
 .. automodule:: berserk.enums
     :members:
     :undoc-members:
+    :inherited-members:
     :show-inheritance:
 
 Formats
