@@ -54,18 +54,13 @@ class JsonHandler(FormatHandler):
     """Handle JSON data.
 
     :param str mime_type: the MIME type for the format
+    :param decoder: the decoder to use for the JSON format
+    :type decoder: :class:`json.JSONDecoder`
     """
 
-    #: mapping of MIME types to :class:`~json.JSONDecoder` classes
-    decoder_ring = {
-        'application/json': json.JSONDecoder,
-        'application/vnd.lichess.v3+json': json.JSONDecoder,
-        'application/x-ndjson': ndjson.Decoder,
-    }
-
-    def __init__(self, mime_type):
+    def __init__(self, mime_type, decoder=json.JSONDecoder):
         super().__init__(mime_type=mime_type)
-        self.decoder = self.decoder_ring.get(self.mime_type)
+        self.decoder = decoder
 
     def parse(self, response):
         """Parse all JSON data from a response.
@@ -90,7 +85,7 @@ class JsonHandler(FormatHandler):
                 yield json.loads(decoded_line)
 
 
-class PgnHanlder(FormatHandler):
+class PgnHandler(FormatHandler):
     """Handle PGN data."""
 
     def __init__(self):
@@ -132,7 +127,7 @@ JSON = JsonHandler(mime_type='application/json')
 LIJSON = JsonHandler(mime_type='application/vnd.lichess.v3+json')
 
 #: Handles newline-delimited JSON
-NDJSON = JsonHandler(mime_type='application/x-ndjson')
+NDJSON = JsonHandler(mime_type='application/x-ndjson', decoder=ndjson.Decoder)
 
 #: Handles PGN
-PGN = PgnHanlder()
+PGN = PgnHandler()
