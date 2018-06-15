@@ -115,9 +115,12 @@ class PgnHandler(FormatHandler):
             if last_line or decoded_line:
                 lines.append(decoded_line)
             else:
-                yield '\n'.join(lines)
+                yield '\n'.join(lines).strip()
                 lines = []
             last_line = decoded_line
+
+        if lines:
+            yield '\n'.join(lines).strip()
 
 
 #: Handles vanilla JSON
