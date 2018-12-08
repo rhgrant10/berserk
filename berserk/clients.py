@@ -407,7 +407,7 @@ class Tournaments(BaseClient):
 
     def create(self, clock_time, clock_increment, minutes, name=None,
                wait_minutes=None, variant=None, mode=None, berserkable=None,
-               private=None, password=None):
+               start_date=None, position=None, private=None, password=None):
         """Create a new tournament."""
         path = 'api/tournament'
         payload = {
@@ -419,6 +419,8 @@ class Tournaments(BaseClient):
             'variant': variant,
             'mode': mode,
             'berserkable': berserkable,
+            'start_date': start_date,
+            'position': position,
             'private': private,
             'password': password,
         }
