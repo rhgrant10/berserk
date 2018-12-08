@@ -4,7 +4,7 @@
 
 __author__ = """Robert Grant"""
 __email__ = 'rhgrant10@gmail.com'
-__version__ = '0.1.2'
+__version__ = '0.2.0'
 
 
 from .clients import Client  # noqa: F401
