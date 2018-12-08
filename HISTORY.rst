@@ -2,6 +2,13 @@
 History
 =======
 
+0.2.0 (2018-12-08)
+------------------
+
+* Add `position` and `start_date` params to `Tournament.create`
+* Add `Position` enum
+
+
 0.1.2 (2018-07-14)
 ------------------
 
