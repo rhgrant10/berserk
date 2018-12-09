@@ -4,6 +4,7 @@ from unittest import mock
 import pytest
 
 from berserk import session
+from berserk import utils
 
 
 def test_request():
@@ -21,7 +22,7 @@ def test_request():
 
     args, kwargs = m_fmt.handle.call_args
     assert (m_session.request.return_value,) == args
-    assert {'is_stream': None} == kwargs
+    assert {'is_stream': None, 'converter': utils.noop} == kwargs
 
 
 def test_bad_request():

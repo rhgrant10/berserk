@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from .session import Requestor
 from .formats import JSON, LIJSON, PGN, NDJSON
+from . import models
 
 
 __all__ = ['Client', 'Account', 'Users', 'Games', 'Bots', 'Tournaments']
@@ -54,7 +55,7 @@ class Account(BaseClient):
         :rtype: dict
         """
         path = 'api/account'
-        return self._r.get(path)
+        return self._r.get(path, converter=models.Account.convert)
 
     def get_email(self):
         """Get your email address.
@@ -152,7 +153,7 @@ class Users(BaseClient):
         :rtype: dict
         """
         path = f'api/user/{username}'
-        return self._r.get(path)
+        return self._r.get(path, converter=models.User.convert)
 
     def get_activity_feed(self, username):
         """Get the activity feed of a user.
@@ -162,7 +163,7 @@ class Users(BaseClient):
         :rtype: list
         """
         path = f'api/user/{username}/activity'
-        return self._r.get(path)
+        return self._r.get(path, converter=models.Activity.convert)
 
     def get_by_id(self, *usernames):
         """Get multiple users by their IDs.
@@ -172,17 +173,19 @@ class Users(BaseClient):
         :rtype: list
         """
         path = 'api/users'
-        return self._r.post(path, data=','.join(usernames))
+        return self._r.post(path, data=','.join(usernames),
+                            converter=models.User.convert)
 
     def get_by_team(self, team_id):
         """Get members of a team.
 
         :param str team_id: ID of a team
         :return: users on the given team
-        :rtype: list
+        :rtype: iter
         """
         path = f'team/{team_id}/users'
-        return self._r.get(path, fmt=NDJSON)
+        return self._r.get(path, fmt=NDJSON, stream=True,
+                           converter=models.User.convert)
 
     def get_live_streamers(self):
         """Get basic information about currently streaming users.
@@ -240,7 +243,8 @@ class Games(BaseClient):
             'literate': literate,
         }
         fmt = PGN if self._use_pgn(as_pgn) else JSON
-        return self._r.get(path, params=params, fmt=fmt)
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
 
     def export_by_player(self, username, as_pgn=None, since=None, until=None,
                          max=None, vs=None, rated=None, perf_type=None,
@@ -286,7 +290,8 @@ class Games(BaseClient):
             'opening': opening,
         }
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
-        yield from self._r.get(path, params=params, fmt=fmt, stream=True)
+        yield from self._r.get(path, params=params, fmt=fmt, stream=True,
+                               converter=models.Game.convert)
 
     def export_multi(self, *game_ids, as_pgn=None, moves=None, tags=None,
                      clocks=None, evals=None, opening=None):
@@ -313,7 +318,7 @@ class Games(BaseClient):
         payload = ','.join(game_ids)
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
         yield from self._r.post(path, params=params, data=payload, fmt=fmt,
-                                stream=True)
+                                stream=True, converter=models.Game.convert)
 
     def get_among_players(self, *usernames):
         """Get the games currently being played among players.
@@ -326,7 +331,8 @@ class Games(BaseClient):
         """
         path = 'api/stream/games-by-users'
         payload = ','.join(usernames)
-        yield from self._r.post(path, data=payload, fmt=NDJSON, stream=True)
+        yield from self._r.post(path, data=payload, fmt=NDJSON, stream=True,
+                                converter=models.Game.convert)
 
     # move this to Account?
     def get_ongoing(self, count=10):
@@ -361,7 +367,8 @@ class Bots(BaseClient):
     def stream_game_state(self, game_id):
         """Get the stream of events for a bot game."""
         path = f'api/bot/game/stream/{game_id}'
-        yield from self._r.get(path, stream=True)
+        yield from self._r.get(path, stream=True,
+                               converter=models.GameState.convert)
 
     def make_move(self, game_id, move):
         """Make a move in a bot game."""
@@ -402,7 +409,7 @@ class Tournaments(BaseClient):
     def get(self):
         """Get recently finished, ongoing, and upcoming tournaments."""
         path = 'api/tournament'
-        return self._r.get(path)
+        return self._r.get(path, converter=models.Tournament.convert)
 
     def create(self, clock_time, clock_increment, minutes, name=None,
                wait_minutes=None, variant=None, mode=None, berserkable=None,
@@ -423,4 +430,5 @@ class Tournaments(BaseClient):
             'private': private,
             'password': password,
         }
-        return self._r.post(path, json=payload)
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)

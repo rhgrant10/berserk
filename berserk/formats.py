@@ -3,6 +3,8 @@ import json
 
 import ndjson
 
+from . import utils
+
 
 class FormatHandler:
     """Provide request headers and parse responses for a particular format.
@@ -18,18 +20,19 @@ class FormatHandler:
         self.mime_type = mime_type
         self.headers = {'Accept': mime_type}
 
-    def handle(self, response, is_stream):
+    def handle(self, response, is_stream, converter=utils.noop):
         """Handle the response by returning the data.
 
         :param response: raw response
         :type response: :class:`requests.Response`
         :param bool is_stream: ``True`` if the response is a stream
+        :param func converter: function to handle field conversions
         :return: either all response data or an iterator of response data
         """
         if is_stream:
-            return iter(self.parse_stream(response))
+            return map(converter, iter(self.parse_stream(response)))
         else:
-            return self.parse(response)
+            return converter(self.parse(response))
 
     def parse(self, response):
         """Parse all data from a response.
@@ -90,6 +93,10 @@ class PgnHandler(FormatHandler):
 
     def __init__(self):
         super().__init__(mime_type='application/x-chess-pgn')
+
+    def handle(self, *args, **kwargs):
+        kwargs['converter'] = utils.noop  # disable conversions
+        return super().handle(*args, **kwargs)
 
     def parse(self, response):
         """Parse all text data from a response.

@@ -3,6 +3,8 @@ import urllib
 
 import requests
 
+from . import utils
+
 
 class Requestor:
     """Encapsulates the logic for making a request.
@@ -19,13 +21,15 @@ class Requestor:
         self.base_url = base_url
         self.default_fmt = default_fmt
 
-    def request(self, method, path, *args, fmt=None, **kwargs):
+    def request(self, method, path, *args, fmt=None, converter=utils.noop,
+                **kwargs):
         """Make a request for a resource in a paticular format.
 
         :param str method: HTTP verb
         :param str path: the URL suffix
         :param fmt: the format handler
         :type fmt: :class:`~berserk.formats.FormatHandler`
+        :param func converter: function to handle field conversions
         :return: response
         :raises requests.exceptions.RequestException: if the status is >=400
         """
@@ -37,7 +41,8 @@ class Requestor:
         if not response.ok:
             response.raise_for_status()
 
-        return fmt.handle(response, is_stream=kwargs.get('stream'))
+        return fmt.handle(response, is_stream=kwargs.get('stream'),
+                          converter=converter)
 
     def get(self, *args, **kwargs):
         """Convenience method to make a GET request."""
