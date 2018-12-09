@@ -13,7 +13,7 @@ def test_inner_datetime_fromtimestamp():
     converter = utils.inner_datetime_fromtimestamp('foo')
     result = converter({'foo': 1514505150, 'bar': 'baz', 'qux': 123})
     assert result == {
-        'foo': datetime.datetime(2017, 12, 28, 15, 52, 30),
+        'foo': datetime.datetime(2017, 12, 28, 15, 52, 30, tzinfo=None),
         'bar': 'baz',
         'qux': 123,
     }
