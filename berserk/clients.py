@@ -172,8 +172,7 @@ class Users(BaseClient):
         :rtype: list
         """
         path = 'api/users'
-        payload = {'usernames': ','.join(usernames)}
-        return self._r.post(path, json=payload)
+        return self._r.post(path, data=','.join(usernames))
 
     def get_by_team(self, team_id):
         """Get members of a team.
