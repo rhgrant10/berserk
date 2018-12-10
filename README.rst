@@ -32,7 +32,8 @@ Features
 Usage
 -----
 
-You can use any ``requests.Session``-like object as a session, including those from ``requests_oauth``. A simple token session is included, as shown below:
+You can use any ``requests.Session``-like object as a session, including those
+from ``requests_oauth``. A simple token session is included, as shown below:
 
 .. code-block:: python
 
@@ -84,7 +85,8 @@ Details for each function can be found in the full documentation.
 Credits
 -------
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+This package was created with Cookiecutter_ and the
+`audreyr/cookiecutter-pypackage`_ project template.
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
