@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import requests
+
 from .session import Requestor
 from .formats import JSON, LIJSON, PGN, NDJSON
 from . import models
@@ -35,9 +37,9 @@ class Client(BaseClient):
                                 support it.
     """
 
-    def __init__(self, session, base_url='https://lichess.org/',
+    def __init__(self, session=None, base_url='https://lichess.org/',
                  pgn_as_default=False):
-        super().__init__(session, base_url)
+        super().__init__(session or requests.Session(), base_url)
         self.account = Account(session, base_url)
         self.users = Users(session, base_url)
         self.games = Games(session, base_url, pgn_as_default=pgn_as_default)
