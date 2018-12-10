@@ -3,6 +3,10 @@ from datetime import datetime
 from datetime import timezone
 
 
+def to_millis(dt):
+    return dt.timestamp() * 1000
+
+
 def datetime_from_seconds(ts):
     return datetime.fromtimestamp(ts, timezone.utc)
 
