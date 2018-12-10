@@ -375,34 +375,34 @@ class Bots(BaseClient):
     def make_move(self, game_id, move):
         """Make a move in a bot game."""
         path = f'api/bot/game/{game_id}/move/{move}'
-        return self._r.post(path)
+        return self._r.post(path)['ok']
 
     def post_message(self, game_id, text, spectator=False):
         """Post a message in a bot game."""
         path = f'api/bot/game/{game_id}/chat'
         room = 'spectator' if spectator else 'player'
         payload = {'room': room, 'text': text}
-        return self._r.post(path, json=payload)
+        return self._r.post(path, json=payload)['ok']
 
     def abort_game(self, game_id):
         """Abort a bot game."""
         path = f'api/bot/game/{game_id}/abort'
-        return self._r.post(path)
+        return self._r.post(path)['ok']
 
     def resign_game(self, game_id):
         """Resign a bot game."""
         path = f'api/bot/game/{game_id}/resign'
-        return self._r.post(path)
+        return self._r.post(path)['ok']
 
     def accept_challenge(self, challenge_id):
         """Accept an incoming challenge."""
         path = f'api/challenge/{challenge_id}/accept'
-        return self._r.post(path)
+        return self._r.post(path)['ok']
 
     def decline_challenge(self, challenge_id):
         """Decline an incoming challenge."""
         path = f'api/challenge/{challenge_id}/decline'
-        return self._r.post(path)
+        return self._r.post(path)['ok']
 
 
 class Tournaments(BaseClient):
