@@ -276,7 +276,7 @@ class Games(BaseClient):
         :param bool literate: whether to include literate the PGN
         :return: iterator over the exported games, as JSON or PGN
         """
-        path = f'games/export/{username}'
+        path = f'api/games/user/{username}'
         params = {
             'since': since,
             'until': until,
