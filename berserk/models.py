@@ -53,8 +53,3 @@ class GameState(Model):
     btime = utils.datetime_from_millis
     winc = utils.datetime_from_millis
     binc = utils.datetime_from_millis
-
-
-class Tournament(Model):
-    startsAt = utils.datetime_from_millis
-    finishesAt = utils.datetime_from_millis

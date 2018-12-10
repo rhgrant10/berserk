@@ -432,5 +432,4 @@ class Tournaments(BaseClient):
             'private': private,
             'password': password,
         }
-        return self._r.post(path, json=payload,
-                            converter=models.Tournament.convert)
+        return self._r.post(path, json=payload)
