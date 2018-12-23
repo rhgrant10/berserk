@@ -9,8 +9,7 @@ Use ``berserk`` by creating an API client:
     >>> import berserk
     >>> client = berserk.Client()
 
-
-Authentication
+Authenticating
 ==============
 
 By default the client does not perform any authentication. However many of the
@@ -53,15 +52,8 @@ for this.
     >>> client = berserk.Client(session)
 
 
-Using the Client
-================
-
-The client object contains all the functions logically grouped into namespaces.
-The rest of this document explains the basics for each group. Note that
-particularly long output is truncated/abbreviated.
-
 Account information, preferences, and settings
-----------------------------------------------
+==============================================
 
 Get the user information, the email address specifically, or get the
 preferences:
@@ -140,7 +132,7 @@ Read more below about how to use bot functionality.
 
 
 Users and Teams
----------------
+===============
 
 Get realtime information about one or more players:
 
@@ -254,8 +246,8 @@ Last but not least, we can get a list of all users currently streaming:
      {'id': 'videogamepianist', 'name': 'VideoGamePianist', 'playing': True}]
 
 
-Games
------
+Getting games
+=============
 
 Finished games can be exported and current games can be listed. Let's take a
 look at the most recent 300 games played by "LeelaChess" on Dec. 8th, 2018:
@@ -369,8 +361,8 @@ To see an interesting game for each game type, get the TV channels:
      'user': {'id': 'linischoki', 'name': 'linischoki'}}
 
 
-Tournaments
------------
+Working with tournaments
+========================
 
 You have to specify the clock time, increment, and minutes, but creating a new
 tournament is easy:
@@ -397,6 +389,15 @@ tournament is easy:
      'system': 'arena',
      'variant': 'standard',
      'verdicts': {'accepted': True, 'list': []}}
+
+You can specify the starting position for new tournaments using one of the
+provided enum value in ``berserk.enums.Position``:
+
+.. code-block:: python
+
+    >>> client.tournaments.create(clock_time=10, clock_increment=3, minutes=180,
+                                  position=berserk.enums.Position.KINGS_PAWN)
+
 
 Additionally you can see tournaments that have recently finished, are in
 progress, and are about to start:
@@ -426,8 +427,8 @@ progress, and are about to start:
      'winner': None}
 
 
-Bots
-----
+Being a bot
+===========
 
 .. warning::
 
@@ -453,7 +454,7 @@ then listens to the stream of state for that particular game and plays it to
 completion.
 
 Responding to challenges
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 Here the goal is to respond to challenges and spawn workers to play those
 accepted. Here's a bit of sample code that hits the highlights:
@@ -473,7 +474,7 @@ accepted. Here's a bit of sample code that hits the highlights:
     ...
 
 Playing a game
-~~~~~~~~~~~~~~
+--------------
 
 Having accepted a challenge and recieved the gameStart event for it, the main
 job here is to listen and react to the stream of the game state:

@@ -2,6 +2,12 @@
 History
 =======
 
+0.3.0 (2018-12-23)
+------------------
+
+* Convert all timestamps to datetime in all responses
+* Provide support for challenging other players to a game
+
 0.2.1 (2018-12-08)
 ------------------
 

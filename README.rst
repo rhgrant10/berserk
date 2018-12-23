@@ -39,10 +39,6 @@ from ``requests_oauth``. A simple token session is included, as shown below:
 
     import berserk
 
-
-    session = berserk.TokenSession('token')
-    lichess = berserk.Client(session)
-
     lichess.account.get()
     lichess.account.get_email()
     lichess.account.get_preferences()
@@ -65,6 +61,10 @@ from ``requests_oauth``. A simple token session is included, as shown below:
     lichess.games.get_among_players()
     lichess.games.get_ongoing()
     lichess.games.get_tv_channels()
+
+    lichess.challenges.create()
+    lichess.challenges.accept()
+    lichess.challenges.decline()
 
     lichess.bots.stream_incoming_events()
     lichess.bots.stream_game_state()
