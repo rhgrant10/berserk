@@ -6,7 +6,9 @@ from .formats import JSON, LIJSON, PGN, NDJSON
 from . import models
 
 
-__all__ = ['Client', 'Account', 'Users', 'Games', 'Bots', 'Tournaments']
+__all__ = [
+    'Client', 'Account', 'Users', 'Games', 'Challenges', 'Bots', 'Tournaments',
+]
 
 
 class BaseClient:
@@ -23,6 +25,7 @@ class Client(BaseClient):
     - :class:`account <berserk.clients.Account>` - managing account information
     - :class:`users <berserk.clients.Users>` - getting information about users
     - :class:`games <berserk.clients.Games>` - getting and exporting games
+    - :class:`bots <berserk.clients.Challenges>` - using challenges
     - :class:`bots <berserk.clients.Bots>` - performing bot operations
     - :class:`tournaments <berserk.clients.Tournaments>` - getting and creating
       tournaments
@@ -39,10 +42,12 @@ class Client(BaseClient):
 
     def __init__(self, session=None, base_url='https://lichess.org/',
                  pgn_as_default=False):
-        super().__init__(session or requests.Session(), base_url)
+        session = session or requests.Session()
+        super().__init__(session, base_url)
         self.account = Account(session, base_url)
         self.users = Users(session, base_url)
         self.games = Games(session, base_url, pgn_as_default=pgn_as_default)
+        self.challenges = Challenges(session, base_url)
         self.bots = Bots(session, base_url)
         self.tournaments = Tournaments(session, base_url)
 
@@ -356,6 +361,51 @@ class Games(BaseClient):
         """
         path = 'tv/channels'
         return self._r.get(path)
+
+
+class Challenges(BaseClient):
+
+    def create(self, username, rated, clock_limit=None, clock_increment=None,
+               days=None, color=None, variant=None, position=None):
+        """Challenge another player to a game.
+
+        :param str username: username of the player to challege
+        :param bool rated: whether or not the game will be rated
+        :param int clock_limit: clock initial time (in seconds)
+        :param int clock_increment: clock increment (in seconds)
+        :param int days: days per move (for correspondence games; omit clock)
+        :param color: color of the accepting player
+        :type color: :class:`~berserk.enums.Color`
+        :param variant: game variant to use
+        :type variant: :class:`~berserk.enums.Variant`
+        :param position: use one of the custom initial positions (cannot be a
+                         rated game)
+        :type position: :class:`~berserk.enums.Position`
+        :return: success indicator
+        :rtype: bool
+        """
+        path = f'api/challenge/{username}'
+        return self._r.post(path)
+
+    def accept(self, challenge_id):
+        """Accept an incoming challenge.
+
+        :param str challenge_id: id of the challenge to accept
+        :return: success indicator
+        :rtype: bool
+        """
+        path = f'api/challenge/{challenge_id}/accept'
+        return self._r.post(path)['ok']
+
+    def decline(self, challenge_id):
+        """Decline an incoming challenge.
+
+        :param str challenge_id: id of the challenge to decline
+        :return: success indicator
+        :rtype: bool
+        """
+        path = f'api/challenge/{challenge_id}/decline'
+        return self._r.post(path)['ok']
 
 
 class Bots(BaseClient):
