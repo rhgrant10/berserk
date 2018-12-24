@@ -12,7 +12,7 @@ class Model(metaclass=model):
     @classmethod
     def convert(cls, data):
         if isinstance(data, (list, tuple)):
-            return cls.convert_multiple(data)
+            return [cls.convert_one(v) for v in data]
         return cls.convert_one(data)
 
     @classmethod
@@ -22,9 +22,9 @@ class Model(metaclass=model):
         return data
 
     @classmethod
-    def convert_multiple(cls, data):
-        for datum in data:
-            cls.convert_one(datum)
+    def convert_values(cls, data):
+        for k in data:
+            data[k] = cls.convert(data[k])
         return data
 
 
@@ -53,3 +53,12 @@ class GameState(Model):
     btime = utils.datetime_from_millis
     winc = utils.datetime_from_millis
     binc = utils.datetime_from_millis
+
+
+class Tournament(Model):
+    startsAt = utils.datetime_from_str
+
+
+class Tournaments(Model):
+    startsAt = utils.datetime_from_millis
+    finishesAt = utils.datetime_from_millis

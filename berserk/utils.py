@@ -23,5 +23,10 @@ def inner_datetime_fromtimestamp(*keys):
     return convert
 
 
+def datetime_from_str(dt_str):
+    dt = datetime.strptime(dt_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+    return dt.replace(tzinfo=timezone.utc)
+
+
 def noop(arg):
     return arg

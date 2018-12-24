@@ -407,21 +407,21 @@ progress, and are about to start:
     >>> tournaments = client.tournaments.get()
     >>> list(tournaments)
     ['created', 'started', 'finished']
-    >>> len(tournaments['started'])
+    >>> len(tournaments['created'])
     19
-    >>> tournaments['started'][0]
-    {'clock': {'increment': 1, 'limit': 120},
-     'createdBy': 'newtiziano',
-     'finishesAt': 1544402066723,
-     'fullName': 'SI ganas te toy 1000 pavos Arena',
-     'id': '3sJhgluT',
-     'minutes': 35,
-     'nbPlayers': 7,
-     'perf': {'icon': 'T', 'key': 'bullet', 'name': 'Bullet', 'position': 0},
+    >>> tournaments['created'][0]
+    {'clock': {'increment': 0, 'limit': 300},
+     'createdBy': 'bashkimneziri',
+     'finishesAt': datetime.datetime(2018, 12, 24, 0, 21, 2, 179000, tzinfo=datetime.timezone.utc),
+     'fullName': 'GM Arena',
+     'id': 'COnVgmKH',
+     'minutes': 45,
+     'nbPlayers': 1,
+     'perf': {'icon': ')', 'key': 'blitz', 'name': 'Blitz', 'position': 1},
      'rated': True,
-     'secondsToStart': 0,
-     'startsAt': 1544399966723,
-     'status': 20,
+     'secondsToStart': 160,
+     'startsAt': datetime.datetime(2018, 12, 23, 23, 36, 2, 179000, tzinfo=datetime.timezone.utc),
+     'status': 10,
      'system': 'arena',
      'variant': {'key': 'standard', 'name': 'Standard', 'short': 'Std'},
      'winner': None}

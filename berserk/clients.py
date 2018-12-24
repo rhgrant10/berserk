@@ -385,7 +385,7 @@ class Challenges(BaseClient):
         :rtype: bool
         """
         path = f'api/challenge/{username}'
-        return self._r.post(path)
+        return self._r.post(path, converter=models.Tournament.convert)
 
     def accept(self, challenge_id):
         """Accept an incoming challenge.
@@ -461,7 +461,7 @@ class Tournaments(BaseClient):
     def get(self):
         """Get recently finished, ongoing, and upcoming tournaments."""
         path = 'api/tournament'
-        return self._r.get(path, converter=models.Tournament.convert)
+        return self._r.get(path, converter=models.Tournaments.convert_values)
 
     def create(self, clock_time, clock_increment, minutes, name=None,
                wait_minutes=None, variant=None, mode=None, berserkable=None,
@@ -482,4 +482,5 @@ class Tournaments(BaseClient):
             'private': private,
             'password': password,
         }
-        return self._r.post(path, json=payload)
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)

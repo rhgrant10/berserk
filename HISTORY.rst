@@ -2,6 +2,11 @@
 History
 =======
 
+???
+---
+
+* Convert datetime string in tournament creation response into datetime object
+
 0.3.0 (2018-12-23)
 ------------------
 
