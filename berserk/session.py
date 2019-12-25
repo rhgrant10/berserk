@@ -34,11 +34,17 @@ class Requestor:
         :raises requests.exceptions.RequestException: if the status is >=400
         """
         fmt = fmt or self.default_fmt
-        kwargs['headers'] = fmt.headers
+        # merge fmt (e.g. application/json and session e.g. auth headers)
+        #  https://stackoverflow.com/a/26853961/1497139
+        kwargs['headers'] = { **fmt.headers,**self.session.headers } 
         url = urllib.parse.urljoin(self.base_url, path)
 
         response = self.session.request(method, url, *args, **kwargs)
         if not response.ok:
+            # handle 400 error messages
+            # https://github.com/rhgrant10/berserk/issues/6
+            if response.status_code==400:
+                response.reason=response.reason+"("+response.content.decode("utf-8")+")"
             response.raise_for_status()
 
         return fmt.handle(response, is_stream=kwargs.get('stream'),
