@@ -2,6 +2,15 @@
 History
 =======
 
+0.3.2 (2020-01-04)
+------------------
+
+* Fix bug where options not passed for challenge creation
+* Convert requirements from pinned to sematically compatible
+* Bump all developer dependencies
+* Use pytest instead of the older py.test
+* Use py37 in tox
+
 0.3.1 (2018-12-23)
 ------------------
 
