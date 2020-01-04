@@ -385,7 +385,18 @@ class Challenges(BaseClient):
         :rtype: bool
         """
         path = f'api/challenge/{username}'
-        return self._r.post(path, converter=models.Tournament.convert)
+        payload = {
+            'username': username,
+            'rated': rated,
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'days': days,
+            'color': color,
+            'variant': variant,
+            'position': position,
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
 
     def accept(self, challenge_id):
         """Accept an incoming challenge.
