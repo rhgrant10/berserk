@@ -1,2 +1,2 @@
-requests>=2.20.0
-ndjson==0.1.0
+requests~=2.20
+ndjson~=0.2
