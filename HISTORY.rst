@@ -2,6 +2,16 @@
 History
 =======
 
+0.4.0 (2020-01-19)
+------------------
+
+* Add support for the broadcast endpoints
+* Add a utility for easily converting API objects into update params
+* Fix multiple bugs with the tournament create endpoint
+* Improve the reusability of some conversion utilities
+* Improve many docstrings in the client classes
+
+
 0.3.2 (2020-01-04)
 ------------------
 
@@ -11,16 +21,19 @@ History
 * Use pytest instead of the older py.test
 * Use py37 in tox
 
+
 0.3.1 (2018-12-23)
 ------------------
 
 * Convert datetime string in tournament creation response into datetime object
+
 
 0.3.0 (2018-12-23)
 ------------------
 
 * Convert all timestamps to datetime in all responses
 * Provide support for challenging other players to a game
+
 
 0.2.1 (2018-12-08)
 ------------------
