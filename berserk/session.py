@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import logging
 import urllib
 
 import requests
 
 from . import utils
 from . import exceptions
+
+
+LOG = logging.getLogger(__name__)
 
 
 class Requestor:
@@ -38,6 +42,10 @@ class Requestor:
         kwargs['headers'] = fmt.headers
         url = urllib.parse.urljoin(self.base_url, path)
 
+        is_stream = kwargs.get('stream')
+        LOG.debug('%s %s %s params=%s data=%s json=%s',
+                  'stream' if is_stream else 'request', method, url,
+                  kwargs.get('params'), kwargs.get('data'), kwargs.get('json'))
         try:
             response = self.session.request(method, url, *args, **kwargs)
         except requests.RequestException as e:
@@ -45,8 +53,7 @@ class Requestor:
         if not response.ok:
             raise exceptions.ResponseError(response)
 
-        return fmt.handle(response, is_stream=kwargs.get('stream'),
-                          converter=converter)
+        return fmt.handle(response, is_stream=is_stream, converter=converter)
 
     def get(self, *args, **kwargs):
         """Convenience method to make a GET request."""
