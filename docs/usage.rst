@@ -52,11 +52,11 @@ for this.
     >>> client = berserk.Client(session)
 
 
-Account information, preferences, and settings
-==============================================
+Accounts
+========
 
-Get the user information, the email address specifically, or get the
-preferences:
+Information and Preferences
+---------------------------
 
 .. code-block:: python
 
@@ -86,6 +86,9 @@ preferences:
      ...
      'transp': False,
      'zen': 0}}
+
+Kid Mode
+--------
 
 Using Oauth2, you can set the kid mode.
 
@@ -120,7 +123,10 @@ the current or previous status.
     >>> show_kid_mode()
     enabled
 
-Lastly, if this is a new account that has not yet played a game, and if you
+Bot Account Upgrade
+-------------------
+
+If this is a new account that has not yet played a game, and if you
 have the required OAuth2 permission, you can upgrade the account to a bot
 account:
 
@@ -134,17 +140,29 @@ Read more below about how to use bot functionality.
 Users and Teams
 ===============
 
+Realtime Statuses
+-----------------
+
 Get realtime information about one or more players:
 
 .. code-block:: python
 
-    >>> client.users.get_realtime_statuses('larry', 'curly', 'moe')
-    [{'id': 'larry', 'name': 'Larry'},
-    {'id': 'curly', 'name': 'curly'},
-    {'id': 'moe', 'name': 'Moe'}]
+    >>> players = ['Sasageyo', 'Voinikonis_Nikita', 'Zugzwangerz', 'DOES-NOT-EXIST']
+    >>> client.users.get_realtime_statuses(players)
+    [{'id': 'sasageyo',
+    'name': 'Sasageyo',
+    'title': 'IM',
+    'online': True,
+    'playing': True},
+    {'id': 'voinikonis_nikita',
+    'name': 'Voinikonis_Nikita',
+    'title': 'FM',
+    'online': True,
+    'playing': True},
+    {'id': 'zugzwangerz', 'name': 'Zugzwangerz'}]
 
-I guess they're not online right now... so let's take a look at the top 10
-lists:
+Top 10 Lists
+------------
 
 .. code-block:: python
 
@@ -168,7 +186,8 @@ lists:
      'perfs': {'horde': {'progress': 22, 'rating': 2443}},
      'username': 'Ingrid-Vengeance'}
 
-Who's 11th best?
+Leaderboards
+------------
 
 .. code-block:: python
 
@@ -177,7 +196,8 @@ Who's 11th best?
      'perfs': {'horde': {'progress': 10, 'rating': 2230}},
      'username': 'PhilippeSaner'}
 
-Want to know more about them? You can get their public data:
+Public Data
+-----------
 
 .. code-block:: python
 
@@ -196,8 +216,8 @@ Want to know more about them? You can get their public data:
      'url': 'https://lichess.org/@/PhilippeSaner',
      'username': 'PhilippeSaner'}
 
-You can also see their activity feed. Let's see what happened the last time
-they logged on:
+Activity Feeds
+--------------
 
 .. code-block:: python
 
@@ -216,10 +236,8 @@ they logged on:
         'tournament': {'id': '9zm2uIdP', 'name': 'Daily Horde Arena'}}],
       'nb': 1}}
 
-12 wins? Nice job!
-
-Teams are important too though. Let's find out how many players are on the
-"coders" team:
+Team Members
+------------
 
 .. code-block:: python
 
@@ -229,7 +247,8 @@ Teams are important too though. Let's find out how many players are on the
     >>> len(members)
     228
 
-Last but not least, we can get a list of all users currently streaming:
+Live Streamers
+--------------
 
 .. code-block:: python
 
@@ -246,8 +265,11 @@ Last but not least, we can get a list of all users currently streaming:
      {'id': 'videogamepianist', 'name': 'VideoGamePianist', 'playing': True}]
 
 
-Getting games
-=============
+Exporting Games
+===============
+
+By Player
+---------
 
 Finished games can be exported and current games can be listed. Let's take a
 look at the most recent 300 games played by "LeelaChess" on Dec. 8th, 2018:
@@ -266,6 +288,9 @@ look at the most recent 300 games played by "LeelaChess" on Dec. 8th, 2018:
     datetime.datetime(2018, 12, 8, 9, 11, 42, 229000, tzinfo=datetime.timezone.utc)
 
 Wow, they play a lot of chess :)
+
+By ID
+-----
 
 You can export games too using their IDs. Let's export the last game LeelaChess
 played that day:
@@ -305,7 +330,11 @@ played that day:
      'variant': 'standard',
      'winner': 'white'}
 
-Of course sometimes PGN format is desirable. Just pass ``as_pgn=True``:
+PGN vs JSON
+-----------
+
+Of course sometimes PGN format is desirable. Just pass ``as_pgn=True`` to
+any of the export methods:
 
 .. code-block:: python
 
@@ -333,7 +362,8 @@ Of course sometimes PGN format is desirable. Just pass ``as_pgn=True``:
 
     1. d4 { [%eval 0.08] [%clk 0:05:00] } 1... d5 ...
 
-To see an interesting game for each game type, get the TV channels:
+TV Channels
+-----------
 
 .. code-block:: python
 

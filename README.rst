@@ -22,15 +22,14 @@ Python client for the lichess API
 
 
 Features
---------
+========
 
 * handles JSON and PGN formats at user's discretion
-* *all* endpoints implemented
 * token auth support provided
-* easy integration with oauth2
+* easy integration with OAuth2
 
 Usage
------
+=====
 
 You can use any ``requests.Session``-like object as a session, including those
 from ``requests_oauth``. A simple token session is included, as shown below:
@@ -39,51 +38,80 @@ from ``requests_oauth``. A simple token session is included, as shown below:
 
     import berserk
 
-    lichess.account.get()
-    lichess.account.get_email()
-    lichess.account.get_preferences()
-    lichess.account.get_kid_mode()
-    lichess.account.set_kid_mode()
-    lichess.account.upgrade_to_bot()
+    session = berserk.TokenSession(API_TOKEN)
+    client = berserk.Client(session=session)
 
-    lichess.users.get_realtime_statuses()
-    lichess.users.get_all_top_10()
-    lichess.users.get_leaderboard()
-    lichess.users.get_public_data()
-    lichess.users.get_activity_feed()
-    lichess.users.get_by_id()
-    lichess.users.get_by_team()
-    lichess.users.get_live_streamers()
+Most if not all of the API is available:
 
-    lichess.games.export()
-    lichess.games.export_by_player()
-    lichess.games.export_multi()
-    lichess.games.get_among_players()
-    lichess.games.get_ongoing()
-    lichess.games.get_tv_channels()
+.. code-block:: python
 
-    lichess.challenges.create()
-    lichess.challenges.accept()
-    lichess.challenges.decline()
+    client.account.get()
+    client.account.get_email()
+    client.account.get_preferences()
+    client.account.get_kid_mode()
+    client.account.set_kid_mode()
+    client.account.upgrade_to_bot()
 
-    lichess.bots.stream_incoming_events()
-    lichess.bots.stream_game_state()
-    lichess.bots.make_move()
-    lichess.bots.post_message()
-    lichess.bots.abort_game()
-    lichess.bots.resign_game()
-    lichess.bots.accept_challenge()
-    lichess.bots.decline_challenge()
+    client.users.get_realtime_statuses()
+    client.users.get_all_top_10()
+    client.users.get_leaderboard()
+    client.users.get_public_data()
+    client.users.get_activity_feed()
+    client.users.get_by_id()
+    client.users.get_by_team()
+    client.users.get_live_streamers()
 
-    lichess.tournaments.get()
-    lichess.tournaments.create()
+    client.games.export()
+    client.games.export_by_player()
+    client.games.export_multi()
+    client.games.get_among_players()
+    client.games.get_ongoing()
+    client.games.get_tv_channels()
 
+    client.challenges.create()
+    client.challenges.accept()
+    client.challenges.decline()
+
+    client.bots.stream_incoming_events()
+    client.bots.stream_game_state()
+    client.bots.make_move()
+    client.bots.post_message()
+    client.bots.abort_game()
+    client.bots.resign_game()
+    client.bots.accept_challenge()
+    client.bots.decline_challenge()
+
+    client.tournaments.get()
+    client.tournaments.create()
+
+    client.broadcasts.get()
+    client.broadcasts.create()
+    client.broadcasts.update()
+    client.broadcasts.push_pgn_update()
+    
 
 Details for each function can be found in the full documentation.
 
 
 Credits
+=======
+
+Authors
 -------
+
+Development Lead
+~~~~~~~~~~~~~~~~
+
+* Robert Grant <rhgrant10@gmail.com>
+
+Contributors
+~~~~~~~~~~~~
+
+* Robert Graham <rpgraham84@gmail.com>
+
+
+Miscellaneous
+-------------
 
 This package was created with Cookiecutter_ and the
 `audreyr/cookiecutter-pypackage`_ project template.
