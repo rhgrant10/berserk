@@ -15,10 +15,10 @@ def datetime_from_millis(millis):
     return datetime_from_seconds(millis / 1000)
 
 
-def inner_datetime_fromtimestamp(*keys):
+def inner(func, *keys):
     def convert(data):
         for k in keys:
-            data[k] = datetime_from_seconds(data[k])
+            data[k] = func(data[k])
         return data
     return convert
 

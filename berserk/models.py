@@ -39,7 +39,8 @@ class User(Model):
 
 
 class Activity(Model):
-    interval = utils.inner_datetime_fromtimestamp('start', 'end')
+    interval = utils.inner(utils.datetime_from_seconds,
+                           'start', 'end')
 
 
 class Game(Model):
