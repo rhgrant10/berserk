@@ -666,10 +666,9 @@ class Broadcasts(BaseClient):
 
         :param str broadcast_id: ID of a broadcast
         :param list pgn_games: one or more games in PGN format
-        :return: success for each game PGN given
-        :rtype: list
+        :return: success
+        :rtype: bool
         """
         path = f'broadcast/{slug}/{broadcast_id}/push'
         games = '\n\n'.join(g.strip() for g in pgn_games)
-        okays = self._r.post(path, data=games)
-        return [a['ok'] for a in okays]
+        return self._r.post(path, data=games)['ok']
