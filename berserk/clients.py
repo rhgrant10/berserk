@@ -32,7 +32,7 @@ class Client(BaseClient):
     - :class:`account <berserk.clients.Account>` - managing account information
     - :class:`users <berserk.clients.Users>` - getting information about users
     - :class:`games <berserk.clients.Games>` - getting and exporting games
-    - :class:`bots <berserk.clients.Challenges>` - using challenges
+    - :class:`challenges <berserk.clients.Challenges>` - using challenges
     - :class:`bots <berserk.clients.Bots>` - performing bot operations
     - :class:`tournaments <berserk.clients.Tournaments>` - getting and creating
       tournaments
@@ -536,7 +536,7 @@ class Tournaments(BaseClient):
 
         .. note::
 
-            ``wiat_minutes`` is always relative to now and is overriden by
+            ``wait_minutes`` is always relative to now and is overriden by
             ``start_time``.
 
         .. note::
