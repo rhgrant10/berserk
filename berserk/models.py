@@ -63,3 +63,8 @@ class Tournament(Model):
 class Tournaments(Model):
     startsAt = utils.datetime_from_millis
     finishesAt = utils.datetime_from_millis
+
+
+class Broadcast(Model):
+    broadcast = utils.inner(utils.datetime_from_millis,
+                            'startedAt', 'startsAt')

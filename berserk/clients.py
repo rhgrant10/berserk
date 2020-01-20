@@ -29,6 +29,8 @@ class Client(BaseClient):
     - :class:`bots <berserk.clients.Bots>` - performing bot operations
     - :class:`tournaments <berserk.clients.Tournaments>` - getting and creating
       tournaments
+    - :class:`broadcasts <berserk.clients.Broadcasts>` - getting and creating
+      broadcasts
 
     :param session: request session, authenticated as needed
     :type session: :class:`requests.Session`
@@ -50,6 +52,7 @@ class Client(BaseClient):
         self.challenges = Challenges(session, base_url)
         self.bots = Bots(session, base_url)
         self.tournaments = Tournaments(session, base_url)
+        self.broadcasts = Broadcasts(session, base_url)
 
 
 class Account(BaseClient):
@@ -565,3 +568,100 @@ class Tournaments(BaseClient):
         }
         return self._r.post(path, json=payload,
                             converter=models.Tournament.convert)
+
+
+class Broadcasts(BaseClient):
+
+    def create(self, name, description, sync_url=None, markdown=None,
+               credit=None, starts_at=None, official=None, throttle=None):
+        """Create a new broadcast.
+
+        .. note::
+
+            ``sync_url`` must be publicly accessible. If not provided, you
+            must periodically push new PGN to update the broadcast manually.
+
+        :param str name: name of the broadcast
+        :param str description: short description
+        :param str markdown: long description
+        :param str sync_url: URL by which Lichess can poll for updates
+        :param str credit: short text to give credit to the source provider
+        :param int starts_at: start time as millis
+        :param bool official: DO NOT USE
+        :param int throttle: DO NOT USE
+        :return: created tournament info
+        :rtype: dict
+        """
+        path = 'broadcast/new'
+        payload = {
+            'name': name,
+            'description': description,
+            'syncUrl': sync_url,
+            'markdown': markdown,
+            'credit': credit,
+            'startsAt': starts_at,
+            'official': official,
+            'throttle': throttle,
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Broadcast.convert)
+
+    def get(self, broadcast_id, slug='-'):
+        """Get a broadcast by ID.
+
+        :param str broadcast_id: ID of a broadcast
+        :param str slug: slug for SEO
+        :return: broadcast information
+        :rtype: dict
+        """
+        path = f'broadcast/{slug}/{broadcast_id}'
+        return self._r.get(path, converter=models.Broadcast.convert)
+
+    def update(self, broadcast_id, name, description, sync_url, markdown=None,
+               credit=None, starts_at=None, official=None, throttle=None,
+               slug='-'):
+        """Update an existing broadcast by ID.
+
+        .. note::
+
+            Provide all fields. Values in missing fields will be erased.
+
+        :param str broadcast_id: ID of a broadcast
+        :param str name: name of the broadcast
+        :param str description: short description
+        :param str sync_url: URL by which Lichess can poll for updates
+        :param str markdown: long description
+        :param str credit: short text to give credit to the source provider
+        :param int starts_at: start time as millis
+        :param bool official: DO NOT USE
+        :param int throttle: DO NOT USE
+        :param str slug: slug for SEO
+        :return: updated broadcast information
+        :rtype: dict
+        """
+        path = f'broadcast/{slug}/{broadcast_id}'
+        payload = {
+            'name': name,
+            'description': description,
+            'syncUrl': sync_url,
+            'markdown': markdown,
+            'credit': credit,
+            'startsAt': starts_at,
+            'official': official,
+
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Broadcast.convert)
+
+    def push_pgn_update(self, broadcast_id, pgn_games, slug='-'):
+        """Manually update an existing broadcast by ID.
+
+        :param str broadcast_id: ID of a broadcast
+        :param list pgn_games: one or more games in PGN format
+        :return: success for each game PGN given
+        :rtype: list
+        """
+        path = f'broadcast/{slug}/{broadcast_id}/push'
+        games = '\n\n'.join(g.strip() for g in pgn_games)
+        okays = self._r.post(path, data=games)
+        return [a['ok'] for a in okays]
