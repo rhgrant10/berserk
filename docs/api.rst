@@ -33,3 +33,12 @@ Formats
     :members:
     :undoc-members:
     :show-inheritance:
+
+
+Exceptions
+----------
+
+.. automodule:: berserk.exceptions
+    :members:
+    :undoc-members:
+    :show-inheritance:

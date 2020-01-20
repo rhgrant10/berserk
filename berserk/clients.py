@@ -7,7 +7,14 @@ from . import models
 
 
 __all__ = [
-    'Client', 'Account', 'Users', 'Games', 'Challenges', 'Bots', 'Tournaments',
+    'Client',
+    'Account',
+    'Users',
+    'Games',
+    'Challenges',
+    'Bots',
+    'Tournaments',
+    'Broadcasts',
 ]
 
 
@@ -571,6 +578,7 @@ class Tournaments(BaseClient):
 
 
 class Broadcasts(BaseClient):
+    """Broadcast of one or more games."""
 
     def create(self, name, description, sync_url=None, markdown=None,
                credit=None, starts_at=None, official=None, throttle=None):
