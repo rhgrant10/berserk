@@ -4,6 +4,7 @@ import urllib
 import requests
 
 from . import utils
+from . import exceptions
 
 
 class Requestor:
@@ -31,15 +32,18 @@ class Requestor:
         :type fmt: :class:`~berserk.formats.FormatHandler`
         :param func converter: function to handle field conversions
         :return: response
-        :raises requests.exceptions.RequestException: if the status is >=400
+        :raises berserk.exceptions.ResponseError: if the status is >=400
         """
         fmt = fmt or self.default_fmt
         kwargs['headers'] = fmt.headers
         url = urllib.parse.urljoin(self.base_url, path)
 
-        response = self.session.request(method, url, *args, **kwargs)
+        try:
+            response = self.session.request(method, url, *args, **kwargs)
+        except requests.RequestException as e:
+            raise exceptions.ApiError(e)
         if not response.ok:
-            response.raise_for_status()
+            raise exceptions.ResponseError(response)
 
         return fmt.handle(response, is_stream=kwargs.get('stream'),
                           converter=converter)
