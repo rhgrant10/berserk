@@ -1,5 +1,6 @@
 
 
+
 def get_message(e):
     return e.args[0] if e.args else ''
 
@@ -26,11 +27,18 @@ class ApiError(BerserkError):
 class ResponseError(ApiError):
     """Response that indicates an error."""
 
+    # sentinal object for when None is a valid result
+    __UNDEFINED = object()
+
     def __init__(self, response):
         error = ResponseError._catch_exception(response)
         super().__init__(error)
+        self._cause = ResponseError.__UNDEFINED
         self.response = response
-        self.message = f'HTTP {self.status_code}: {self.reason}: {self.cause}'
+        base_message = f'HTTP {self.status_code}: {self.reason}'
+        if self.cause:
+            self.message = f'{base_message}: {self.cause}'
+
 
     @property
     def status_code(self):
@@ -44,10 +52,12 @@ class ResponseError(ApiError):
 
     @property
     def cause(self):
-        try:
-            return self.response.json()['error']
-        except Exception:
-            return None
+        if self._cause is ResponseError.__UNDEFINED:
+            try:
+                self._cause = self.response.json()['error']
+            except Exception:
+                self._cause = None
+        return self._cause
 
     @staticmethod
     def _catch_exception(response):
