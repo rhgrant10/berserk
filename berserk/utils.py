@@ -15,6 +15,11 @@ def datetime_from_millis(millis):
     return datetime_from_seconds(millis / 1000)
 
 
+def datetime_from_str(dt_str):
+    dt = datetime.strptime(dt_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+    return dt.replace(tzinfo=timezone.utc)
+
+
 def inner(func, *keys):
     def convert(data):
         for k in keys:
@@ -24,11 +29,6 @@ def inner(func, *keys):
                 pass  # normal for keys to not be present sometimes
         return data
     return convert
-
-
-def datetime_from_str(dt_str):
-    dt = datetime.strptime(dt_str, '%Y-%m-%dT%H:%M:%S.%fZ')
-    return dt.replace(tzinfo=timezone.utc)
 
 
 def noop(arg):

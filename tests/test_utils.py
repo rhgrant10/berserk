@@ -1,24 +1,104 @@
 # -*- coding: utf-8 -*-
 import datetime
+import dataclasses
+
+import pytest
 
 from berserk import utils
 
 
-def test_datetime_from_millis():
-    dt = utils.datetime_from_millis(1514505150384)
-    assert dt.timestamp() == 1514505150.384
+TIME_FMT = '%Y-%m-%dT%H:%M:%S.%fZ'
 
 
-def test_inner_datetime_from_seconds():
-    converter = utils.inner(utils.datetime_from_seconds, 'foo')
-    result = converter({'foo': 1514505150, 'bar': 'baz', 'qux': 123})
-    assert result == {
-        'foo': datetime.datetime(2017, 12, 28, 23, 52, 30,
-                                 tzinfo=datetime.timezone.utc),
-        'bar': 'baz',
-        'qux': 123,
-    }
+@dataclasses.dataclass
+class Case:
+    dt: datetime.datetime
+    seconds: float
+    millis: float
+    text: str
+
+    @classmethod
+    def from_datetime(cls, dt):
+        ts = dt.timestamp()
+        return cls(dt, ts, ts * 1000, dt.strftime(TIME_FMT))
+
+
+@pytest.fixture
+def time_case():
+    dt = datetime.datetime(2017, 12, 28, 23, 52, 30,
+                           tzinfo=datetime.timezone.utc)
+    return Case.from_datetime(dt)
+
+
+def test_to_millis(time_case):
+    assert utils.to_millis(time_case.dt) == time_case.millis
+
+
+def test_datetime_from_seconds(time_case):
+    assert utils.datetime_from_seconds(time_case.seconds) == time_case.dt
+
+
+def test_datetime_from_millis(time_case):
+    assert utils.datetime_from_millis(time_case.millis) == time_case.dt
+
+
+def test_datetime_from_str(time_case):
+    assert utils.datetime_from_str(time_case.text) == time_case.dt
+
+
+def test_inner():
+    convert = utils.inner(lambda v: 2 * v, 'x', 'y')
+    result = convert({'x': 42})
+    assert result == {'x': 84}
 
 
 def test_noop():
     assert 'foo' == utils.noop('foo')
+
+
+@pytest.fixture
+def adapter_mapping():
+    return {
+        'foo_bar': 'foo.bar',
+        'baz': 'baz',
+        'qux': 'foo.qux',
+        'quux': 'foo.quux',
+        'corgeGrault': 'foo.corge.grault',
+        'corgeGarply': 'foo.corge.garply',
+    }
+
+
+@pytest.fixture
+def data_to_adapt():
+    return {
+        'foo': {
+            'bar': 'one',
+            'qux': 'three',
+            'corge': {'grault': 'four', 'garply': None}
+        },
+        'baz': 'two',
+    }
+
+
+def test_adapt_with_fill(adapter_mapping, data_to_adapt):
+    adapt = utils.build_adapter(adapter_mapping)
+    default = object()
+    assert adapt(data_to_adapt, fill=True, default=default) == {
+        'foo_bar': 'one',
+        'baz': 'two',
+        'qux': 'three',
+        'quux': default,
+        'corgeGrault': 'four',
+        'corgeGarply': None,
+    }
+
+
+def test_adapt(adapter_mapping, data_to_adapt):
+    adapt = utils.build_adapter(adapter_mapping)
+    assert adapt(data_to_adapt) == {
+        'foo_bar': 'one',
+        'baz': 'two',
+        'qux': 'three',
+        'corgeGrault': 'four',
+        'corgeGarply': None,
+    }
