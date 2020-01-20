@@ -520,9 +520,34 @@ class Tournaments(BaseClient):
         return self._r.get(path, converter=models.Tournaments.convert_values)
 
     def create(self, clock_time, clock_increment, minutes, name=None,
-               wait_minutes=None, variant=None, mode=None, berserkable=None,
-               start_date=None, position=None, private=None, password=None):
-        """Create a new tournament."""
+               wait_minutes=None, variant=None, berserkable=None, rated=None,
+               start_date=None, position=None, password=None, conditions=None):
+        """Create a new tournament.
+
+        .. note::
+
+            ``wiat_minutes`` is always relative to now and is overriden by
+            ``start_time``.
+
+        .. note::
+
+            If ``name`` is left blank then one is automatically created.
+
+        :param int clock_time: intial clock time in minutes
+        :param int clock_increment: clock increment in seconds
+        :param int minutes: length of the tournament in minutes
+        :param str name: tournament name
+        :param int wait_minutes: future start time in minutes
+        :param str start_date: when to start the tournament
+        :param str variant: variant to use if other than standard
+        :param bool rated: whether the game affects player ratings
+        :param str berserkable: whether players can use berserk
+        :param str position: custom initial position in FEN
+        :param str password: password (makes the tournament private)
+        :param dict conditions: conditions for participation
+        :return: created tournament info
+        :rtype: dict
+        """
         path = 'api/tournament'
         payload = {
             'name': name,
@@ -530,13 +555,13 @@ class Tournaments(BaseClient):
             'clockIncrement': clock_increment,
             'minutes': minutes,
             'waitMinutes': wait_minutes,
+            'startDate': start_date,
             'variant': variant,
-            'mode': mode,
-            'berserkable': berserkable,
-            'start_date': start_date,
+            'rated': rated,
             'position': position,
-            'private': private,
+            'berserkable': berserkable,
             'password': password,
+            **{f'conditions.{c}': v for c, v in (conditions or {}).items()},
         }
         return self._r.post(path, json=payload,
                             converter=models.Tournament.convert)
