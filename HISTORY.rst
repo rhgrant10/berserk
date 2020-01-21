@@ -2,6 +2,15 @@
 History
 =======
 
+0.6.1 (2020-01-20)
+==================
+
+* Add py37 to the travis build
+* Update development status classifier to 4 - Beta
+* Fix py36 issue preventing successful build
+* Make updates to the Makefile
+
+
 0.6.0 (2020-01-20)
 ==================
 
