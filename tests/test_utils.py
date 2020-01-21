@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-import dataclasses
+import collections
 
 import pytest
 
@@ -10,24 +10,15 @@ from berserk import utils
 TIME_FMT = '%Y-%m-%dT%H:%M:%S.%fZ'
 
 
-@dataclasses.dataclass
-class Case:
-    dt: datetime.datetime
-    seconds: float
-    millis: float
-    text: str
-
-    @classmethod
-    def from_datetime(cls, dt):
-        ts = dt.timestamp()
-        return cls(dt, ts, ts * 1000, dt.strftime(TIME_FMT))
+Case = collections.namedtuple('Case', 'dt seconds millis text')
 
 
 @pytest.fixture
 def time_case():
     dt = datetime.datetime(2017, 12, 28, 23, 52, 30,
                            tzinfo=datetime.timezone.utc)
-    return Case.from_datetime(dt)
+    ts = dt.timestamp()
+    return Case(dt, ts, ts * 1000, dt.strftime(TIME_FMT))
 
 
 def test_to_millis(time_case):
