@@ -3,7 +3,7 @@ History
 =======
 
 0.6.0 (2020-01-20)
-------------------
+==================
 
 * Add logging to the ``berserk.session`` module
 * Fix exception message when no cause
@@ -12,7 +12,7 @@ History
 
 
 0.5.0 (2020-01-20)
-------------------
+==================
 
 * Add ``ResponseError`` for 4xx and 5xx responses with status code, reason, and cause
 * Add ``ApiError`` for all other request errors
@@ -21,7 +21,7 @@ History
 
 
 0.4.0 (2020-01-19)
-------------------
+==================
 
 * Add support for the broadcast endpoints
 * Add a utility for easily converting API objects into update params
@@ -31,7 +31,7 @@ History
 
 
 0.3.2 (2020-01-04)
-------------------
+==================
 
 * Fix bug where options not passed for challenge creation
 * Convert requirements from pinned to sematically compatible
@@ -41,39 +41,39 @@ History
 
 
 0.3.1 (2018-12-23)
-------------------
+==================
 
 * Convert datetime string in tournament creation response into datetime object
 
 
 0.3.0 (2018-12-23)
-------------------
+==================
 
 * Convert all timestamps to datetime in all responses
 * Provide support for challenging other players to a game
 
 
 0.2.1 (2018-12-08)
-------------------
+==================
 
 * Bump requests dependency to >=2.20.0 (CVE-2018-18074)
 
 
 0.2.0 (2018-12-08)
-------------------
+==================
 
 * Add `position` and `start_date` params to `Tournament.create`
 * Add `Position` enum
 
 
 0.1.2 (2018-07-14)
-------------------
+==================
 
 * Fix an asine bug in the docs
 
 
 0.1.1 (2018-07-14)
-------------------
+==================
 
 * Added tests for session and formats modules
 * Fixed mispelled PgnHandler class (!)
@@ -85,6 +85,6 @@ History
 
 
 0.1.0 (2018-07-10)
-------------------
+==================
 
 * First release on PyPI.
