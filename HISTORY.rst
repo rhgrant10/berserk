@@ -2,13 +2,22 @@
 History
 =======
 
+0.6.0 (2020-01-20)
+------------------
+
+* Add logging to the ``berserk.session`` module
+* Fix exception message when no cause
+* Fix bug in ``Broadcasts.push_pgn_update``
+* Update documentation and tweak the theme
+
+
 0.5.0 (2020-01-20)
 ------------------
 
 * Add ``ResponseError`` for 4xx and 5xx responses with status code, reason, and cause
 * Add ``ApiError`` for all other request errors
 * Fix test case broken by 0.4.0 release
-* Pull all utils code under test
+* Put all utils code under test
 
 
 0.4.0 (2020-01-19)
