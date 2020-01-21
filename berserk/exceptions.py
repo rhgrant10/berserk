@@ -1,6 +1,5 @@
 
 
-
 def get_message(e):
     return e.args[0] if e.args else ''
 
@@ -38,7 +37,6 @@ class ResponseError(ApiError):
         base_message = f'HTTP {self.status_code}: {self.reason}'
         if self.cause:
             self.message = f'{base_message}: {self.cause}'
-
 
     @property
     def status_code(self):
