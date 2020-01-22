@@ -60,6 +60,7 @@ class Client(BaseClient):
         self.bots = Bots(session, base_url)
         self.tournaments = Tournaments(session, base_url)
         self.broadcasts = Broadcasts(session, base_url)
+        self.simuls = Simuls(session, base_url)
 
 
 class Account(BaseClient):
@@ -672,3 +673,16 @@ class Broadcasts(BaseClient):
         path = f'broadcast/{slug}/{broadcast_id}/push'
         games = '\n\n'.join(g.strip() for g in pgn_games)
         return self._r.post(path, data=games)['ok']
+
+
+class Simuls(BaseClient):
+    """Simultaneous exhibitions - one vs many."""
+
+    def get(self):
+        """Get recently finished, ongoing, and upcoming simuls.
+
+        :return: current simuls
+        :rtype: list
+        """
+        path = 'api/simul'
+        return self._r.get(path)
