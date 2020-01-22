@@ -577,6 +577,60 @@ class Tournaments(BaseClient):
         return self._r.post(path, json=payload,
                             converter=models.Tournament.convert)
 
+    def export_games(self, id_, as_pgn=False, moves=None, tags=None,
+                     clocks=None, evals=None, opening=None):
+        """Export games from a tournament.
+
+        :param str id_: tournament ID
+        :param bool as_pgn: whether to return PGN instead of JSON
+        :param bool moves: include moves
+        :param bool tags: include tags
+        :param bool clocks: include clock comments in the PGN moves, when
+                            available
+        :param bool evals: include analysis evalulation comments in the PGN
+                           moves, when available
+        :param bool opening: include the opening name
+        :return: games
+        :rtype: list
+        """
+        path = f'api/tournament/{id_}/games'
+        params = {
+            'moves': moves,
+            'tags': tags,
+            'clocks': clocks,
+            'evals': evals,
+            'opening': opening,
+        }
+        fmt = PGN if self._use_pgn(as_pgn) else JSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
+
+    def stream_results(self, id_, limit=None):
+        """Stream the results of a tournament.
+
+        Results are the players of a tournament with their scores and
+        performance in rank order. Note that results for ongoing
+        tournaments can be inconsistent due to ranking changes.
+
+        :param str id_: tournament ID
+        :param int limit: maximum number of results to stream
+        :return: iterator over the stream of results
+        :rtype: iter
+        """
+        path = f'api/tournament/{id_}/results'
+        params = {'nb': limit}
+        return self._r.get(path, params=params, stream=True)
+
+    def stream_by_creator(self, username):
+        """Stream the tournaments created by a player.
+
+        :param str username: username of the player
+        :return: tournaments
+        :rtype: iter
+        """
+        path = f'api/user/{username}/tournament/created'
+        return self._r.get(path, stream=True)
+
 
 class Broadcasts(BaseClient):
     """Broadcast of one or more games."""
