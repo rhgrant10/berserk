@@ -4,18 +4,48 @@ from datetime import timezone
 
 
 def to_millis(dt):
+    """Return the milliseconds between the given datetime and the epoch.
+
+    :param datetime dt: a datetime
+    :return: milliseconds since the epoch
+    :rtype: int
+    """
     return dt.timestamp() * 1000
 
 
 def datetime_from_seconds(ts):
+    """Return the datetime for the given seconds since the epoch.
+
+    UTC is assumed. The returned datetime is timezone aware.
+
+    :return: timezone aware datetime
+    :rtype: :class:`datetime`
+    """
     return datetime.fromtimestamp(ts, timezone.utc)
 
 
 def datetime_from_millis(millis):
+    """Return the datetime for the given millis since the epoch.
+
+    UTC is assumed. The returned datetime is timezone aware.
+
+    :return: timezone aware datetime
+    :rtype: :class:`datetime`
+    """
     return datetime_from_seconds(millis / 1000)
 
 
 def datetime_from_str(dt_str):
+    """Convert the time in a string to a datetime.
+
+    UTC is assumed. The returned datetime is timezone aware. The format
+    must match::
+
+        '%Y-%m-%dT%H:%M:%S.%fZ'
+
+    :return: timezone aware datetime
+    :rtype: :class:`datetime`
+    """
     dt = datetime.strptime(dt_str, '%Y-%m-%dT%H:%M:%S.%fZ')
     return dt.replace(tzinfo=timezone.utc)
 

@@ -42,3 +42,9 @@ Exceptions
     :members:
     :undoc-members:
     :show-inheritance:
+
+Utils
+-----
+
+.. automodule:: berserk.utils
+    :members:
