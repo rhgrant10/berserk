@@ -130,6 +130,18 @@ class Account(BaseClient):
 class Users(BaseClient):
     """Client for user-related endpoints."""
 
+    def get_puzzle_activity(self, max=None):
+        """Stream puzzle activity history starting with the most recent.
+
+        :param int max: maximum number of entries to stream
+        :return: puzzle activity history
+        :rtype: iter
+        """
+        path = 'api/user/puzzle-activity'
+        params = {'max': max}
+        return self._r.get(path, params=params, fmt=NDJSON, stream=True,
+                           converter=models.PuzzleActivity.convert)
+
     def get_realtime_statuses(self, *user_ids):
         """Get the online, playing, and streaming statuses of players.
 

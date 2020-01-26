@@ -72,3 +72,7 @@ class Broadcast(Model):
 
 class RatingHistory(Model):
     points = utils.listing(utils.rating_history)
+
+
+class PuzzleActivity(Model):
+    date = utils.datetime_from_millis
