@@ -215,6 +215,38 @@ class Users(BaseClient):
         path = 'streamer/live'
         return self._r.get(path)
 
+    def get_users_followed(self, username):
+        """Stream users followed by a user.
+
+        :param str username: a username
+        :return: iterator over the users the given user follows
+        :rtype: iter
+        """
+        path = f'/api/user/{username}/following'
+        return self._r.get(path, stream=True, fmt=NDJSON,
+                           converter=models.User.convert)
+
+    def get_users_following(self, username):
+        """Stream users who follow a user.
+
+        :param str username: a username
+        :return: iterator over the users that follow the given user
+        :rtype: iter
+        """
+        path = f'/api/user/{username}/followers'
+        return self._r.get(path, stream=True, fmt=NDJSON,
+                           converter=models.User.convert)
+
+    def get_rating_history(self, username):
+        """Get the rating history of a user.
+
+        :param str username: a username
+        :return: rating history for all game types
+        :rtype: list
+        """
+        path = f'/api/user/{username}/rating-history'
+        return self._r.get(path, converter=models.RatingHistory.convert)
+
 
 class Games(BaseClient):
     """Client for games-related endpoints.

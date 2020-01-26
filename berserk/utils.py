@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from datetime import timezone
+import collections
 
 
 def to_millis(dt):
@@ -39,15 +40,20 @@ def datetime_from_str(dt_str):
     """Convert the time in a string to a datetime.
 
     UTC is assumed. The returned datetime is timezone aware. The format
-    must match::
-
-        '%Y-%m-%dT%H:%M:%S.%fZ'
+    must match ``%Y-%m-%dT%H:%M:%S.%fZ``.
 
     :return: timezone aware datetime
     :rtype: :class:`datetime`
     """
     dt = datetime.strptime(dt_str, '%Y-%m-%dT%H:%M:%S.%fZ')
     return dt.replace(tzinfo=timezone.utc)
+
+
+_RatingHistoryEntry = collections.namedtuple('Entry', 'year month day rating')
+
+
+def rating_history(data):
+    return _RatingHistoryEntry(*data)
 
 
 def inner(func, *keys):
@@ -58,6 +64,15 @@ def inner(func, *keys):
             except KeyError:
                 pass  # normal for keys to not be present sometimes
         return data
+    return convert
+
+
+def listing(func):
+    def convert(items):
+        result = []
+        for item in items:
+            result.append(func(item))
+        return result
     return convert
 
 
