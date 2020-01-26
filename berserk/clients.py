@@ -61,6 +61,7 @@ class Client(BaseClient):
         self.tournaments = Tournaments(session, base_url)
         self.broadcasts = Broadcasts(session, base_url)
         self.simuls = Simuls(session, base_url)
+        self.studies = Studies(session, base_url)
 
 
 class Account(BaseClient):
@@ -740,3 +741,25 @@ class Simuls(BaseClient):
         """
         path = 'api/simul'
         return self._r.get(path)
+
+
+class Studies(BaseClient):
+    """Study chess the Lichess way."""
+
+    def export_chapter(self, study_id, chapter_id):
+        """Export one chapter of a study.
+
+        :return: chapter
+        :rtype: PGN
+        """
+        path = f'/study/{study_id}/{chapter_id}.pgn'
+        return self._r.get(path, fmt=PGN)
+
+    def export(self, study_id):
+        """Export all chapters of a study.
+
+        :return: all chapters as PGN
+        :rtype: list
+        """
+        path = f'/study/{study_id}.pgn'
+        return self._r.get(path, fmt=PGN, stream=True)
