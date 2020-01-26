@@ -10,12 +10,15 @@ from . import models
 __all__ = [
     'Client',
     'Account',
-    'Users',
-    'Games',
-    'Challenges',
     'Bots',
-    'Tournaments',
     'Broadcasts',
+    'Challenges',
+    'Games',
+    'Simuls',
+    'Studies',
+    'Teams',
+    'Tournaments',
+    'Users',
 ]
 
 
@@ -51,20 +54,21 @@ class FmtClient(BaseClient):
 class Client(BaseClient):
     """Main touchpoint for the API.
 
-    The client contains all the endpoints in logical (hopefully) namespaces.
+    All endpoints are namespaced into the clients below:
 
     - :class:`account <berserk.clients.Account>` - managing account information
-    - :class:`users <berserk.clients.Users>` - getting information about users
-    - :class:`teams <berserk.clients.Teams>` - getting information about teams
-    - :class:`games <berserk.clients.Games>` - getting and exporting games
-    - :class:`challenges <berserk.clients.Challenges>` - using challenges
     - :class:`bots <berserk.clients.Bots>` - performing bot operations
-    - :class:`tournaments <berserk.clients.Tournaments>` - getting and creating
-      tournaments
     - :class:`broadcasts <berserk.clients.Broadcasts>` - getting and creating
+      broadcasts
+    - :class:`challenges <berserk.clients.Challenges>` - using challenges
+    - :class:`games <berserk.clients.Games>` - getting and exporting games
     - :class:`simuls <berserk.clients.Simuls>` - getting simultaneous
-                                                 exhibition games
+      exhibition games
     - :class:`studies <berserk.clients.Studies>` - exporting studies
+    - :class:`teams <berserk.clients.Teams>` - getting information about teams
+    - :class:`tournaments <berserk.clients.Tournaments>` - getting and
+      creating tournaments
+    - :class:`users <berserk.clients.Users>` - getting information about users
 
     :param session: request session, authenticated as needed
     :type session: :class:`requests.Session`
@@ -333,7 +337,6 @@ class Teams(BaseClient):
         """
         path = f'/team/{team_id}/kick/{user_id}'
         return self._r.post(path)['ok']
-
 
 
 class Games(FmtClient):
