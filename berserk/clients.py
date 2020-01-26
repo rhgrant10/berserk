@@ -25,6 +25,29 @@ class BaseClient:
         self._r = Requestor(session, base_url, default_fmt=JSON)
 
 
+class FmtClient(BaseClient):
+    """Client that can return PGN or not.
+
+    :param session: request session, authenticated as needed
+    :type session: :class:`requests.Session`
+    :param str base_url: base URL for the API
+    :param bool pgn_as_default: ``True`` if PGN should be the default format
+                                for game exports when possible. This defaults
+                                to ``False`` and is used as a fallback when
+                                ``as_pgn`` is left as ``None`` for methods that
+                                support it.
+    """
+
+    def __init__(self, session, base_url='https://lichess.org/',
+                 pgn_as_default=False):
+        super().__init__(session, base_url)
+        self.pgn_as_default = pgn_as_default
+
+    def _use_pgn(self, as_pgn=None):
+        # helper to merge default with provided arg
+        return as_pgn if as_pgn is not None else self.pgn_as_default
+
+
 class Client(BaseClient):
     """Main touchpoint for the API.
 
@@ -32,13 +55,16 @@ class Client(BaseClient):
 
     - :class:`account <berserk.clients.Account>` - managing account information
     - :class:`users <berserk.clients.Users>` - getting information about users
+    - :class:`teams <berserk.clients.Teams>` - getting information about teams
     - :class:`games <berserk.clients.Games>` - getting and exporting games
     - :class:`challenges <berserk.clients.Challenges>` - using challenges
     - :class:`bots <berserk.clients.Bots>` - performing bot operations
     - :class:`tournaments <berserk.clients.Tournaments>` - getting and creating
       tournaments
     - :class:`broadcasts <berserk.clients.Broadcasts>` - getting and creating
-      broadcasts
+    - :class:`simuls <berserk.clients.Simuls>` - getting simultaneous
+                                                 exhibition games
+    - :class:`studies <berserk.clients.Studies>` - exporting studies
 
     :param session: request session, authenticated as needed
     :type session: :class:`requests.Session`
@@ -56,10 +82,12 @@ class Client(BaseClient):
         super().__init__(session, base_url)
         self.account = Account(session, base_url)
         self.users = Users(session, base_url)
+        self.teams = Teams(session, base_url)
         self.games = Games(session, base_url, pgn_as_default=pgn_as_default)
         self.challenges = Challenges(session, base_url)
         self.bots = Bots(session, base_url)
-        self.tournaments = Tournaments(session, base_url)
+        self.tournaments = Tournaments(session, base_url,
+                                       pgn_as_default=pgn_as_default)
         self.broadcasts = Broadcasts(session, base_url)
         self.simuls = Simuls(session, base_url)
         self.studies = Studies(session, base_url)
@@ -275,8 +303,9 @@ class Teams(BaseClient):
         return self._r.get(path, fmt=NDJSON, stream=True,
                            converter=models.User.convert)
 
-    def _use_pgn(self, as_pgn):
-        return as_pgn if as_pgn is not None else self.pgn_as_default
+
+class Games(FmtClient):
+    """Client for games-related endpoints."""
 
     def export(self, game_id, as_pgn=None, moves=None, tags=None, clocks=None,
                evals=None, opening=None, literate=None):
@@ -560,7 +589,7 @@ class Bots(BaseClient):
         return self._r.post(path)['ok']
 
 
-class Tournaments(BaseClient):
+class Tournaments(FmtClient):
     """Client for tournament-related endpoints."""
 
     def get(self):
@@ -643,7 +672,7 @@ class Tournaments(BaseClient):
             'evals': evals,
             'opening': opening,
         }
-        fmt = PGN if self._use_pgn(as_pgn) else JSON
+        fmt = PGN if self._use_pgn(as_pgn) else NDJSON
         return self._r.get(path, params=params, fmt=fmt,
                            converter=models.Game.convert)
 
