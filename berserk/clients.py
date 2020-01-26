@@ -303,6 +303,38 @@ class Teams(BaseClient):
         return self._r.get(path, fmt=NDJSON, stream=True,
                            converter=models.User.convert)
 
+    def join(self, team_id):
+        """Join a team.
+
+        :param str team_id: ID of a team
+        :return: success
+        :rtype: bool
+        """
+        path = f'/team/{team_id}/join'
+        return self._r.post(path)['ok']
+
+    def leave(self, team_id):
+        """Leave a team.
+
+        :param str team_id: ID of a team
+        :return: success
+        :rtype: bool
+        """
+        path = f'/team/{team_id}/quit'
+        return self._r.post(path)['ok']
+
+    def kick_member(self, team_id, user_id):
+        """Kick a member out of your team.
+
+        :param str team_id: ID of a team
+        :param str user_id: ID of a team member
+        :return: success
+        :rtype: bool
+        """
+        path = f'/team/{team_id}/kick/{user_id}'
+        return self._r.post(path)['ok']
+
+
 
 class Games(FmtClient):
     """Client for games-related endpoints."""
