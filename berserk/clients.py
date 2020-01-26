@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import requests
+from deprecated import deprecated
 
 from .session import Requestor
 from .formats import JSON, LIJSON, PGN, NDJSON
@@ -207,6 +208,7 @@ class Users(BaseClient):
         return self._r.post(path, data=','.join(usernames),
                             converter=models.User.convert)
 
+    @deprecated(version='0.7.0', reason='use Teams.get_members(id) instead')
     def get_by_team(self, team_id):
         """Get members of a team.
 
@@ -260,23 +262,18 @@ class Users(BaseClient):
         return self._r.get(path, converter=models.RatingHistory.convert)
 
 
-class Games(BaseClient):
-    """Client for games-related endpoints.
+class Teams(BaseClient):
 
-    :param session: request session, authenticated as needed
-    :type session: :class:`requests.Session`
-    :param str base_url: base URL for the API
-    :param bool pgn_as_default: ``True`` if PGN should be the default format
-                                for game exports when possible. This defaults
-                                to ``False`` and is used as a fallback when
-                                ``as_pgn`` is left as ``None`` for methods that
-                                support it.
-    """
+    def get_members(self, team_id):
+        """Get members of a team.
 
-    def __init__(self, session, base_url='https://lichess.org/',
-                 pgn_as_default=False):
-        super().__init__(session, base_url)
-        self.pgn_as_default = pgn_as_default
+        :param str team_id: ID of a team
+        :return: users on the given team
+        :rtype: iter
+        """
+        path = f'team/{team_id}/users'
+        return self._r.get(path, fmt=NDJSON, stream=True,
+                           converter=models.User.convert)
 
     def _use_pgn(self, as_pgn):
         return as_pgn if as_pgn is not None else self.pgn_as_default
