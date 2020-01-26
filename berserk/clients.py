@@ -22,10 +22,14 @@ __all__ = [
 ]
 
 
+# Base URL for the API
+API_URL = 'https://lichess.org/'
+
+
 class BaseClient:
 
-    def __init__(self, session, base_url):
-        self._r = Requestor(session, base_url, default_fmt=JSON)
+    def __init__(self, session, base_url=None):
+        self._r = Requestor(session, base_url or API_URL, default_fmt=JSON)
 
 
 class FmtClient(BaseClient):
@@ -41,8 +45,7 @@ class FmtClient(BaseClient):
                                 support it.
     """
 
-    def __init__(self, session, base_url='https://lichess.org/',
-                 pgn_as_default=False):
+    def __init__(self, session, base_url=None, pgn_as_default=False):
         super().__init__(session, base_url)
         self.pgn_as_default = pgn_as_default
 
@@ -72,7 +75,7 @@ class Client(BaseClient):
 
     :param session: request session, authenticated as needed
     :type session: :class:`requests.Session`
-    :param str base_url: base URL for the API
+    :param str base_url: base API URL to use (if other than the default)
     :param bool pgn_as_default: ``True`` if PGN should be the default format
                                 for game exports when possible. This defaults
                                 to ``False`` and is used as a fallback when
@@ -80,8 +83,7 @@ class Client(BaseClient):
                                 support it.
     """
 
-    def __init__(self, session=None, base_url='https://lichess.org/',
-                 pgn_as_default=False):
+    def __init__(self, session=None, base_url=None, pgn_as_default=False):
         session = session or requests.Session()
         super().__init__(session, base_url)
         self.account = Account(session, base_url)
