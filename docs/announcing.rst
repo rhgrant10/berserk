@@ -1,3 +1,5 @@
+Hi everyone,
+
 I'm pleased to announce the release of berserk v0.7.0!
 
 What's New?
@@ -46,8 +48,11 @@ What is berserk?
 berserk is the Python client for the Lichess API. It supports JSON and PGN,
 provides pluggable session auth, and implements most if not all of the API.
 
-* Free software: GNU General Public License v3
-* Documentation: https://berserk.readthedocs.io.
+License: GNU General Public License v3
+
+* Read the **docs**: https://berserk.readthedocs.io/
+* Install from **PyPI**: https://pypi.org/project/berserk/
+* Contribute **source**: https://github.com/rhgrant10/berserk
 
 
 Example
