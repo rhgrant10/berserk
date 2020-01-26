@@ -2,6 +2,19 @@
 History
 =======
 
+0.7.0 (2020-01-26)
+==================
+
+* Add simuls
+* Add studies export and export chapter
+* Add tournament results, games export, and list by creator
+* Add user followers, users following, rating history, and puzzle activity
+* Add new ``Teams`` client: join, get members, kick member, and leave
+* Updated documentation, including new docs for some useful utils
+* Fixed bugs in ``Tournaments.export_games``
+* Deprecated ``Users.get_by_team`` - use ``Teams.get_members`` instead
+
+
 0.6.1 (2020-01-20)
 ==================
 
