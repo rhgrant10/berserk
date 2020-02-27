@@ -10,6 +10,7 @@ from . import models
 __all__ = [
     'Client',
     'Account',
+    'Board',
     'Bots',
     'Broadcasts',
     'Challenges',
@@ -91,6 +92,7 @@ class Client(BaseClient):
         self.teams = Teams(session, base_url)
         self.games = Games(session, base_url, pgn_as_default=pgn_as_default)
         self.challenges = Challenges(session, base_url)
+        self.board = Board(session, base_url)
         self.bots = Bots(session, base_url)
         self.tournaments = Tournaments(session, base_url,
                                        pgn_as_default=pgn_as_default)
@@ -537,6 +539,72 @@ class Challenges(BaseClient):
         path = f'api/challenge/{challenge_id}/decline'
         return self._r.post(path)['ok']
 
+class Board(BaseClient):
+    """Client for physical board or external application endpoints."""
+
+    def stream_incoming_events(self):
+        """Get your realtime stream of incoming events.
+
+        :return: stream of incoming events
+        :rtype: iterator over the stream of events
+        """
+        path = 'api/stream/event'
+        yield from self._r.get(path, stream=True)
+
+    def stream_game_state(self, game_id):
+        """Get the stream of events for a board game.
+
+        :param str game_id: ID of a game
+        :return: iterator over game states
+        """
+        path = f'api/board/game/stream/{game_id}'
+        yield from self._r.get(path, stream=True,
+                               converter=models.GameState.convert)
+
+    def make_move(self, game_id, move):
+        """Make a move in a board game.
+
+        :param str game_id: ID of a game
+        :param str move: move to make
+        :return: success
+        :rtype: bool
+        """
+        path = f'api/board/game/{game_id}/move/{move}'
+        return self._r.post(path)['ok']
+
+    def post_message(self, game_id, text, spectator=False):
+        """Post a message in a board game.
+
+        :param str game_id: ID of a game
+        :param str text: text of the message
+        :param bool spectator: post to spectator room (else player room)
+        :return: success
+        :rtype: bool
+        """
+        path = f'api/board/game/{game_id}/chat'
+        room = 'spectator' if spectator else 'player'
+        payload = {'room': room, 'text': text}
+        return self._r.post(path, json=payload)['ok']
+
+    def abort_game(self, game_id):
+        """Abort a board game.
+
+        :param str game_id: ID of a game
+        :return: success
+        :rtype: bool
+        """
+        path = f'api/board/game/{game_id}/abort'
+        return self._r.post(path)['ok']
+
+    def resign_game(self, game_id):
+        """Resign a board game.
+
+        :param str game_id: ID of a game
+        :return: success
+        :rtype: bool
+        """
+        path = f'api/board/game/{game_id}/resign'
+        return self._r.post(path)['ok']
 
 class Bots(BaseClient):
     """Client for bot-related endpoints."""
