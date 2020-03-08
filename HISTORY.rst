@@ -2,6 +2,11 @@
 History
 =======
 
+0.8.0 (2020-03-08)
+==================
+
+* Add new ``Board`` client: stream_incoming_events, stream_game_state, make_move, post_message, abort_game, and resign_game
+
 0.7.0 (2020-01-26)
 ==================
 
