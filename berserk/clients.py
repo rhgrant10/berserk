@@ -539,6 +539,7 @@ class Challenges(BaseClient):
         path = f'api/challenge/{challenge_id}/decline'
         return self._r.post(path)['ok']
 
+
 class Board(BaseClient):
     """Client for physical board or external application endpoints."""
 
@@ -605,6 +606,7 @@ class Board(BaseClient):
         """
         path = f'api/board/game/{game_id}/resign'
         return self._r.post(path)['ok']
+
 
 class Bots(BaseClient):
     """Client for bot-related endpoints."""
