@@ -2,19 +2,23 @@
 from datetime import datetime
 from datetime import timezone
 import collections
+from typing import Dict
+from typing import Any
+from typing import Optional
+from typing import Callable
 
 
-def to_millis(dt):
+def to_millis(dt: datetime) -> int:
     """Return the milliseconds between the given datetime and the epoch.
 
     :param datetime dt: a datetime
     :return: milliseconds since the epoch
     :rtype: int
     """
-    return dt.timestamp() * 1000
+    return int(dt.timestamp() * 1000)
 
 
-def datetime_from_seconds(ts):
+def datetime_from_seconds(ts: float) -> datetime:
     """Return the datetime for the given seconds since the epoch.
 
     UTC is assumed. The returned datetime is timezone aware.
@@ -25,7 +29,7 @@ def datetime_from_seconds(ts):
     return datetime.fromtimestamp(ts, timezone.utc)
 
 
-def datetime_from_millis(millis):
+def datetime_from_millis(millis: float) -> datetime:
     """Return the datetime for the given millis since the epoch.
 
     UTC is assumed. The returned datetime is timezone aware.
@@ -36,7 +40,7 @@ def datetime_from_millis(millis):
     return datetime_from_seconds(millis / 1000)
 
 
-def datetime_from_str(dt_str):
+def datetime_from_str(dt_str: str) -> datetime:
     """Convert the time in a string to a datetime.
 
     UTC is assumed. The returned datetime is timezone aware. The format
@@ -56,14 +60,15 @@ def rating_history(data):
     return _RatingHistoryEntry(*data)
 
 
-def inner(func, *keys):
-    def convert(data):
+def inner(func: Callable, *keys: str) -> Callable:
+    def convert(data: Dict[str, int]) -> Dict[str, int]:
         for k in keys:
             try:
                 data[k] = func(data[k])
             except KeyError:
                 pass  # normal for keys to not be present sometimes
         return data
+
     return convert
 
 
@@ -73,14 +78,15 @@ def listing(func):
         for item in items:
             result.append(func(item))
         return result
+
     return convert
 
 
-def noop(arg):
+def noop(arg: str) -> str:
     return arg
 
 
-def build_adapter(mapper, sep='.'):
+def build_adapter(mapper: Dict[str, str], sep: str = '.') -> Callable:
     """Build a data adapter.
 
     Uses a map to pull values from an object and assign them to keys.
@@ -117,12 +123,17 @@ def build_adapter(mapper, sep='.'):
     :return: adapted data
     :rtype: dict
     """
-    def get(data, location):
+
+    def get(data: Dict[str, Any], location: str) -> str:
         for key in location.split(sep):
             data = data[key]
         return data
 
-    def adapter(data, default=None, fill=False):
+    def adapter(
+        data: Dict[str, Any],
+        default: Optional[object] = None,
+        fill: bool = False,
+    ) -> Dict[str, Any]:
         result = {}
         for key, loc in mapper.items():
             try:

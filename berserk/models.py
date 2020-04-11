@@ -1,22 +1,26 @@
 # -*- coding: utf-8 -*-
 from . import utils
+from typing import Dict, Union, List
+from typing import Any
 
 
 class model(type):
     @property
-    def conversions(cls):
+    def conversions(cls) -> Dict[str, type]:
         return {k: v for k, v in vars(cls).items() if not k.startswith('_')}
 
 
 class Model(metaclass=model):
     @classmethod
-    def convert(cls, data):
+    def convert(
+        cls, data: Dict[str, Any]
+    ) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
         if isinstance(data, (list, tuple)):
             return [cls.convert_one(v) for v in data]
         return cls.convert_one(data)
 
     @classmethod
-    def convert_one(cls, data):
+    def convert_one(cls, data: Dict[str, Any]) -> Dict[str, Any]:
         for k in set(data) & set(cls.conversions):
             data[k] = cls.conversions[k](data[k])
         return data
@@ -39,8 +43,7 @@ class User(Model):
 
 
 class Activity(Model):
-    interval = utils.inner(utils.datetime_from_seconds,
-                           'start', 'end')
+    interval = utils.inner(utils.datetime_from_seconds, 'start', 'end')
 
 
 class Game(Model):
@@ -66,8 +69,9 @@ class Tournaments(Model):
 
 
 class Broadcast(Model):
-    broadcast = utils.inner(utils.datetime_from_millis,
-                            'startedAt', 'startsAt')
+    broadcast = utils.inner(
+        utils.datetime_from_millis, 'startedAt', 'startsAt'
+    )
 
 
 class RatingHistory(Model):

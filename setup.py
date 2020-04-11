@@ -12,9 +12,13 @@ with open('HISTORY.rst') as history_file:
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.read().splitlines()
 
-setup_requirements = ['pytest-runner', ]
+setup_requirements = [
+    'pytest-runner',
+]
 
-test_requirements = ['pytest', ]
+test_requirements = [
+    'pytest',
+]
 
 setup(
     author="Robert Grant",

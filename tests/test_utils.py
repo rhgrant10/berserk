@@ -15,8 +15,9 @@ Case = collections.namedtuple('Case', 'dt seconds millis text')
 
 @pytest.fixture
 def time_case():
-    dt = datetime.datetime(2017, 12, 28, 23, 52, 30,
-                           tzinfo=datetime.timezone.utc)
+    dt = datetime.datetime(
+        2017, 12, 28, 23, 52, 30, tzinfo=datetime.timezone.utc
+    )
     ts = dt.timestamp()
     return Case(dt, ts, ts * 1000, dt.strftime(TIME_FMT))
 
@@ -65,7 +66,7 @@ def data_to_adapt():
         'foo': {
             'bar': 'one',
             'qux': 'three',
-            'corge': {'grault': 'four', 'garply': None}
+            'corge': {'grault': 'four', 'garply': None},
         },
         'baz': 'two',
     }
