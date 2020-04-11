@@ -2,10 +2,9 @@
 import requests
 from deprecated import deprecated
 
-from .session import Requestor
-from .formats import JSON, LIJSON, PGN, NDJSON
 from . import models
-
+from .formats import JSON, LIJSON, NDJSON, PGN
+from .session import Requestor
 
 __all__ = [
     'Client',

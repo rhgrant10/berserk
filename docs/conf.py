@@ -21,9 +21,10 @@
 import os
 import sys
 
+import berserk  # noqa
+
 sys.path.insert(0, os.path.abspath('..'))
 
-import berserk  # noqa
 
 # -- General configuration ---------------------------------------------
 

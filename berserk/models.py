@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+from typing import Any, Dict, List, Union
+
 from . import utils
-from typing import Dict, Union, List
-from typing import Any
 
 
 class model(type):

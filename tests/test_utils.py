@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import datetime
 import collections
+import datetime
 
 import pytest
 
 from berserk import utils
-
 
 TIME_FMT = '%Y-%m-%dT%H:%M:%S.%fZ'
 

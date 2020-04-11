@@ -3,8 +3,7 @@ from unittest import mock
 
 import pytest
 
-from berserk import session
-from berserk import utils
+from berserk import session, utils
 
 
 def test_request():

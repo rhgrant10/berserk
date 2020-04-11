@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
+from typing import Any, Callable, Dict, Iterator, Union
 
 import ndjson
 import requests
 
 from . import utils
-from typing import Callable
-from typing import Union
-from typing import Any
-from typing import Dict
-from typing import Iterator
 
 
 class FormatHandler:

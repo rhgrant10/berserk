@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 import urllib
-from typing import Any, Union, Optional, Callable
+from typing import Any, Callable, Optional, Union
 
 import requests
 
-from . import utils
-from . import exceptions
-
+from . import exceptions, utils
 from .formats import FormatHandler
 
 LOG = logging.getLogger(__name__)

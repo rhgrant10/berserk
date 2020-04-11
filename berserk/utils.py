@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
-from datetime import timezone
 import collections
-from typing import Dict
-from typing import Any
-from typing import Optional
-from typing import Callable
+from datetime import datetime, timezone
+from typing import Any, Callable, Dict, Optional
 
 
 def to_millis(dt: datetime) -> int:
