@@ -130,6 +130,9 @@ class PgnHandler(FormatHandler):
             yield '\n'.join(lines).strip()
 
 
+#: Basic text
+TEXT = FormatHandler(mime_type='text/plain')
+
 #: Handles vanilla JSON
 JSON = JsonHandler(mime_type='application/json')
 

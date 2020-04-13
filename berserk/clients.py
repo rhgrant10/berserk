@@ -3,7 +3,7 @@ import requests
 from deprecated import deprecated
 
 from .session import Requestor
-from .formats import JSON, LIJSON, PGN, NDJSON
+from .formats import JSON, LIJSON, PGN, NDJSON, TEXT
 from . import models
 
 
@@ -552,6 +552,23 @@ class Board(BaseClient):
         path = 'api/stream/event'
         yield from self._r.get(path, stream=True)
 
+    def seek(self, time, increment, rated=False, variant='standard',
+             color='random', rating_range=''):
+        if isinstance(rating_range, (list, tuple)):
+            low, high = rating_range
+            rating_range = f'{low}-{high}'
+
+        path = '/api/board/seek'
+        payload = {
+            'rated': rated,
+            'time': time,
+            'increment': increment,
+            'variant': variant,
+            'color': color,
+            'ratingRange': rating_range,
+        }
+        return self._r.post(path, data=payload, fmt=TEXT, stream=True)
+
     def stream_game_state(self, game_id):
         """Get the stream of events for a board game.
 
@@ -606,6 +623,20 @@ class Board(BaseClient):
         """
         path = f'api/board/game/{game_id}/resign'
         return self._r.post(path)['ok']
+
+    def handle_draw_offer(self, game_id, accept):
+        accept = "yes" if accept else "no"
+        path = f'/api/board/game/{game_id}/draw/{accept}'
+        return self._r.post(path)['ok']
+
+    def offer_draw(self, game_id):
+        return self.handle_draw_offer(game_id, True)
+
+    def accept_draw_offer(self, game_id):
+        return self.handle_draw_offer(game_id, True)
+
+    def decline_draw_offer(self, game_id):
+        return self.handle_draw_offer(game_id, False)
 
 
 class Bots(BaseClient):
