@@ -52,7 +52,7 @@ class ResponseError(ApiError):
     def cause(self):
         if self._cause is ResponseError.__UNDEFINED:
             try:
-                self._cause = self.response.json()['error']
+                self._cause = self.response.json()
             except Exception:
                 self._cause = None
         return self._cause

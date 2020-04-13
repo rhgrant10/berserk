@@ -130,8 +130,20 @@ class PgnHandler(FormatHandler):
             yield '\n'.join(lines).strip()
 
 
+class TextHandler(FormatHandler):
+
+    def __init__(self):
+        super().__init__(mime_type='text/plain')
+
+    def parse(self, response):
+        return response.text
+
+    def parse_stream(self, response):
+        yield from response.iter_lines()
+
+
 #: Basic text
-TEXT = FormatHandler(mime_type='text/plain')
+TEXT = TextHandler()
 
 #: Handles vanilla JSON
 JSON = JsonHandler(mime_type='application/json')

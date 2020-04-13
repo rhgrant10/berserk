@@ -553,19 +553,19 @@ class Board(BaseClient):
         yield from self._r.get(path, stream=True)
 
     def seek(self, time, increment, rated=False, variant='standard',
-             color='random', rating_range=''):
+             color='random', rating_range=None):
         if isinstance(rating_range, (list, tuple)):
             low, high = rating_range
             rating_range = f'{low}-{high}'
 
         path = '/api/board/seek'
         payload = {
-            'rated': rated,
+            'rated': str(bool(rated)).lower(),
             'time': time,
             'increment': increment,
             'variant': variant,
             'color': color,
-            'ratingRange': rating_range,
+            'ratingRange': rating_range or '',
         }
         return self._r.post(path, data=payload, fmt=TEXT, stream=True)
 
