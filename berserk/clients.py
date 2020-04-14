@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from time import time as now
 import requests
 from deprecated import deprecated
 
@@ -554,6 +555,17 @@ class Board(BaseClient):
 
     def seek(self, time, increment, rated=False, variant='standard',
              color='random', rating_range=None):
+        """Create a public seek to start a game with a random opponent.
+
+        :param int time: intial clock time in minutes
+        :param int increment: clock increment in minutes
+        :param bool rated: whether the game is rated (impacts ratings)
+        :param str variant: game variant to use
+        :param str color: color to play
+        :param rating_range: range of opponent ratings
+        :return: duration of the seek
+        :rtype: float
+        """
         if isinstance(rating_range, (list, tuple)):
             low, high = rating_range
             rating_range = f'{low}-{high}'
@@ -567,7 +579,16 @@ class Board(BaseClient):
             'color': color,
             'ratingRange': rating_range or '',
         }
-        return self._r.post(path, data=payload, fmt=TEXT, stream=True)
+
+        # we time the seek
+        start = now()
+
+        # just keep reading to keep the search going
+        for line in self._r.post(path, data=payload, fmt=TEXT, stream=True):
+            pass
+
+        # and return the time elapsed
+        return now() - start
 
     def stream_game_state(self, game_id):
         """Get the stream of events for a board game.
@@ -625,17 +646,50 @@ class Board(BaseClient):
         return self._r.post(path)['ok']
 
     def handle_draw_offer(self, game_id, accept):
+        """Create, accept, or decline a draw offer.
+
+        To offer a draw, pass ``accept=True`` and a game ID of an in-progress
+        game. To response to a draw offer, pass either ``accept=True`` or
+        ``accept=False`` and the ID of a game in which you have recieved a
+        draw offer.
+
+        Often, it's easier to call :func:`offer_draw`, :func:`accept_draw`, or
+        :func:`decline_draw`.
+
+        :param str game_id: ID of an in-progress game
+        :param bool accept: whether to accept
+        :return: True if successful
+        :rtype: bool
+        """
         accept = "yes" if accept else "no"
         path = f'/api/board/game/{game_id}/draw/{accept}'
         return self._r.post(path)['ok']
 
     def offer_draw(self, game_id):
+        """Offer a draw in the given game.
+
+        :param str game_id: ID of an in-progress game
+        :return: True if successful
+        :rtype: bool
+        """
         return self.handle_draw_offer(game_id, True)
 
-    def accept_draw_offer(self, game_id):
+    def accept_draw(self, game_id):
+        """Accept an already offered draw in the given game.
+
+        :param str game_id: ID of an in-progress game
+        :return: True if successful
+        :rtype: bool
+        """
         return self.handle_draw_offer(game_id, True)
 
-    def decline_draw_offer(self, game_id):
+    def decline_draw(self, game_id):
+        """Decline an already offered draw in the given game.
+
+        :param str game_id: ID of an in-progress game
+        :return: True if successful
+        :rtype: bool
+        """
         return self.handle_draw_offer(game_id, False)
 
 
