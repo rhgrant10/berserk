@@ -1,5 +1,5 @@
-API
-===
+Developer Interface
+===================
 
 Clients
 -------
