@@ -1,6 +1,13 @@
 History
 =======
 
+0.9.0 (2020-04-14)
+------------------
+
+* Add remaining ``Board`` endpoints: seek, handle_draw_offer, offer_draw, accept_draw, and decline_draw
+* Multiple doc updates/fixes
+* Add codecov reporting
+
 0.8.0 (2020-03-08)
 ------------------
 
