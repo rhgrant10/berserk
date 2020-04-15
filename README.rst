@@ -11,8 +11,8 @@ berserk
         :target: https://travis-ci.org/rhgrant10/berserk
         :alt: Continuous Integration
 
-.. image:: https://codecov.io/gh/rhgrant10/tsplib95/branch/master/graph/badge.svg
-        :target: https://codecov.io/gh/rhgrant10/tsplib95
+.. image:: https://codecov.io/gh/rhgrant10/berserk/branch/master/graph/badge.svg
+        :target: https://codecov.io/gh/rhgrant10/berserk
         :alt: Code Coverage
 
 .. image:: https://readthedocs.org/projects/berserk/badge/?version=latest
