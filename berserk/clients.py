@@ -487,6 +487,37 @@ class Games(FmtClient):
 
 class Challenges(BaseClient):
 
+    def ai(self, level=8, clock_limit=None, clock_increment=None, 
+           days=None, color=None, variant=None, position=None):
+        """Challenge AI to a game.
+
+        :param int level: level of the AI (1 to 8)
+        :param int clock_limit: clock initial time (in seconds)
+        :param int clock_increment: clock increment (in seconds)
+        :param int days: days per move (for correspondence games; omit clock)
+        :param color: color of the accepting player
+        :type color: :class:`~berserk.enums.Color`
+        :param variant: game variant to use
+        :type variant: :class:`~berserk.enums.Variant`
+        :param position: use one of the custom initial positions (cannot be a
+                         rated game)
+        :type position: :class:`~berserk.enums.Position`
+        :return: success indicator
+        :rtype: bool
+        """
+        path = f'api/challenge/ai'
+        payload = {
+            'level': level,
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'days': days,
+            'color': color,
+            'variant': variant,
+            'position': position,
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
+
     def create(self, username, rated, clock_limit=None, clock_increment=None,
                days=None, color=None, variant=None, position=None):
         """Challenge another player to a game.
