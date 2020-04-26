@@ -85,6 +85,7 @@ Most if not all of the API is available:
     client.games.get_ongoing
     client.games.get_tv_channels
 
+    client.challenges.ai
     client.challenges.create
     client.challenges.accept
     client.challenges.decline
