@@ -1,6 +1,15 @@
 History
 =======
 
+0.10.0 (2020-04-26)
+-------------------
+
+* Add ``Challenge.create_ai`` for creating an AI challenge
+* Add ``Challenge.create_open`` for creating an open challenge
+* Add ``Challenge.create_with_accept`` auto-acceptance of challenges using OAuth token
+* Bugfix for passing initial board positions in FEN for challenges
+* Minor fixes for docstrings
+
 0.9.0 (2020-04-14)
 ------------------
 
