@@ -487,37 +487,6 @@ class Games(FmtClient):
 
 class Challenges(BaseClient):
 
-    def ai(self, level=8, clock_limit=None, clock_increment=None,
-           days=None, color=None, variant=None, position=None):
-        """Challenge AI to a game.
-
-        :param int level: level of the AI (1 to 8)
-        :param int clock_limit: clock initial time (in seconds)
-        :param int clock_increment: clock increment (in seconds)
-        :param int days: days per move (for correspondence games; omit clock)
-        :param color: color of the accepting player
-        :type color: :class:`~berserk.enums.Color`
-        :param variant: game variant to use
-        :type variant: :class:`~berserk.enums.Variant`
-        :param position: use one of the custom initial positions (cannot be a
-                         rated game)
-        :type position: :class:`~berserk.enums.Position`
-        :return: success indicator
-        :rtype: bool
-        """
-        path = f'api/challenge/ai'
-        payload = {
-            'level': level,
-            'clock.limit': clock_limit,
-            'clock.increment': clock_increment,
-            'days': days,
-            'color': color,
-            'variant': variant,
-            'position': position,
-        }
-        return self._r.post(path, json=payload,
-                            converter=models.Tournament.convert)
-
     def create(self, username, rated, clock_limit=None, clock_increment=None,
                days=None, color=None, variant=None, position=None):
         """Challenge another player to a game.
@@ -531,22 +500,115 @@ class Challenges(BaseClient):
         :type color: :class:`~berserk.enums.Color`
         :param variant: game variant to use
         :type variant: :class:`~berserk.enums.Variant`
-        :param position: use one of the custom initial positions (cannot be a
-                         rated game)
-        :type position: :class:`~berserk.enums.Position`
-        :return: success indicator
-        :rtype: bool
+        :param position: custom intial position in FEN (variant must be
+                         standard and the game cannot be rated)
+        :type position: str
+        :return: challenge data
+        :rtype: dict
         """
         path = f'api/challenge/{username}'
         payload = {
-            'username': username,
             'rated': rated,
             'clock.limit': clock_limit,
             'clock.increment': clock_increment,
             'days': days,
             'color': color,
             'variant': variant,
-            'position': position,
+            'fen': position,
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
+
+    def create_with_accept(self, username, rated, token, clock_limit=None,
+                           clock_increment=None, days=None, color=None,
+                           variant=None, position=None):
+        """Start a game with another player.
+
+        This is just like the regular challenge create except it forces the
+        opponent to accept. You must provide the OAuth token of the opponent
+        and it must have the challenge:write scope.
+
+        :param str username: username of the opponent
+        :param bool rated: whether or not the game will be rated
+        :param str token: opponent's OAuth token
+        :param int clock_limit: clock initial time (in seconds)
+        :param int clock_increment: clock increment (in seconds)
+        :param int days: days per move (for correspondence games; omit clock)
+        :param color: color of the accepting player
+        :type color: :class:`~berserk.enums.Color`
+        :param variant: game variant to use
+        :type variant: :class:`~berserk.enums.Variant`
+        :param position: custom intial position in FEN (variant must be
+                         standard and the game cannot be rated)
+        :type position: :class:`~berserk.enums.Position`
+        :return: game data
+        :rtype: dict
+        """
+        path = f'api/challenge/{username}'
+        payload = {
+            'rated': rated,
+            'acceptByToken': token,
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'days': days,
+            'color': color,
+            'variant': variant,
+            'fen': position,
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
+
+    def create_ai(self, level=8, clock_limit=None, clock_increment=None,
+                  days=None, color=None, variant=None, position=None):
+        """Challenge AI to a game.
+
+        :param int level: level of the AI (1 to 8)
+        :param int clock_limit: clock initial time (in seconds)
+        :param int clock_increment: clock increment (in seconds)
+        :param int days: days per move (for correspondence games; omit clock)
+        :param color: color of the accepting player
+        :type color: :class:`~berserk.enums.Color`
+        :param variant: game variant to use
+        :type variant: :class:`~berserk.enums.Variant`
+        :param position: use one of the custom initial positions (variant must
+                         be standard and cannot be rated)
+        :type position: str
+        :return: success indicator
+        :rtype: bool
+        """
+        path = f'api/challenge/ai'
+        payload = {
+            'level': level,
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'days': days,
+            'color': color,
+            'variant': variant,
+            'fen': position,
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
+
+    def create_open(self, clock_limit=None, clock_increment=None,
+                    variant=None, position=None):
+        """Create a challenge that any two players can join.
+
+        :param int clock_limit: clock initial time (in seconds)
+        :param int clock_increment: clock increment (in seconds)
+        :param variant: game variant to use
+        :type variant: :class:`~berserk.enums.Variant`
+        :param position: custom intial position in FEN (variant must be
+                         standard and the game cannot be rated)
+        :type position: str
+        :return: challenge data
+        :rtype: dict
+        """
+        path = f'api/challenge/open'
+        payload = {
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'variant': variant,
+            'fen': position,
         }
         return self._r.post(path, json=payload,
                             converter=models.Tournament.convert)
