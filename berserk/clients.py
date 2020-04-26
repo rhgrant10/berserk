@@ -487,7 +487,7 @@ class Games(FmtClient):
 
 class Challenges(BaseClient):
 
-    def ai(self, level=8, clock_limit=None, clock_increment=None, 
+    def ai(self, level=8, clock_limit=None, clock_increment=None,
            days=None, color=None, variant=None, position=None):
         """Challenge AI to a game.
 
