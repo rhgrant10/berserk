@@ -279,7 +279,7 @@ look at the most recent 300 games played by "LeelaChess" on Dec. 8th, 2018:
     >>> start = berserk.utils.to_millis(datetime(2018, 12, 8))
     >>> end = berserk.utils.to_millis(datetime(2018, 12, 9))
     >>> client.games.export_by_player('LeelaChess', since=start, until=end,
-                                      max=300))
+    ...                                  max=300)
     <generator object Games.export_by_player at 0x10c24b048>
     >>> games = list(_)
     >>> games[0]['createdAt']
