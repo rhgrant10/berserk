@@ -784,7 +784,7 @@ class Board(BaseClient):
         :rtype: bool
         """
         return self.handle_draw_offer(game_id, False)
-    
+
     def accept_challenge(self, challenge_id):
         """Accept an incoming challenge.
 
