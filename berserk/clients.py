@@ -21,6 +21,7 @@ __all__ = [
     'Teams',
     'Tournaments',
     'Users',
+    'Analysis'
 ]
 
 
@@ -74,6 +75,7 @@ class Client(BaseClient):
     - :class:`tournaments <berserk.clients.Tournaments>` - getting and
       creating tournaments
     - :class:`users <berserk.clients.Users>` - getting information about users
+    - :class:`analysis <berserk.clients.Analysis>` - getting analysis of positions
 
     :param session: request session, authenticated as needed
     :type session: :class:`requests.Session`
@@ -100,6 +102,7 @@ class Client(BaseClient):
         self.broadcasts = Broadcasts(session, base_url)
         self.simuls = Simuls(session, base_url)
         self.studies = Studies(session, base_url)
+        self.analysis = Analysis(session, base_url=base_url)
 
 
 class Account(BaseClient):
@@ -1118,3 +1121,27 @@ class Studies(BaseClient):
         """
         path = f'/study/{study_id}.pgn'
         return self._r.get(path, fmt=PGN, stream=True)
+
+class Analysis(BaseClient):
+    """Get analysis of chess positions."""
+
+    def evaluate_position(self, fen, multiPv=1, variant='standard'):
+        """Get evaluation of position, if stored in the lichess database.
+        Up to 7 million positions stored.
+
+        :param str fen: the chess position to analyze
+        :param multPv: number of variations in the future
+        :param variant: the variant of the position
+
+        :return: the analysis of the queried position
+        with the fen, knodes, depth, and future variations
+        :rtype: dict"""
+
+        path  = '/api/cloud-eval'
+        params = {
+            'fen': fen, 
+            'multiPv': multiPv,
+            'variant': variant
+        }
+        return self._r.get(path, params=params)
+
