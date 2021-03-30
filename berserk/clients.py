@@ -251,7 +251,7 @@ class Users(BaseClient):
         :return: users on the given team
         :rtype: iter
         """
-        path = f'team/{team_id}/users'
+        path = f'api/team/{team_id}/users'
         return self._r.get(path, fmt=NDJSON, stream=True,
                            converter=models.User.convert)
 
@@ -306,7 +306,7 @@ class Teams(BaseClient):
         :return: users on the given team
         :rtype: iter
         """
-        path = f'team/{team_id}/users'
+        path = f'api/team/{team_id}/users'
         return self._r.get(path, fmt=NDJSON, stream=True,
                            converter=models.User.convert)
 
