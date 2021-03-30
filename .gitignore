@@ -104,3 +104,4 @@ ENV/
 # idea
 .idea/
 .vscode/
+config.py

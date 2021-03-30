@@ -44,7 +44,7 @@ from ``requests_oauth``. A simple token session is included, as shown below:
 
 .. code-block:: python
 
-    import berserk
+    import zack-berserk
 
     session = berserk.TokenSession(API_TOKEN)
     client = berserk.Client(session=session)
@@ -114,8 +114,12 @@ Most if not all of the API is available:
     client.bots.decline_challenge
 
     client.tournaments.get
-    client.tournaments.create
-    client.tournaments.export_games
+    client.tournaments.create_arena
+    client.tournaments.create_swiss
+    client.tournaments.export_arena_games
+    client.tournaments.export_swiss_games
+    client.tournaments.arena_by_team()
+    client.tournaments.swiss_by_team()
     client.tournaments.stream_results
     client.tournaments.stream_by_creator
 
