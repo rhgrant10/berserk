@@ -884,6 +884,49 @@ class Tournaments(FmtClient):
         path = 'api/tournament'
         return self._r.get(path, converter=models.Tournaments.convert_values)
 
+    @deprecated(version='0.11.0', reason='use Tournaments.create_arena or Tournaments.create_swiss instead')
+    def create(self, clock_time, clock_increment, minutes, name=None,
+               wait_minutes=None, variant=None, berserkable=None, rated=None,
+               start_date=None, position=None, password=None, conditions=None):
+        """Create a new tournament.
+        .. note::
+            ``wait_minutes`` is always relative to now and is overriden by
+            ``start_time``.
+        .. note::
+            If ``name`` is left blank then one is automatically created.
+        :param int clock_time: intial clock time in minutes
+        :param int clock_increment: clock increment in seconds
+        :param int minutes: length of the tournament in minutes
+        :param str name: tournament name
+        :param int wait_minutes: future start time in minutes
+        :param str start_date: when to start the tournament
+        :param str variant: variant to use if other than standard
+        :param bool rated: whether the game affects player ratings
+        :param str berserkable: whether players can use berserk
+        :param str position: custom initial position in FEN
+        :param str password: password (makes the tournament private)
+        :param dict conditions: conditions for participation
+        :return: created tournament info
+        :rtype: dict
+        """
+        path = 'api/tournament'
+        payload = {
+            'name': name,
+            'clockTime': clock_time,
+            'clockIncrement': clock_increment,
+            'minutes': minutes,
+            'waitMinutes': wait_minutes,
+            'startDate': start_date,
+            'variant': variant,
+            'rated': rated,
+            'position': position,
+            'berserkable': berserkable,
+            'password': password,
+            **{f'conditions.{c}': v for c, v in (conditions or {}).items()},
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
+
     def create_arena(self, clock_time, clock_increment, minutes, name=None,
                      wait_minutes=None, start_date=None, variant=None,
                      rated=None, position=None, berserkable=None,
@@ -988,6 +1031,34 @@ class Tournaments(FmtClient):
         }
         return self._r.post(path, json=payload,
                             converter=models.Tournament.convert)
+
+    @deprecated(version='0.11.0', reason='use Tournaments.export_arena_games or Tournaments.export_swiss_games')
+    def export_games(self, id_, as_pgn=False, moves=None, tags=None,
+                     clocks=None, evals=None, opening=None):
+        """Export games from a tournament.
+        :param str id_: tournament ID
+        :param bool as_pgn: whether to return PGN instead of JSON
+        :param bool moves: include moves
+        :param bool tags: include tags
+        :param bool clocks: include clock comments in the PGN moves, when
+                            available
+        :param bool evals: include analysis evalulation comments in the PGN
+                           moves, when available
+        :param bool opening: include the opening name
+        :return: games
+        :rtype: list
+        """
+        path = f'api/tournament/{id_}/games'
+        params = {
+            'moves': moves,
+            'tags': tags,
+            'clocks': clocks,
+            'evals': evals,
+            'opening': opening,
+        }
+        fmt = PGN if self._use_pgn(as_pgn) else NDJSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
 
     def export_arena_games(self, id_, as_pgn=False, moves=None, tags=None,
                            clocks=None, evals=None, opening=None):

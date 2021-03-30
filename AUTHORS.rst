@@ -6,6 +6,7 @@ Development Lead
 ================
 
 * Robert Grant
+* Zack Clements (for this fork only)
 
 Developers
 ==========

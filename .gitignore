@@ -105,3 +105,8 @@ ENV/
 .idea/
 .vscode/
 config.py
+pyvenv.cfg
+Scripts/activate
+*.bat
+*.ps1
+*.exe

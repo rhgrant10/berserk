@@ -1,6 +1,21 @@
 History
 =======
 
+0.11.0 (2021-03-18)
+-------------------
+
+* Add ``Tournaments.create_arena`` for creating arena tournaments
+* Add ``Tournaments.create_swiss`` for creating swiss tournaments
+* Add ``Tournaments.export_arena_games`` for exporting arena games
+* Add ``Tournaments.export_swiss_games`` for exporting swiss games
+* Add ``Tournaments.arena_by_team`` for getting arena tournaments by team
+* Add ``Tournaments.swiss_by_team`` for getting swiss tournaments by team
+* Add ``Tournaments.tournaments_by_user`` for getting tournaments by user
+* Deprecated ``Tournaments.create`` and ``Tournaments.export_games``
+* Uploaded fork to pypi
+* Minor fixes for docstrings
+* Minor updates to README, AUTHORS
+
 0.10.0 (2020-04-26)
 -------------------
 

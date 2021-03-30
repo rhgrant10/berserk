@@ -4,7 +4,7 @@ berserk
 
 
 .. image:: https://img.shields.io/pypi/v/berserk.svg
-        :target: https://pypi.python.org/pypi/berserk
+        :target: https://pypi.python.org/pypi/zack-berserk
         :alt: Available on PyPI
 
 .. image:: https://img.shields.io/travis/rhgrant10/berserk.svg
@@ -44,7 +44,7 @@ from ``requests_oauth``. A simple token session is included, as shown below:
 
 .. code-block:: python
 
-    import zack-berserk
+    import berserk
 
     session = berserk.TokenSession(API_TOKEN)
     client = berserk.Client(session=session)
@@ -118,8 +118,8 @@ Most if not all of the API is available:
     client.tournaments.create_swiss
     client.tournaments.export_arena_games
     client.tournaments.export_swiss_games
-    client.tournaments.arena_by_team()
-    client.tournaments.swiss_by_team()
+    client.tournaments.arena_by_team
+    client.tournaments.swiss_by_team
     client.tournaments.stream_results
     client.tournaments.stream_by_creator
 
