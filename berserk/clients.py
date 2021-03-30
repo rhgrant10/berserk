@@ -931,7 +931,8 @@ class Tournaments(FmtClient):
                      wait_minutes=None, start_date=None, variant=None,
                      rated=None, position=None, berserkable=None,
                      streakable=None, hasChat=None, description=None,
-                     password=None, teambBattleByTeam=None, conditions=None):
+                     password=None, teambBattleByTeam=None, teamId=None,
+                     minRating=None, maxRating=None, nbRatedGame=None):
         """Create a new arena tournament.
 
         .. note::
@@ -961,7 +962,10 @@ class Tournaments(FmtClient):
         :param str password: password
         :param str teambBattleByTeam: Id of a team you lead
                                       to create a team battle
-        :param dict conditions: conditions for participation
+        :param string teamId: Restrict entry to members of team
+        :param int minRating: Minimum rating to join
+        :param int maxRating: Maximum rating to join
+        :param int nbRatedGame: Min number of rated games required
         :return: created tournament info
         :rtype: dict
         """
@@ -982,7 +986,10 @@ class Tournaments(FmtClient):
             'description': description,
             'password': password,
             'teambBattleByTeam': teambBattleByTeam,
-            **{f'conditions.{c}': v for c, v in (conditions or {}).items()},
+            'conditions.teamMember.teamId': teamId,
+            'conditions.minRating.rating': minRating,
+            'conditions.maxRating.rating': maxRating,
+            'conditions.nbRatedGame.nb': nbRatedGame
         }
         return self._r.post(path, json=payload,
                             converter=models.Tournament.convert)
