@@ -886,6 +886,17 @@ class Tournaments(FmtClient):
         path = 'api/tournament'
         return self._r.get(path, converter=models.Tournaments.convert_values)
 
+    def get_tournament(self, tournament_id):
+        """Get information about a tournament.
+
+        :patam str tournament_id
+        :return: tournament information
+        :rtype: dict
+        """
+        path = f'api/tournament/{tournament_id}'
+        return self._r.get(path, converter=models.Tournaments.convert_values)
+
+
     def create(self, clock_time, clock_increment, minutes, name=None,
                wait_minutes=None, variant=None, berserkable=None, rated=None,
                start_date=None, position=None, password=None, conditions=None):
