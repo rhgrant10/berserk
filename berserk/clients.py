@@ -886,14 +886,14 @@ class Tournaments(FmtClient):
         path = 'api/tournament'
         return self._r.get(path, converter=models.Tournaments.convert_values)
 
-    def get_tournament(self, tournament_id):
+    def get_tournament(self, tournament_id, page=1):
         """Get information about a tournament.
 
         :patam str tournament_id
         :return: tournament information
         :rtype: dict
         """
-        path = f'api/tournament/{tournament_id}'
+        path = f'api/tournament/{tournament_id}?page={page}'
         return self._r.get(path, converter=models.Tournaments.convert_values)
 
 
