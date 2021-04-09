@@ -114,6 +114,7 @@ Most if not all of the API is available:
     client.bots.decline_challenge
 
     client.tournaments.get
+    client.tournaments.get_tournament
     client.tournaments.create
     client.tournaments.export_games
     client.tournaments.stream_results
