@@ -7,7 +7,6 @@ from .session import Requestor
 from .formats import JSON, LIJSON, PGN, NDJSON, TEXT
 from . import models
 
-
 __all__ = [
     'Client',
     'Account',
@@ -22,7 +21,6 @@ __all__ = [
     'Tournaments',
     'Users',
 ]
-
 
 # Base URL for the API
 API_URL = 'https://lichess.org/'
@@ -253,7 +251,7 @@ class Users(BaseClient):
         :return: users on the given team
         :rtype: iter
         """
-        path = f'team/{team_id}/users'
+        path = f'api/team/{team_id}/users'
         return self._r.get(path, fmt=NDJSON, stream=True,
                            converter=models.User.convert)
 
@@ -308,7 +306,7 @@ class Teams(BaseClient):
         :return: users on the given team
         :rtype: iter
         """
-        path = f'team/{team_id}/users'
+        path = f'api/team/{team_id}/users'
         return self._r.get(path, fmt=NDJSON, stream=True,
                            converter=models.User.convert)
 
@@ -576,7 +574,7 @@ class Challenges(BaseClient):
         :return: success indicator
         :rtype: bool
         """
-        path = f'api/challenge/ai'
+        path = "api/challenge/ai"
         payload = {
             'level': level,
             'clock.limit': clock_limit,
@@ -603,7 +601,7 @@ class Challenges(BaseClient):
         :return: challenge data
         :rtype: dict
         """
-        path = f'api/challenge/open'
+        path = "api/challenge/open"
         payload = {
             'clock.limit': clock_limit,
             'clock.increment': clock_increment,
@@ -885,7 +883,7 @@ class Tournaments(FmtClient):
         """
         path = 'api/tournament'
         return self._r.get(path, converter=models.Tournaments.convert_values)
-
+      
     def get_tournament(self, tournament_id):
         """Get information about a tournament.
 
@@ -896,21 +894,16 @@ class Tournaments(FmtClient):
         path = f'api/tournament/{tournament_id}'
         return self._r.get(path, converter=models.Tournaments.convert_values)
 
-
+    @deprecated(version='0.11.0', reason='use Tournaments.create_arena or Tournaments.create_swiss instead')
     def create(self, clock_time, clock_increment, minutes, name=None,
                wait_minutes=None, variant=None, berserkable=None, rated=None,
                start_date=None, position=None, password=None, conditions=None):
         """Create a new tournament.
-
         .. note::
-
             ``wait_minutes`` is always relative to now and is overriden by
             ``start_time``.
-
         .. note::
-
             If ``name`` is left blank then one is automatically created.
-
         :param int clock_time: intial clock time in minutes
         :param int clock_increment: clock increment in seconds
         :param int minutes: length of the tournament in minutes
@@ -944,9 +937,149 @@ class Tournaments(FmtClient):
         return self._r.post(path, json=payload,
                             converter=models.Tournament.convert)
 
+    def create_arena(self, clock_time, clock_increment, minutes, name=None,
+                     wait_minutes=None, start_date=None, variant=None,
+                     rated=None, position=None, berserkable=None,
+                     streakable=None, hasChat=None, description=None,
+                     password=None, teambBattleByTeam=None, teamId=None,
+                     minRating=None, maxRating=None, nbRatedGame=None):
+        """Create a new arena tournament.
+
+        .. note::
+
+            ``wait_minutes`` is always relative to now and is overriden by
+            ``start_time``.
+
+        .. note::
+
+            If ``name`` is left blank then one is automatically created.
+
+        :param int clock_time: initial clock time in minutes
+        :param int clock_increment: clock increment in seconds
+        :param int minutes: length of the tournament in minutes
+        :param str name: tournament name
+        :param int wait_minutes: future start time in minutes
+        :param str start_date: when to start the tournament
+        :param str variant: variant to use if other than standard
+        :param bool rated: whether the game affects player ratings
+        :param str position: custom initial position in FEN
+        :param str berserkable: whether players can use berserk
+        :param bool streakable: whether players get streaks
+        :param bool hasChat: whether players can
+                            discuss in a chat
+        :param string description: anything you want to
+                                  tell players about the tournament
+        :param str password: password
+        :param str teambBattleByTeam: Id of a team you lead
+                                      to create a team battle
+        :param string teamId: Restrict entry to members of team
+        :param int minRating: Minimum rating to join
+        :param int maxRating: Maximum rating to join
+        :param int nbRatedGame: Min number of rated games required
+        :return: created tournament info
+        :rtype: dict
+        """
+        path = 'api/tournament'
+        payload = {
+            'name': name,
+            'clockTime': clock_time,
+            'clockIncrement': clock_increment,
+            'minutes': minutes,
+            'waitMinutes': wait_minutes,
+            'startDate': start_date,
+            'variant': variant,
+            'rated': rated,
+            'position': position,
+            'berserkable': berserkable,
+            'streakable': streakable,
+            'hasChat': hasChat,
+            'description': description,
+            'password': password,
+            'teambBattleByTeam': teambBattleByTeam,
+            'conditions.teamMember.teamId': teamId,
+            'conditions.minRating.rating': minRating,
+            'conditions.maxRating.rating': maxRating,
+            'conditions.nbRatedGame.nb': nbRatedGame
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
+
+    def create_swiss(self, teamId_, clock_limit, clock_increment, nbRounds,
+                     name=None, startsAt=None, roundInterval=None,
+                     variant=None, description=None, rated=None, chatFor=None):
+        """Create a new swiss tournament
+
+        .. note::
+
+            If ``name`` is left blank then one is automatically created.
+
+        .. note::
+
+            If ``startsAt`` is left blank then the
+            tournament begins 10 minutes after creation
+
+            :param string teamId_: team Id, required for swiss tournaments
+            :param int clock_limit: initial clock time in seconds
+            :param int clock_increment: clock increment in seconds
+            :param int nbRounds: maximum number of rounds to play
+            :param string name: tournament name
+            :param int startsAt: when to start tournament, in ms timestamp
+            :param int roundInterval: interval between rounds in seconds
+            :param string variant: variant to use if other than standard
+            :param string description: tournament description
+            :param bool rated: whether the game affects player ratings
+            :param int chatFor: who can read and write in the chat
+            :return: created tournament info
+            :rtype: dict
+        """
+        path = f'api/swiss/new/{teamId_}'
+
+        payload = {
+            'name': name,
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'nbRounds': nbRounds,
+            'startsAt': startsAt,
+            'roundInterval': roundInterval,
+            'variant': variant,
+            'description': description,
+            'rated': rated,
+            'chatFor': chatFor
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
+
+    @deprecated(version='0.11.0', reason='use Tournaments.export_arena_games or Tournaments.export_swiss_games')
     def export_games(self, id_, as_pgn=False, moves=None, tags=None,
                      clocks=None, evals=None, opening=None):
         """Export games from a tournament.
+        :param str id_: tournament ID
+        :param bool as_pgn: whether to return PGN instead of JSON
+        :param bool moves: include moves
+        :param bool tags: include tags
+        :param bool clocks: include clock comments in the PGN moves, when
+                            available
+        :param bool evals: include analysis evalulation comments in the PGN
+                           moves, when available
+        :param bool opening: include the opening name
+        :return: games
+        :rtype: list
+        """
+        path = f'api/tournament/{id_}/games'
+        params = {
+            'moves': moves,
+            'tags': tags,
+            'clocks': clocks,
+            'evals': evals,
+            'opening': opening,
+        }
+        fmt = PGN if self._use_pgn(as_pgn) else NDJSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
+
+    def export_arena_games(self, id_, as_pgn=False, moves=None, tags=None,
+                           clocks=None, evals=None, opening=None):
+        """Export games from a arena tournament.
 
         :param str id_: tournament ID
         :param bool as_pgn: whether to return PGN instead of JSON
@@ -967,6 +1100,88 @@ class Tournaments(FmtClient):
             'clocks': clocks,
             'evals': evals,
             'opening': opening,
+        }
+        fmt = PGN if self._use_pgn(as_pgn) else NDJSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
+
+    def export_swiss_games(self, id_, as_pgn=False, moves=None, pgnInJson=None,
+                           tags=None, clocks=None, evals=None, opening=None):
+        """Export games from a swiss tournament
+
+        :param str id_: tournament id
+        :param bool as_pgn: whether to return pgn instead of JSON
+        :param bool moves: include moves
+        :param bool pgnInJson: include the full PGN within the
+                              JSON response, in a pgn field
+        :param bool tags: include tags
+        :param bool clocks: include clock comments
+        :param bool evals: include analysis evaluation
+                          comments in the PGN, when available
+        :param bool opening: include the opening name
+        :return: games
+        :rtype: list
+        """
+        path = f'api/swiss/{id_}/games'
+        params = {
+            'moves:': moves,
+            'pgnInJson': pgnInJson,
+            'tags': tags,
+            'clocks': clocks,
+            'evals': evals,
+            'opening': opening,
+        }
+        fmt = PGN if self._use_pgn(as_pgn) else NDJSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
+
+    def tournaments_by_user(self, username, nb=None, as_pgn=False):
+        """Get tournaments created by a user
+
+        :param string username: username
+        :param int nb: max number of tournaments to fetch
+        :param bool as_pgn: whether to return pgn instead of Json
+        :return: tournaments
+        :rtype: list
+        """
+
+        path = f'api/user/{username}/tournament/created'
+        params = {
+            'nb': nb,
+        }
+        fmt = PGN if self._use_pgn(as_pgn) else NDJSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
+
+    def arenas_by_team(self, teamId, maxT=None, as_pgn=False):
+        """Get arenas created for a team
+
+        :param string teamId: Id of the team
+        :param int maxT: how many tournaments to download
+        :param bool as_pgn: whether to return pgn instead of Json
+        :return: tournaments
+        :rtype: list
+        """
+        path = f'api/team/{teamId}/arena'
+        params = {
+            'max': maxT,
+        }
+        fmt = PGN if self._use_pgn(as_pgn) else NDJSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
+
+    def swiss_by_team(self, teamId, maxT=None, as_pgn=False):
+        """Get swiss tournaments created for a team
+
+        :param string teamId: Id of the team
+        :param int maxT: how many tournaments to download
+        :param bool as_pgn: whether to return pgn instead of Json
+        :return: tournaments
+        :rtype: list
+        """
+        path = f'api/team/{teamId}/swiss'
+        params = {
+            'max': maxT,
         }
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
         return self._r.get(path, params=params, fmt=fmt,

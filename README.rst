@@ -4,7 +4,7 @@ berserk
 
 
 .. image:: https://img.shields.io/pypi/v/berserk.svg
-        :target: https://pypi.python.org/pypi/berserk
+        :target: https://pypi.python.org/pypi/zack-berserk
         :alt: Available on PyPI
 
 .. image:: https://img.shields.io/travis/rhgrant10/berserk.svg
@@ -117,6 +117,12 @@ Most if not all of the API is available:
     client.tournaments.get_tournament
     client.tournaments.create
     client.tournaments.export_games
+    client.tournaments.create_arena
+    client.tournaments.create_swiss
+    client.tournaments.export_arena_games
+    client.tournaments.export_swiss_games
+    client.tournaments.arena_by_team
+    client.tournaments.swiss_by_team
     client.tournaments.stream_results
     client.tournaments.stream_by_creator
 

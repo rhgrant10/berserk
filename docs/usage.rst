@@ -399,7 +399,7 @@ tournament is easy:
 
 .. code-block:: python
 
-    >>> client.tournaments.create(clock_time=10, clock_increment=3, minutes=180)
+    >>> client.tournaments.create_arena(clock_time=10, clock_increment=3, minutes=180)
     {'berserkable': True,
      'clock': {'increment': 3, 'limit': 600},
      'createdBy': 'rhgrant10',
@@ -428,6 +428,31 @@ provided enum value in ``berserk.enums.Position``:
     >>> client.tournaments.create(clock_time=10, clock_increment=3, minutes=180,
                                   position=berserk.enums.Position.KINGS_PAWN)
 
+You can also create Swiss tournaments easily, specifying the team id, clock time,
+clock increment, and number of rounds.
+
+.. code-block:: python
+
+    >>> client.tournaments.create_swiss(teamid_="coders", clock_limit=10,
+                                        clock_increment=0, nbRounds=5)
+    {'rated': true,
+     'clock': {'increment': 0, 'limit': 600},
+     'createdBy': "zccze",
+     'greatPlayer': {'name': "Wang',
+       'url':'https://wikipedia.org/wiki/Wang_Hao_(chess_player)' },
+      'id': '3uwyXjiC'
+      'name': 'Wang',
+      'nbOngoing': 0,
+      'nbPlayers': 0,
+      'nbRounds': 5,
+      'nextRound': { 'at': '2021-05-18T12:23:18.233-06:00', 'in': 600},
+      'quote': {'author': 'Bent Larsen',
+        'text': 'I often play a move I know how to refute.'},
+      'round': 0,
+      'startsAt': '2021-05-18T12:23:18.233-06:00',
+      'status': 'created',
+      'variant': 'standard'
+      }
 
 Additionally you can see tournaments that have recently finished, are in
 progress, and are about to start:
