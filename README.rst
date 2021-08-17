@@ -95,6 +95,7 @@ Most if not all of the API is available:
     client.board.stream_incoming_events
     client.board.seek
     client.board.stream_game_state
+    client.board.stream_tv_game
     client.board.make_move
     client.board.post_message
     client.board.abort_game
