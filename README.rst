@@ -20,7 +20,7 @@ berserk
         :alt: Documentation Status
 
 
-Python client for the `Lichess API`_.
+Python client for the `Lichess API`_ (modified).
 
 .. _Lichess API: https://lichess.org/api
 
