@@ -298,6 +298,17 @@ class Users(BaseClient):
         path = f'/api/user/{username}/rating-history'
         return self._r.get(path, converter=models.RatingHistory.convert)
 
+    def get_performance_statistics(self, username, perf):
+        """Get the performance statistics of a user.
+
+        :param str username: a username
+        :param str perf: a perf (https://lichess.org/api#operation/apiUserPerf)
+        :return: performance history of username in perf
+        :rtype: list
+        """
+        path = f'api/user/{username}/perf/{perf}'
+        return self._r.get(path, converter=models.User.convert)
+
 
 class Teams(BaseClient):
 
