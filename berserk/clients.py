@@ -90,6 +90,7 @@ class Client(BaseClient):
         super().__init__(session, base_url)
         self.account = Account(session, base_url)
         self.users = Users(session, base_url)
+        self.relations = Relations(session, base_url)
         self.teams = Teams(session, base_url)
         self.games = Games(session, base_url, pgn_as_default=pgn_as_default)
         self.challenges = Challenges(session, base_url)
