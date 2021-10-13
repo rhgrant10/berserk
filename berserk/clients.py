@@ -266,6 +266,7 @@ class Users(BaseClient):
         path = 'streamer/live'
         return self._r.get(path)
 
+    @deprecated(version='1.0.0', reason='Moved to Relations.')
     def get_users_followed(self, username):
         """Stream users followed by a user.
 
@@ -277,6 +278,7 @@ class Users(BaseClient):
         return self._r.get(path, stream=True, fmt=NDJSON,
                            converter=models.User.convert)
 
+    @deprecated(version='1.0.0', reason='Moved to Relations and removed from Lichess API.')
     def get_users_following(self, username):
         """Stream users who follow a user.
 
