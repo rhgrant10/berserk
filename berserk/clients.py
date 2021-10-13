@@ -340,6 +340,52 @@ class Users(BaseClient):
         return base
 
 
+class Relations(BaseClient):
+
+    def get_users_followed(self, username):
+        """Stream users followed by a user.
+
+        :param str username: a username
+        :return: iterator over the users the given user follows
+        :rtype: iter
+        """
+        path = f'/api/user/{username}/following'
+        return self._r.get(path, stream=True, fmt=NDJSON,
+                           converter=models.User.convert)
+
+    @deprecated(version='1.0.0', reason='Removed from Lichess API.')
+    def get_users_following(self, username):
+        """Stream users who follow a user.
+
+        :param str username: a username
+        :return: iterator over the users that follow the given user
+        :rtype: iter
+        """
+        path = f'/api/user/{username}/followers'
+        return self._r.get(path, stream=True, fmt=NDJSON,
+                           converter=models.User.convert)
+
+    def follow_user(self, username):
+        """Follow a user.
+
+        :param str username: username of player to follow.
+        :return: success
+        :rtype: bool
+        """
+        path = f'/api/rel/follow/{username}'
+        return self._r.post(path)['ok']
+
+    def unfollow_user(self, username):
+        """Unfollow a user.
+
+        :param str username: username of player to unfollow.
+        :return: success
+        :rtype: bool
+        """
+        path = f'/api/rel/unfollow/{username}'
+        return self._r.post(path)['ok']
+
+
 class Teams(BaseClient):
 
     def get_members(self, team_id):
