@@ -20,15 +20,15 @@ _:warning: Found `upgrade_to_bot` in **Account** instead of **Bot**_
 - [x] Get users by ID
 - [x] Get members of a team *:warning: Depreated*
 - [x] Get live streamers
-- [ ] Get crosstable
+- [x] Get crosstable
 
-_:warning: Found `get_users_following` and `get_users_followed` in **Users** instead of **Relations**_
+_:warning: Found `get_users_following` and `get_users_followed` in **Users** instead of **Relations** :information_source: `deprecated`_
 
 ### Relations
-- [x] Get users followed by a user _:warning: Found in **Users**_
-- [x] Get users who follow a user _:warning: Found in **Users**_
-- [ ] Follow a player
-- [ ] Unfollow a player
+- [x] Get users followed by a user _:warning: Found in **Users** :information_source: `deprecated`_
+- [x] Get users who follow a user _:warning: Found in **Users** :information_source: `deprecated`_
+- [x] Follow a player
+- [x] Unfollow a player
 
 ### Games
 - [x] Export one game
