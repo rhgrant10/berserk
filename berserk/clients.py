@@ -306,7 +306,7 @@ class Users(BaseClient):
         :return: performance history of username in perf
         :rtype: list
         """
-        path = f'api/user/{username}/perf/{perf}'
+        path = f'/api/user/{username}/perf/{perf}'
         return self._r.get(path, converter=models.User.convert)
 
     def get_crosstable(self, user1, user2, matchup=False):
