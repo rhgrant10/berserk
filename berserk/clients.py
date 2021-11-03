@@ -462,6 +462,38 @@ class Games(FmtClient):
         fmt = PGN if self._use_pgn(as_pgn) else JSON
         return self._r.get(path, params=params, fmt=fmt,
                            converter=models.Game.convert)
+   
+    def export_going(self, username, moves=True, pgn_in_json=False, tags=True,
+                     clocks=True, evals=True, opening=True, literate=False,
+                     players=None):
+        """Get ongoing game of a player.
+        
+        :param str username: which player's games to return
+        :param bool moves: whether to include the PGN moves
+        :param bool pgn_in_json: whether to include the full PGN within the JSON response, in a ``pgn`` field
+        :param bool tags: whether to include the PGN tags
+        :param bool clocks: whether to include clock comments in the PGN moves, when available
+        :param bool evals: whether to include analysis evaluation comments in the PGN, when available
+        :param bool opening: whether to include the opening name
+        :param bool literate: whether to insert textual annotations in the PGN about the opening, analysis variations, mistakes, and game termination
+        :param str players: URL of a text file containing real names and ratings, to replace Lichess usernames and ratings in the PGN
+        :return: exported game, as JSON or PGN
+        """
+        path = f'api/user/{username}/current-game'
+        params = {
+            'moves': moves,
+            'pgnInJson': pgn_in_json,
+            'tags': tags,
+            'clocks': clocks,
+            'evals': evals,
+            'opening': opening,
+            'literate': literate,
+            'players': players,
+        }
+        fmt = PGN if self._use_pgn(not pgn_in_json) else JSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
+
 
     def export_by_player(self, username, as_pgn=None, since=None, until=None,
                          max=None, vs=None, rated=None, perf_type=None,
@@ -720,6 +752,19 @@ class Challenges(BaseClient):
         """
         path = f'api/challenge/{challenge_id}/decline'
         return self._r.post(path)['ok']
+    
+    def cancel(self, challenge_id, opponent_token=None):
+        """Cancel a challenge you sent, or aborts the game if the
+        challenge was accepted, but the game was not yet played.
+        
+        :param str challenge_id: id of the challenge to cancel
+        :param str opponent_token: optional ``challenge:write`` token of the opponent. If set, the game can be canceled even if both players have moved
+        :return: success indicator
+        :rtype: bool
+        """
+        path = f'api/challenge/{challenge_id}/cancel'
+        params = {'opponentToken': opponent_token}
+        return self._r.post(path, params=params)['ok']
 
 
 class Board(BaseClient):
