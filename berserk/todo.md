@@ -32,13 +32,13 @@ _:warning: Found `get_users_following` and `get_users_followed` in **Users** ins
 
 ### Games
 - [x] Export one game
-- [ ] Export ongoing game of a user
+- [x] Export ongoing game of a user
 - [x] Export games of a user
 - [x] Export games by IDs
 - [x] Stream current games
 - [x] Get my ongoing games
 - [ ] Stream moves of a game
-- [ ] Import one game
+- [x] Import one game
 
 _:warning: Found `get_tv_channels` in **Games** instead of **TV**_
 

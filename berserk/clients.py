@@ -603,6 +603,17 @@ class Games(FmtClient):
         """
         path = 'tv/channels'
         return self._r.get(path)
+    
+    def import_game(self, pgn):
+        """Import one game from PGN.
+        
+        :param str pgn: the PGN, it can contain only one game
+        :return: game id
+        :rtype: str
+        """
+        path = 'api/import'
+        payload = {'pgn': pgn}
+        return self._r.post(path, data=payload)["id"]
 
 
 class Challenges(BaseClient):
