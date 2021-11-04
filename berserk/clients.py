@@ -1370,3 +1370,15 @@ class Puzzles(BaseClient):
         """
         path = f'api/puzzle/dashboard/{days}'
         return self._r.get(path, fmt=JSON)
+
+    def get_storm_dashboard(self, username, days=30):
+        """Get storm dashboard of player.
+
+        :param str username: a username
+        :param int days: how many days of history to return
+        :return: a player storm dashboard
+        :rtype: dict
+        """
+        path = f'api/storm/dashboard/{username}'
+        params = {'days': days}
+        return self._r.get(path, params=params, fmt=JSON)

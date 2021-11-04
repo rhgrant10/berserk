@@ -51,7 +51,7 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 - [x] Get the daily puzzle
 - [x] Get your puzzle activity
 - [x] Get your puzzle dashboard
-- [ ] Get the storm dashboard of a player
+- [x] Get the storm dashboard of a player
 
 ### Teams
 - [ ] Get team swiss tournaments
