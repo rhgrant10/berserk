@@ -1342,7 +1342,7 @@ class Puzzles(BaseClient):
     """Chess puzzles."""
 
     def get_daily(self):
-        """Get the daily Lichess puzzle as JSON.
+        """Get the daily Lichess puzzle.
 
         :return: daily puzzle
         :rtype: dict
@@ -1351,7 +1351,7 @@ class Puzzles(BaseClient):
         return self._r.get(path, fmt=JSON)
 
     def get_activity(self, max_entries=None):
-        """Get your puzzle activity as JSON.
+        """Get your puzzle activity.
 
         :param int max_entries: how many entries to download
         :return: your puzzle activity
@@ -1360,3 +1360,13 @@ class Puzzles(BaseClient):
         path = 'api/puzzle/activity'
         params = {'max': max_entries}
         return self._r.get(path, params=params, fmt=NDJSON)
+
+    def get_dashboard(self, days=30):
+        """Get your puzzle dashboard.
+
+        :param int days: how many days to look back when aggregating puzzle results
+        :return: your puzzle dashboard
+        :rtype: dict
+        """
+        path = f'api/puzzle/dashboard/{days}'
+        return self._r.get(path, fmt=JSON)
