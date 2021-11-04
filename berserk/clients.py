@@ -101,6 +101,7 @@ class Client(BaseClient):
         self.broadcasts = Broadcasts(session, base_url)
         self.simuls = Simuls(session, base_url)
         self.studies = Studies(session, base_url)
+        self.tv = TV(session, base_url)
 
 
 class Account(BaseClient):
@@ -267,7 +268,7 @@ class Users(BaseClient):
         path = 'streamer/live'
         return self._r.get(path)
 
-    @deprecated(version='1.0.0', reason='Moved to Relations.')
+    @deprecated(version='1.0.0', reason='moved to Relations')
     def get_users_followed(self, username):
         """Stream users followed by a user.
 
@@ -595,6 +596,7 @@ class Games(FmtClient):
         params = {'nb': count}
         return self._r.get(path, params=params)['nowPlaying']
 
+    @deprecated(version='1.0.0', reason='moved to tv')
     def get_tv_channels(self):
         """Get basic information about the best games being played.
 
@@ -603,6 +605,17 @@ class Games(FmtClient):
         """
         path = 'tv/channels'
         return self._r.get(path)
+    
+    def import_game(self, pgn):
+        """Import one game from PGN.
+        
+        :param str pgn: the PGN, it can contain only one game
+        :return: game id
+        :rtype: str
+        """
+        path = 'api/import'
+        payload = {'pgn': pgn}
+        return self._r.post(path, data=payload)["id"]
 
 
 class Challenges(BaseClient):
@@ -1251,3 +1264,42 @@ class Studies(BaseClient):
         """
         path = f'/study/{study_id}.pgn'
         return self._r.get(path, fmt=PGN, stream=True)
+
+
+class TV(FmtClient):
+    """Chess TV of Lichess."""
+    
+    def get_tv_channels(self):
+        """Get basic information about the best games being played.
+
+        :return: best ongoing games in each speed and variant
+        :rtype: dict
+        """
+        path = 'api/tv/channels'
+        return self._r.get(path)
+    
+    def get_best_ongoing(self, channel, nb=10, moves=True, 
+                         pgn_in_json=False, tags=True, 
+                         clocks=False, opening=False):
+        """Get a list of ongoing games for a given TV channel.
+        
+        param bool moves: whether to include the PGN moves
+        :param int nb: number of games to fetch
+        :param bool pgn_in_json: whether to include the full PGN within the JSON response, in a ``pgn`` field
+        :param bool tags: whether to include the PGN tags
+        :param bool clocks: whether to include clock comments in the PGN moves, when available
+        :param bool opening: whether to include the opening name
+        :return: exported game, as JSON or PGN
+        :rtype: str or dict
+        """
+        path = f'api/tv/{channel}'
+        params = {
+            'moves': moves,
+            'pgnInJson': pgn_in_json,
+            'tags': tags,
+            'clocks': clocks,
+            'opening': opening,
+        }
+        fmt = PGN if self._use_pgn(not pgn_in_json) else NDJSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)

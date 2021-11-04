@@ -32,20 +32,20 @@ _:warning: Found `get_users_following` and `get_users_followed` in **Users** ins
 
 ### Games
 - [x] Export one game
-- [ ] Export ongoing game of a user
+- [x] Export ongoing game of a user
 - [x] Export games of a user
 - [x] Export games by IDs
 - [x] Stream current games
 - [x] Get my ongoing games
 - [ ] Stream moves of a game
-- [ ] Import one game
+- [x] Import one game
 
-_:warning: Found `get_tv_channels` in **Games** instead of **TV**_
+_:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_source: `deprecated`__
 
 ### TV
-- [x] Get current TV games _:warning: Found in **Games**_
+- [x] Get current TV games _:warning: Found in **Games** :information_source: `deprecated`_
 - [ ] Stream current TV game
-- [ ] Get best ongoing games of a TV channel
+- [x] Get best ongoing games of a TV channel
 
 ### Puzzles
 - [ ] Get the daily puzzle
