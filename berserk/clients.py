@@ -1266,7 +1266,7 @@ class Studies(BaseClient):
         return self._r.get(path, fmt=PGN, stream=True)
 
 
-class TV(BaseClient):
+class TV(FmtClient):
     """Chess TV of Lichess."""
     
     def get_tv_channels(self):
@@ -1277,3 +1277,29 @@ class TV(BaseClient):
         """
         path = 'api/tv/channels'
         return self._r.get(path)
+    
+    def get_best_ongoing(self, channel, nb=10, moves=True, 
+                         pgn_in_json=False, tags=True, 
+                         clocks=False, opening=False):
+        """Get a list of ongoing games for a given TV channel.
+        
+        param bool moves: whether to include the PGN moves
+        :param int nb: number of games to fetch
+        :param bool pgn_in_json: whether to include the full PGN within the JSON response, in a ``pgn`` field
+        :param bool tags: whether to include the PGN tags
+        :param bool clocks: whether to include clock comments in the PGN moves, when available
+        :param bool opening: whether to include the opening name
+        :return: exported game, as JSON or PGN
+        :rtype: str or dict
+        """
+        path = f'api/tv/{channel}'
+        params = {
+            'moves': moves,
+            'pgnInJson': pgn_in_json,
+            'tags': tags,
+            'clocks': clocks,
+            'opening': opening,
+        }
+        fmt = PGN if self._use_pgn(not pgn_in_json) else NDJSON
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)

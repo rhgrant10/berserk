@@ -45,7 +45,7 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 ### TV
 - [x] Get current TV games _:warning: Found in **Games** :information_source: `deprecated`_
 - [ ] Stream current TV game
-- [ ] Get best ongoing games of a TV channel
+- [x] Get best ongoing games of a TV channel
 
 ### Puzzles
 - [ ] Get the daily puzzle
