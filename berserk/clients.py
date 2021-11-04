@@ -101,6 +101,7 @@ class Client(BaseClient):
         self.broadcasts = Broadcasts(session, base_url)
         self.simuls = Simuls(session, base_url)
         self.studies = Studies(session, base_url)
+        self.tv = TV(session, base_url)
 
 
 class Account(BaseClient):
@@ -267,7 +268,7 @@ class Users(BaseClient):
         path = 'streamer/live'
         return self._r.get(path)
 
-    @deprecated(version='1.0.0', reason='Moved to Relations.')
+    @deprecated(version='1.0.0', reason='moved to Relations')
     def get_users_followed(self, username):
         """Stream users followed by a user.
 
@@ -595,6 +596,7 @@ class Games(FmtClient):
         params = {'nb': count}
         return self._r.get(path, params=params)['nowPlaying']
 
+    @deprecated(version='1.0.0', reason='moved to tv')
     def get_tv_channels(self):
         """Get basic information about the best games being played.
 
@@ -1262,3 +1264,16 @@ class Studies(BaseClient):
         """
         path = f'/study/{study_id}.pgn'
         return self._r.get(path, fmt=PGN, stream=True)
+
+
+class TV(BaseClient):
+    """Chess TV of Lichess."""
+    
+    def get_tv_channels(self):
+        """Get basic information about the best games being played.
+
+        :return: best ongoing games in each speed and variant
+        :rtype: dict
+        """
+        path = 'api/tv/channels'
+        return self._r.get(path)
