@@ -1287,6 +1287,15 @@ class TV(FmtClient):
         path = 'api/tv/channels'
         return self._r.get(path)
 
+    def stream_current(self):
+        """Stream current TV game.
+
+        :return: dict of positions and moves of the current TV game
+        :rtype: dict
+        """
+        path = 'api/tv/feed'
+        return self._r.get(path, fmt=NDJSON, stream=True)
+
     def get_best_ongoing(self, channel, nb=10, moves=True,
                          pgn_in_json=False, tags=True,
                          clocks=False, opening=False):
