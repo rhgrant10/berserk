@@ -156,6 +156,7 @@ class Account(BaseClient):
         params = {'v': value}
         return self._r.post(path, params=params)['ok']
 
+    @deprecated(version='1.0.0', reason='use Bots.upgrade_to_bot instead')
     def upgrade_to_bot(self):
         """Upgrade your account to a bot account.
 
@@ -623,6 +624,16 @@ class Games(FmtClient):
         path = 'api/import'
         payload = {'pgn': pgn}
         return self._r.post(path, data=payload)["id"]
+
+    def stream_moves(self, id):
+        """Stream moves of a game as NDJSON.
+
+        :param str id: the ID of the game to stream
+        :return: game stream
+        :rtype: dict
+        """
+        path = f'api/stream/game/{id}'
+        return self._r.get(path, stream=True)
 
 
 class Challenges(BaseClient):
