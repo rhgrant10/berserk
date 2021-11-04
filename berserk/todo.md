@@ -48,7 +48,7 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 - [x] Get best ongoing games of a TV channel
 
 ### Puzzles
-- [ ] Get the daily puzzle
+- [x] Get the daily puzzle
 - [ ] Get your puzzle activity
 - [ ] Get your puzzle dashboard
 - [ ] Get the storm dashboard of a player

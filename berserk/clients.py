@@ -22,6 +22,7 @@ __all__ = [
     'Tournaments',
     'Users',
     'TV',
+    'Puzzles',
 ]
 
 
@@ -104,6 +105,7 @@ class Client(BaseClient):
         self.simuls = Simuls(session, base_url)
         self.studies = Studies(session, base_url)
         self.tv = TV(session, base_url)
+        self.puzzles = Puzzles(session, base_url)
 
 
 class Account(BaseClient):
@@ -1334,3 +1336,16 @@ class TV(FmtClient):
         fmt = PGN if self._use_pgn(not pgn_in_json) else NDJSON
         return self._r.get(path, params=params, fmt=fmt,
                            converter=models.Game.convert)
+
+
+class Puzzles(BaseClient):
+    """Chess puzzles."""
+
+    def get_daily(self):
+        """Get the daily Lichess puzzle in JSON.
+
+        :return: daily puzzle
+        :rtype: dict
+        """
+        path = 'api/puzzle/daily'
+        return self._r.get(path, fmt=JSON)
