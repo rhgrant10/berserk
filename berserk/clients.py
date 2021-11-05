@@ -1529,3 +1529,39 @@ class OpeningExplorer(BaseClient):
         }
         return self._r.get(path, params=params)
 
+    def lichess(self, variant='standard', fen=None, play=None, speeds=None,
+                ratings=None, since='0000-01', until=None, moves=12,
+                top_games=15, recent_games=4):
+        """Get from masters database.
+
+        :param str variant: variant
+        :param str fen: FEN of the root position
+        :param str play: comma separated sequence of legal moves in UCI notation,
+            play additional moves starting from ``fen``
+        :param str speeds: comma separated list of game speeds to look for
+        :param str ratings: comma separated list of rating groups,
+            ranging from their value to the next higher group
+            (1600, 1800, 2000, 2200, 2500)
+        :param int since: include only games from this month or later
+        :param int until: include only games from this month or earlier
+        :param int moves: number of most common moves to display
+        :param int top_games: number of top games to display
+        :param int recent_games: number of recent games to display
+        :return: lichess database search results
+        :rtype: dict
+        """
+        path = 'lichess'
+        params = {
+            'variant': variant,
+            'fen': fen,
+            'play': play,
+            'speeds': speeds,
+            'ratings': ratings,
+            'since': since,
+            'until': until,
+            'moves': moves,
+            'topGames': top_games,
+            'recentGames': recent_games,
+        }
+        return self._r.get(path, params=params)
+
