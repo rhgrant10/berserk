@@ -60,7 +60,7 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 - [x] Teams of a player
 - [x] Search teams
 - [x] Get members of a team
-- [ ] Get team Arena tournaments
+- [x] Get team Arena tournaments
 - [x] Join a team
 - [x] Leave a team
 - [x] Kick a user from your team

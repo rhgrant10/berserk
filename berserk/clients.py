@@ -464,6 +464,21 @@ class Teams(BaseClient):
         return self._r.get(path, fmt=NDJSON, stream=True,
                            converter=models.User.convert)
 
+    def get_arena_tournaments(self, team_id, max_tournaments=100,
+                             stream=False):
+        """Get Arena tournaments of a team.
+
+        :param str team_id: ID of a team
+        :param int max_tournaments: how many entries to download
+        :param bool stream: whether to stream data or not
+        :return: arena tournaments of the given team
+        :rtype: list or iter
+        """
+        path = f'api/team/{team_id}/arena'
+        params = {'max': max_tournaments}
+        return self._r.get(path, params=params, stream=stream,
+                          fmt=NDJSON)
+
     def join(self, team_id):
         """Join a team.
 
