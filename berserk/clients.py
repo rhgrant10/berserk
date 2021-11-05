@@ -410,6 +410,16 @@ class Teams(BaseClient):
         return self._r.get(path, params=params, stream=stream,
                           fmt=NDJSON)
 
+    def get_team(self, team_id):
+        """Get a single team informations.
+
+        :param str team_id: ID of a team
+        :return: informations about the given team
+        :rtype: dict
+        """
+        path = f'api/team/{team_id}'
+        return self._r.get(path)
+
     def get_members(self, team_id):
         """Get members of a team.
 
