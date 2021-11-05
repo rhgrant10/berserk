@@ -54,7 +54,7 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 - [x] Get the storm dashboard of a player
 
 ### Teams
-- [ ] Get team swiss tournaments
+- [x] Get team swiss tournaments
 - [ ] Get a single team
 - [ ] Get popular teams
 - [ ] Teams of a player

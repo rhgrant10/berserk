@@ -394,6 +394,21 @@ class Relations(BaseClient):
 
 
 class Teams(BaseClient):
+    
+    def get_swiss_tournaments(self, team_id, max_tournaments=100,
+                             stream=False):
+        """Get swiss tournaments of a team.
+
+        :param str team_id: ID of a team
+        :param int max_tournaments: how many entries to download
+        :param bool stream: whether to stream data or not
+        :return: swiss tournaments of the given team
+        :rtype: list or iter
+        """
+        path = f'api/team/{team_id}/swiss'
+        params = {'max': max_tournaments}
+        return self._r.get(path, params=params, stream=stream,
+                          fmt=NDJSON)
 
     def get_members(self, team_id):
         """Get members of a team.
