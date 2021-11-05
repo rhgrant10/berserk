@@ -23,6 +23,7 @@ __all__ = [
     'Users',
     'TV',
     'Puzzles',
+    'OpeningExplorer',
 ]
 
 
@@ -106,6 +107,7 @@ class Client(BaseClient):
         self.studies = Studies(session, base_url)
         self.tv = TV(session, base_url)
         self.puzzles = Puzzles(session, base_url)
+        self.opening_explorer = OpeningExplorer(session, 'https://explorer.lichess.ovh/')
 
 
 class Account(BaseClient):
@@ -1497,3 +1499,33 @@ class Puzzles(BaseClient):
         path = f'api/storm/dashboard/{username}'
         params = {'days': days}
         return self._r.get(path, params=params, fmt=JSON)
+
+
+class OpeningExplorer(BaseClient):
+    """Chess openings explorer."""
+
+    def masters(self, fen=None, play=None, since=1952, until=None, moves=12,
+                top_games=15):
+        """Get from masters database.
+
+        :param str fen: FEN of the root position
+        :param str play: comma separated sequence of legal moves in UCI notation,
+            play additional moves starting from ``fen``
+        :param int since: include only games from this year or later
+        :param int until: include only games from this year or earlier
+        :param int moves: number of most common moves to display
+        :param int top_games: number of top games to display
+        :return: masters database search results
+        :rtype: dict
+        """
+        path = 'masters'
+        params = {
+            'fen': fen,
+            'play': play,
+            'since': since,
+            'until': until,
+            'moves': moves,
+            'topGames': top_games,
+        }
+        return self._r.get(path, params=params)
+
