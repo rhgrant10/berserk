@@ -58,7 +58,7 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 - [x] Get a single team
 - [x] Get popular teams
 - [x] Teams of a player
-- [ ] Search teams
+- [x] Search teams
 - [x] Get members of a team
 - [ ] Get team Arena tournaments
 - [x] Join a team

@@ -441,6 +441,18 @@ class Teams(BaseClient):
         path = f'api/team/of/{username}'
         return self._r.get(path)
 
+    def search_teams(self, text, page=1):
+        """Search teams by keyword.
+
+        :param str text: search keyword
+        :param int page: page to get
+        :return: search results
+        :rtype: list
+        """
+        path = 'api/team/search'
+        params = {'text': text, 'page': page}
+        return self._r.get(path, params=params)
+
     def get_members(self, team_id):
         """Get members of a team.
 
