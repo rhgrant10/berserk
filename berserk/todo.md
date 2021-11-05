@@ -37,30 +37,30 @@ _:warning: Found `get_users_following` and `get_users_followed` in **Users** ins
 - [x] Export games by IDs
 - [x] Stream current games
 - [x] Get my ongoing games
-- [ ] Stream moves of a game
+- [x] Stream moves of a game
 - [x] Import one game
 
 _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_source: `deprecated`__
 
 ### TV
 - [x] Get current TV games _:warning: Found in **Games** :information_source: `deprecated`_
-- [ ] Stream current TV game
+- [x] Stream current TV game
 - [x] Get best ongoing games of a TV channel
 
 ### Puzzles
-- [ ] Get the daily puzzle
-- [ ] Get your puzzle activity
-- [ ] Get your puzzle dashboard
-- [ ] Get the storm dashboard of a player
+- [x] Get the daily puzzle
+- [x] Get your puzzle activity
+- [x] Get your puzzle dashboard
+- [x] Get the storm dashboard of a player
 
-### Teams
-- [ ] Get team swiss tournaments
-- [ ] Get a single team
-- [ ] Get popular teams
-- [ ] Teams of a player
-- [ ] Search teams
+### :heavy_check_mark: Teams
+- [x] Get team swiss tournaments
+- [x] Get a single team
+- [x] Get popular teams
+- [x] Teams of a player
+- [x] Search teams
 - [x] Get members of a team
-- [ ] Get team Arena tournaments
+- [x] Get team Arena tournaments
 - [x] Join a team
 - [x] Leave a team
 - [x] Kick a user from your team
@@ -112,15 +112,15 @@ _:warning: Found `accept_challenge` and `decline_challenge` in **Bots** instead 
 ### Arena tournaments
 - [x] Get current tournaments
 - [x] Create a new Arena tournament
-- [ ] Get info about an Arena tournament
-- [ ] Update an Arena tournament
-- [ ] Join an Arena tournament
-- [ ] Terminate an Arena tournament
-- [ ] Update a team battle
+- [ ] Get info about an Arena tournament
+- [ ] Update an Arena tournament
+- [ ] Join an Arena tournament
+- [ ] Terminate an Arena tournament
+- [ ] Update a team battle
 - [x] Export games of an Arena tournament
 - [x] Get results of an Arena tournament
-- [ ] Get team standing of a team battle
+- [ ] Get team standing of a team battle
 - [x] Get tournaments created by a user
-- [ ] Get team Arena tournaments
+- [ ] Get team Arena tournaments
 
 ### Swiss
