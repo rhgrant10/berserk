@@ -420,6 +420,17 @@ class Teams(BaseClient):
         path = f'api/team/{team_id}'
         return self._r.get(path)
 
+    def get_popular(self, page=1):
+        """Get popular teams, page by page.
+
+        :param int page: page to get
+        :return: popular teams infos
+        :rtype: dict
+        """
+        path = f'api/team/all'
+        params = {'page': page}
+        return self._r.get(path, params=params)
+
     def get_members(self, team_id):
         """Get members of a team.
 

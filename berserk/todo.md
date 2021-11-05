@@ -56,7 +56,7 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 ### Teams
 - [x] Get team swiss tournaments
 - [x] Get a single team
-- [ ] Get popular teams
+- [x] Get popular teams
 - [ ] Teams of a player
 - [ ] Search teams
 - [x] Get members of a team
