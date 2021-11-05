@@ -431,6 +431,16 @@ class Teams(BaseClient):
         params = {'page': page}
         return self._r.get(path, params=params)
 
+    def get_player_teams(self, username):
+        """Get teams of a player.
+
+        :param str username: a username
+        :return: teams of the given user
+        :rtype: list
+        """
+        path = f'api/team/of/{username}'
+        return self._r.get(path)
+
     def get_members(self, team_id):
         """Get members of a team.
 
