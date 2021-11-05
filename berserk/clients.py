@@ -1069,6 +1069,15 @@ class Bots(BaseClient):
         yield from self._r.get(path, stream=True,
                                converter=models.User.convert)
 
+    def upgrade_to_bot(self):
+        """Upgrade your account to a bot account.
+
+        :return: success
+        :rtype: bool
+        """
+        path = 'api/bot/account/upgrade'
+        return self._r.post(path)['ok']
+
     def stream_game_state(self, game_id):
         """Get the stream of events for a bot game.
 
@@ -1079,7 +1088,7 @@ class Bots(BaseClient):
         yield from self._r.get(path, stream=True,
                                converter=models.GameState.convert)
 
-    def make_move(self, game_id, move):
+    def make_move(self, game_id, move, offering_draw=False):
         """Make a move in a bot game.
 
         :param str game_id: ID of a game
@@ -1088,7 +1097,8 @@ class Bots(BaseClient):
         :rtype: bool
         """
         path = f'api/bot/game/{game_id}/move/{move}'
-        return self._r.post(path)['ok']
+        params = {'offeringDraw': offering_draw}
+        return self._r.post(path, params=params)['ok']
 
     def post_message(self, game_id, text, spectator=False):
         """Post a message in a bot game.
