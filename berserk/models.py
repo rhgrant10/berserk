@@ -39,7 +39,7 @@ class User(Model):
 
 
 class Activity(Model):
-    interval = utils.inner(utils.datetime_from_seconds,
+    interval = utils.inner(utils.datetime_from_millis,
                            'start', 'end')
 
 
