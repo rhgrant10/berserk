@@ -460,7 +460,7 @@ class Teams(BaseClient):
         :return: users on the given team
         :rtype: iter
         """
-        path = f'team/{team_id}/users'
+        path = f'api/team/{team_id}/users'
         return self._r.get(path, fmt=NDJSON, stream=True,
                            converter=models.User.convert)
 
@@ -479,15 +479,21 @@ class Teams(BaseClient):
         return self._r.get(path, params=params, stream=stream,
                           fmt=NDJSON)
 
-    def join(self, team_id):
+    def join(self, team_id, message=None, password=None):
         """Join a team.
 
         :param str team_id: ID of a team
+        :param str message: optional request message, if the team requires one
+        :param str password: optional password, if the team requires one
         :return: success
         :rtype: bool
         """
-        path = f'/team/{team_id}/join'
-        return self._r.post(path)['ok']
+        path = f'team/{team_id}/join'
+        payload = {
+            'message': message,
+            'password': password,
+        }
+        return self._r.post(path, data=payload)['ok']
 
     def leave(self, team_id):
         """Leave a team.
@@ -496,7 +502,7 @@ class Teams(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f'/team/{team_id}/quit'
+        path = f'team/{team_id}/quit'
         return self._r.post(path)['ok']
 
     def kick_member(self, team_id, user_id):
@@ -507,7 +513,7 @@ class Teams(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f'/team/{team_id}/kick/{user_id}'
+        path = f'team/{team_id}/kick/{user_id}'
         return self._r.post(path)['ok']
 
 

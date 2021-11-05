@@ -53,7 +53,7 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 - [x] Get your puzzle dashboard
 - [x] Get the storm dashboard of a player
 
-### Teams
+### :heavy_check_mark: Teams
 - [x] Get team swiss tournaments
 - [x] Get a single team
 - [x] Get popular teams
