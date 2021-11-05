@@ -81,7 +81,7 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 
 ### Bots
 - [x] Stream incoming events
-- [ ] Get online bots
+- [x] Get online bots
 - [ ] Upgrade to Bot account
 - [x] Stream Bot game state
 - [x] Make a Bot move

@@ -516,6 +516,18 @@ class Teams(BaseClient):
         path = f'team/{team_id}/kick/{user_id}'
         return self._r.post(path)['ok']
 
+    def message_all(self, team_id, message):
+        """Message all members of your team.
+
+        :param str team_id: ID of a team
+        :param str message: the message to send to all your team members
+        :return: success
+        :rtype: bool
+        """
+        path = f'team/{team_id}/pm-all'
+        payload = {'message': message}
+        return self._r.post(path, data=payload)['ok']
+
 
 class Games(FmtClient):
     """Client for games-related endpoints."""
@@ -1044,6 +1056,18 @@ class Bots(BaseClient):
         """
         path = 'api/stream/event'
         yield from self._r.get(path, stream=True)
+
+    def get_online(self, nb):
+        """Stream the online bot users, as ndjson.
+
+        :param int nb: how many bot users to fetch
+        :return: list of online bots
+        :rtype: iter
+        """
+        path = 'api/bot/online'
+        params = {'nb': nb}
+        yield from self._r.get(path, stream=True,
+                               converter=models.User.convert)
 
     def stream_game_state(self, game_id):
         """Get the stream of events for a bot game.
