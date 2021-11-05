@@ -79,10 +79,10 @@ _:warning: Found `get_tv_channels` in **Games** instead of **TV** :information_s
 - [ ] Handle takeback offers
 - [ ] Claim victory of a game
 
-### Bots
+### :heavy_check_mark: Bots
 - [x] Stream incoming events
 - [x] Get online bots
-- [ ] Upgrade to Bot account
+- [x] Upgrade to Bot account
 - [x] Stream Bot game state
 - [x] Make a Bot move
 - [x] Write in the chat

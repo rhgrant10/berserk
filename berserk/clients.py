@@ -1134,6 +1134,7 @@ class Bots(BaseClient):
         path = f'api/bot/game/{game_id}/resign'
         return self._r.post(path)['ok']
 
+    @deprecated(version='1.0.0', reason='use Challenges.accept_challenge instead')
     def accept_challenge(self, challenge_id):
         """Accept an incoming challenge.
 
@@ -1144,6 +1145,7 @@ class Bots(BaseClient):
         path = f'api/challenge/{challenge_id}/accept'
         return self._r.post(path)['ok']
 
+    @deprecated(version='1.0.0', reason='use Challenges.decline_challenge instead')
     def decline_challenge(self, challenge_id):
         """Decline an incoming challenge.
 
