@@ -516,6 +516,18 @@ class Teams(BaseClient):
         path = f'team/{team_id}/kick/{user_id}'
         return self._r.post(path)['ok']
 
+    def message_all(self, team_id, message):
+        """Message all members of your team.
+
+        :param str team_id: ID of a team
+        :param str message: the message to send to all your team members
+        :return: success
+        :rtype: bool
+        """
+        path = f'team/{team_id}/pm-all'
+        payload = {'message': message}
+        return self._r.post(path, data=payload)['ok']
+
 
 class Games(FmtClient):
     """Client for games-related endpoints."""
@@ -1045,6 +1057,27 @@ class Bots(BaseClient):
         path = 'api/stream/event'
         yield from self._r.get(path, stream=True)
 
+    def get_online(self, nb):
+        """Stream the online bot users, as ndjson.
+
+        :param int nb: how many bot users to fetch
+        :return: list of online bots
+        :rtype: iter
+        """
+        path = 'api/bot/online'
+        params = {'nb': nb}
+        yield from self._r.get(path, stream=True,
+                               converter=models.User.convert)
+
+    def upgrade_to_bot(self):
+        """Upgrade your account to a bot account.
+
+        :return: success
+        :rtype: bool
+        """
+        path = 'api/bot/account/upgrade'
+        return self._r.post(path)['ok']
+
     def stream_game_state(self, game_id):
         """Get the stream of events for a bot game.
 
@@ -1055,7 +1088,7 @@ class Bots(BaseClient):
         yield from self._r.get(path, stream=True,
                                converter=models.GameState.convert)
 
-    def make_move(self, game_id, move):
+    def make_move(self, game_id, move, offering_draw=False):
         """Make a move in a bot game.
 
         :param str game_id: ID of a game
@@ -1064,7 +1097,8 @@ class Bots(BaseClient):
         :rtype: bool
         """
         path = f'api/bot/game/{game_id}/move/{move}'
-        return self._r.post(path)['ok']
+        params = {'offeringDraw': offering_draw}
+        return self._r.post(path, params=params)['ok']
 
     def post_message(self, game_id, text, spectator=False):
         """Post a message in a bot game.
@@ -1100,6 +1134,7 @@ class Bots(BaseClient):
         path = f'api/bot/game/{game_id}/resign'
         return self._r.post(path)['ok']
 
+    @deprecated(version='1.0.0', reason='use Challenges.accept_challenge instead')
     def accept_challenge(self, challenge_id):
         """Accept an incoming challenge.
 
@@ -1110,6 +1145,7 @@ class Bots(BaseClient):
         path = f'api/challenge/{challenge_id}/accept'
         return self._r.post(path)['ok']
 
+    @deprecated(version='1.0.0', reason='use Challenges.decline_challenge instead')
     def decline_challenge(self, challenge_id):
         """Decline an incoming challenge.
 
