@@ -128,5 +128,5 @@ _:warning: Found `accept_challenge` and `decline_challenge` in **Bots** instead 
 ### Opening Explorer
 - [x] Masters database
 - [x] Lichess games
-- [ ] Player games
+- [x] Player games
 - [ ] OTB master game

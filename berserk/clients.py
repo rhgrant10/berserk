@@ -1565,3 +1565,39 @@ class OpeningExplorer(BaseClient):
         }
         return self._r.get(path, params=params)
 
+    def player(self, player, color, variant='standard', fen=None, play=None,
+               speeds=None, modes=None, since='0000-01', until=None, moves=12,
+               recent_games=4):
+        """Get from masters database.
+
+        :param str player: a username
+        :param str color: white or black
+        :param str variant: variant
+        :param str fen: FEN of the root position
+        :param str play: comma separated sequence of legal moves in UCI notation,
+            play additional moves starting from ``fen``
+        :param str speeds: comma separated list of game speeds to look for
+        :param str modes: casual or rated
+        :param int since: include only games from this month or later
+        :param int until: include only games from this month or earlier
+        :param int moves: number of most common moves to display
+        :param int recent_games: number of recent games to display
+        :return: player database search results
+        :rtype: dict
+        """
+        path = 'player'
+        params = {
+            'player': player,
+            'color': color,
+            'variant': variant,
+            'fen': fen,
+            'play': play,
+            'speeds': speeds,
+            'modes': modes,
+            'since': since,
+            'until': until,
+            'moves': moves,
+            'recentGames': recent_games,
+        }
+        return self._r.get(path, params=params, fmt=NDJSON)
+
