@@ -643,8 +643,8 @@ class Games(FmtClient):
             'opening': opening,
         }
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
-        yield from self._r.get(path, params=params, fmt=fmt, stream=True,
-                               converter=models.Game.convert)
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
 
     def export_multi(self, *game_ids, as_pgn=None, moves=None, tags=None,
                      clocks=None, evals=None, opening=None):
