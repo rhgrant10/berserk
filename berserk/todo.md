@@ -124,3 +124,9 @@ _:warning: Found `accept_challenge` and `decline_challenge` in **Bots** instead 
 - [ ] Get team Arena tournaments
 
 ### Swiss
+
+### Opening Explorer
+- [x] Masters database
+- [x] Lichess games
+- [x] Player games
+- [ ] OTB master game
