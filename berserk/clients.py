@@ -403,7 +403,8 @@ class Games(FmtClient):
                            the PGN moves when available
         :param bool ongoing: whether to include ongoing games
         :param bool opening: whether to include the opening name
-        :param str sort: how to sort
+        :param sort: how to sort
+        :type sort: :class:`~berserk.enums.SortingType`
         :param bool literate: whether to include literate the PGN
         :return: iterator over the exported games, as JSON or PGN
         """

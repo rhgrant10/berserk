@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-__all__ = ['PerfType', 'Variant', 'Color', 'Room', 'Mode', 'Position']
+__all__ = ['PerfType', 'Variant', 'Color', 'Room', 'Mode', 'Position', 'SortingType']
 
 
 class GameType:
@@ -177,6 +177,6 @@ class Position:
     ZUKERTORT_OPENING = 'rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1'  # noqa: E501
 
 
-class Sorting:
+class SortingType:
     DATE_ASCENDING = 'dateAsc'
     DATE_DESCENDING = 'dateDesc'
