@@ -378,7 +378,7 @@ class Games(FmtClient):
     def export_by_player(self, username, as_pgn=None, since=None, until=None,
                          max=None, vs=None, rated=None, perf_type=None,
                          color=None, analysed=None, moves=None, tags=None,
-                         evals=None, opening=None, sort=None):
+                         clocks=None, evals=None, opening=None, sort=None):
         """Get games by player.
 
         :param str username: which player's games to return
@@ -396,6 +396,7 @@ class Games(FmtClient):
         :param bool analysed: filter by analysis availability
         :param bool moves: whether to include the PGN moves
         :param bool tags: whether to include the PGN tags
+        :param bool clocks: whether to include clock comments in the PGN moves
         :param bool clocks: whether to include clock comments in the PGN moves
         :param bool evals: whether to include analysis evaluation comments in
                            the PGN moves when available
@@ -416,6 +417,7 @@ class Games(FmtClient):
             'analysed': analysed,
             'moves': moves,
             'tags': tags,
+            'clocks': clocks,
             'evals': evals,
             'opening': opening,
             'sort': sort
