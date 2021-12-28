@@ -378,7 +378,7 @@ class Games(FmtClient):
     def export_by_player(self, username, as_pgn=None, since=None, until=None,
                          max=None, vs=None, rated=None, perf_type=None,
                          color=None, analysed=None, moves=None, tags=None,
-                         evals=None, opening=None):
+                         evals=None, opening=None, sort=None):
         """Get games by player.
 
         :param str username: which player's games to return
@@ -400,6 +400,7 @@ class Games(FmtClient):
         :param bool evals: whether to include analysis evaluation comments in
                            the PGN moves when available
         :param bool opening: whether to include the opening name
+        :param str sort: how to sort
         :param bool literate: whether to include literate the PGN
         :return: iterator over the exported games, as JSON or PGN
         """
@@ -417,6 +418,7 @@ class Games(FmtClient):
             'tags': tags,
             'evals': evals,
             'opening': opening,
+            'sort': sort
         }
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
         yield from self._r.get(path, params=params, fmt=fmt, stream=True,
