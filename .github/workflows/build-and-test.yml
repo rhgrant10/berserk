@@ -5,9 +5,12 @@ name: Build and Test
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+    - master
+    - gh-actions
   pull_request:
-    branches: [ master ]
+    branches: 
+    - master
 
 jobs:
   build:
