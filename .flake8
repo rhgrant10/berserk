@@ -1,0 +1,5 @@
+[flake8]
+count = True
+max-complexity = 10
+show-source = True
+statistics = True
