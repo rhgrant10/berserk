@@ -576,7 +576,7 @@ class Challenges(BaseClient):
         :return: success indicator
         :rtype: bool
         """
-        path = f'api/challenge/ai'
+        path = 'api/challenge/ai'
         payload = {
             'level': level,
             'clock.limit': clock_limit,
@@ -603,7 +603,7 @@ class Challenges(BaseClient):
         :return: challenge data
         :rtype: dict
         """
-        path = f'api/challenge/open'
+        path = 'api/challenge/open'
         payload = {
             'clock.limit': clock_limit,
             'clock.increment': clock_increment,
