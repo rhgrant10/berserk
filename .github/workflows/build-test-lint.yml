@@ -28,8 +28,6 @@ jobs:
         python -m pip install tox
     - name: Test with tox
       run: tox -e py
-    - name: "Convert coverage to XML"
-      run: "python -m coverage xml"
     - name: "Upload coverage to Codecov"
       uses: "codecov/codecov-action@v2"
       with:
