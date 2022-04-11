@@ -4,13 +4,8 @@
 name: Build and Test
 
 on:
-  push:
-    branches: 
-    - master
-    - gh-actions
-  pull_request:
-    branches: 
-    - master
+  - push
+  - pull_request
 
 jobs:
 
