@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-__all__ = ['PerfType', 'Variant', 'Color', 'Room', 'Mode', 'Position']
+__all__ = ['PerfType', 'Variant', 'Color', 'Room', 'Mode', 'Position', 'SortingType']
 
 
 class GameType:
@@ -175,3 +175,8 @@ class Position:
     TROMPOWSKY_ATTACK = 'rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 3 2'  # noqa: E501
     VIENNA_GAME = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 2 2'  # noqa: E501
     ZUKERTORT_OPENING = 'rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1'  # noqa: E501
+
+
+class SortingType:
+    DATE_ASCENDING = 'dateAsc'
+    DATE_DESCENDING = 'dateDesc'
