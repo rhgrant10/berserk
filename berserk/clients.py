@@ -99,7 +99,9 @@ class Client(BaseClient):
         self.challenges = Challenges(session, base_url)
         self.board = Board(session, base_url)
         self.bots = Bots(session, base_url)
-        self.tournaments = Tournaments(session, base_url, pgn_as_default=pgn_as_default)
+        self.tournaments = Tournaments(
+            session, base_url, pgn_as_default=pgn_as_default
+        )
         self.broadcasts = Broadcasts(session, base_url)
         self.simuls = Simuls(session, base_url)
         self.studies = Studies(session, base_url)
@@ -269,7 +271,9 @@ class Users(BaseClient):
         :rtype: iter
         """
         path = f"team/{team_id}/users"
-        return self._r.get(path, fmt=NDJSON, stream=True, converter=models.User.convert)
+        return self._r.get(
+            path, fmt=NDJSON, stream=True, converter=models.User.convert
+        )
 
     def get_live_streamers(self):
         """Get basic information about currently streaming users.
@@ -289,7 +293,9 @@ class Users(BaseClient):
         :rtype: iter
         """
         path = f"/api/user/{username}/following"
-        return self._r.get(path, stream=True, fmt=NDJSON, converter=models.User.convert)
+        return self._r.get(
+            path, stream=True, fmt=NDJSON, converter=models.User.convert
+        )
 
     @deprecated(version="1.0.0", reason="moved to relations and removed")
     def get_users_following(self, username):
@@ -300,7 +306,9 @@ class Users(BaseClient):
         :rtype: iter
         """
         path = f"/api/user/{username}/followers"
-        return self._r.get(path, stream=True, fmt=NDJSON, converter=models.User.convert)
+        return self._r.get(
+            path, stream=True, fmt=NDJSON, converter=models.User.convert
+        )
 
     def get_rating_history(self, username):
         """Get the rating history of a user.
@@ -363,7 +371,9 @@ class Relations(BaseClient):
         :rtype: iter
         """
         path = f"/api/user/{username}/following"
-        return self._r.get(path, stream=True, fmt=NDJSON, converter=models.User.convert)
+        return self._r.get(
+            path, stream=True, fmt=NDJSON, converter=models.User.convert
+        )
 
     @deprecated(version="1.0.0", reason="Removed from Lichess API.")
     def get_users_following(self, username):
@@ -374,7 +384,9 @@ class Relations(BaseClient):
         :rtype: iter
         """
         path = f"/api/user/{username}/followers"
-        return self._r.get(path, stream=True, fmt=NDJSON, converter=models.User.convert)
+        return self._r.get(
+            path, stream=True, fmt=NDJSON, converter=models.User.convert
+        )
 
     def follow_user(self, username):
         """Follow a user.
@@ -398,7 +410,9 @@ class Relations(BaseClient):
 
 
 class Teams(BaseClient):
-    def get_swiss_tournaments(self, team_id, max_tournaments=100, stream=False):
+    def get_swiss_tournaments(
+        self, team_id, max_tournaments=100, stream=False
+    ):
         """Get swiss tournaments of a team.
 
         :param str team_id: ID of a team
@@ -462,9 +476,13 @@ class Teams(BaseClient):
         :rtype: iter
         """
         path = f"api/team/{team_id}/users"
-        return self._r.get(path, fmt=NDJSON, stream=True, converter=models.User.convert)
+        return self._r.get(
+            path, fmt=NDJSON, stream=True, converter=models.User.convert
+        )
 
-    def get_arena_tournaments(self, team_id, max_tournaments=100, stream=False):
+    def get_arena_tournaments(
+        self, team_id, max_tournaments=100, stream=False
+    ):
         """Get Arena tournaments of a team.
 
         :param str team_id: ID of a team
@@ -564,7 +582,9 @@ class Games(FmtClient):
             "literate": literate,
         }
         fmt = PGN if self._use_pgn(as_pgn) else JSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(
+            path, params=params, fmt=fmt, converter=models.Game.convert
+        )
 
     def export_going(
         self,
@@ -609,7 +629,9 @@ class Games(FmtClient):
             "players": players,
         }
         fmt = PGN if self._use_pgn(not pgn_in_json) else JSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(
+            path, params=params, fmt=fmt, converter=models.Game.convert
+        )
 
     def export_by_player(
         self,
@@ -668,7 +690,9 @@ class Games(FmtClient):
             "opening": opening,
         }
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(
+            path, params=params, fmt=fmt, converter=models.Game.convert
+        )
 
     def export_multi(
         self,
@@ -723,7 +747,11 @@ class Games(FmtClient):
         path = "api/stream/games-by-users"
         payload = ",".join(usernames)
         yield from self._r.post(
-            path, data=payload, fmt=NDJSON, stream=True, converter=models.Game.convert
+            path,
+            data=payload,
+            fmt=NDJSON,
+            stream=True,
+            converter=models.Game.convert,
         )
 
     # move this to Account?
@@ -809,7 +837,9 @@ class Challenges(BaseClient):
             "variant": variant,
             "fen": position,
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(
+            path, json=payload, converter=models.Tournament.convert
+        )
 
     def create_with_accept(
         self,
@@ -856,7 +886,9 @@ class Challenges(BaseClient):
             "variant": variant,
             "fen": position,
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(
+            path, json=payload, converter=models.Tournament.convert
+        )
 
     def create_ai(
         self,
@@ -894,10 +926,16 @@ class Challenges(BaseClient):
             "variant": variant,
             "fen": position,
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(
+            path, json=payload, converter=models.Tournament.convert
+        )
 
     def create_open(
-        self, clock_limit=None, clock_increment=None, variant=None, position=None
+        self,
+        clock_limit=None,
+        clock_increment=None,
+        variant=None,
+        position=None,
     ):
         """Create a challenge that any two players can join.
 
@@ -918,7 +956,9 @@ class Challenges(BaseClient):
             "variant": variant,
             "fen": position,
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(
+            path, json=payload, converter=models.Tournament.convert
+        )
 
     def accept(self, challenge_id):
         """Accept an incoming challenge.
@@ -1019,7 +1059,9 @@ class Board(BaseClient):
         :return: iterator over game states
         """
         path = f"api/board/game/stream/{game_id}"
-        yield from self._r.get(path, stream=True, converter=models.GameState.convert)
+        yield from self._r.get(
+            path, stream=True, converter=models.GameState.convert
+        )
 
     def make_move(self, game_id, move):
         """Make a move in a board game.
@@ -1135,7 +1177,9 @@ class Bots(BaseClient):
         """
         path = "api/bot/online"
         params = {"nb": nb}
-        yield from self._r.get(path, stream=True, converter=models.User.convert)
+        yield from self._r.get(
+            path, stream=True, converter=models.User.convert
+        )
 
     def upgrade_to_bot(self):
         """Upgrade your account to a bot account.
@@ -1153,7 +1197,9 @@ class Bots(BaseClient):
         :return: iterator over game states
         """
         path = f"api/bot/game/stream/{game_id}"
-        yield from self._r.get(path, stream=True, converter=models.GameState.convert)
+        yield from self._r.get(
+            path, stream=True, converter=models.GameState.convert
+        )
 
     def make_move(self, game_id, move, offering_draw=False):
         """Make a move in a bot game.
@@ -1201,7 +1247,9 @@ class Bots(BaseClient):
         path = f"api/bot/game/{game_id}/resign"
         return self._r.post(path)["ok"]
 
-    @deprecated(version="1.0.0", reason="use Challenges.accept_challenge instead")
+    @deprecated(
+        version="1.0.0", reason="use Challenges.accept_challenge instead"
+    )
     def accept_challenge(self, challenge_id):
         """Accept an incoming challenge.
 
@@ -1212,7 +1260,9 @@ class Bots(BaseClient):
         path = f"api/challenge/{challenge_id}/accept"
         return self._r.post(path)["ok"]
 
-    @deprecated(version="1.0.0", reason="use Challenges.decline_challenge instead")
+    @deprecated(
+        version="1.0.0", reason="use Challenges.decline_challenge instead"
+    )
     def decline_challenge(self, challenge_id):
         """Decline an incoming challenge.
 
@@ -1292,7 +1342,9 @@ class Tournaments(FmtClient):
             "password": password,
             **{f"conditions.{c}": v for c, v in (conditions or {}).items()},
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(
+            path, json=payload, converter=models.Tournament.convert
+        )
 
     def export_games(
         self,
@@ -1327,7 +1379,9 @@ class Tournaments(FmtClient):
             "opening": opening,
         }
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(
+            path, params=params, fmt=fmt, converter=models.Game.convert
+        )
 
     def stream_results(self, id_, limit=None):
         """Stream the results of a tournament.
@@ -1399,7 +1453,9 @@ class Broadcasts(BaseClient):
             "official": official,
             "throttle": throttle,
         }
-        return self._r.post(path, json=payload, converter=models.Broadcast.convert)
+        return self._r.post(
+            path, json=payload, converter=models.Broadcast.convert
+        )
 
     def get(self, broadcast_id, slug="-"):
         """Get a broadcast by ID.
@@ -1454,7 +1510,9 @@ class Broadcasts(BaseClient):
             "startsAt": starts_at,
             "official": official,
         }
-        return self._r.post(path, json=payload, converter=models.Broadcast.convert)
+        return self._r.post(
+            path, json=payload, converter=models.Broadcast.convert
+        )
 
     def push_pgn_update(self, broadcast_id, pgn_games, slug="-"):
         """Manually update an existing broadcast by ID.
@@ -1557,7 +1615,9 @@ class TV(FmtClient):
             "opening": opening,
         }
         fmt = PGN if self._use_pgn(not pgn_in_json) else NDJSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(
+            path, params=params, fmt=fmt, converter=models.Game.convert
+        )
 
 
 class Puzzles(BaseClient):
@@ -1610,7 +1670,13 @@ class OpeningExplorer(BaseClient):
     """Chess openings explorer."""
 
     def masters(
-        self, fen=None, play=None, since=1952, until=None, moves=12, top_games=15
+        self,
+        fen=None,
+        play=None,
+        since=1952,
+        until=None,
+        moves=12,
+        top_games=15,
     ):
         """Get from masters database.
 
