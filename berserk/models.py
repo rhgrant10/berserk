@@ -5,7 +5,7 @@ from . import utils
 class model(type):
     @property
     def conversions(cls):
-        return {k: v for k, v in vars(cls).items() if not k.startswith('_')}
+        return {k: v for k, v in vars(cls).items() if not k.startswith("_")}
 
 
 class Model(metaclass=model):
@@ -39,8 +39,7 @@ class User(Model):
 
 
 class Activity(Model):
-    interval = utils.inner(utils.datetime_from_millis,
-                           'start', 'end')
+    interval = utils.inner(utils.datetime_from_millis, "start", "end")
 
 
 class Game(Model):
@@ -66,8 +65,7 @@ class Tournaments(Model):
 
 
 class Broadcast(Model):
-    broadcast = utils.inner(utils.datetime_from_millis,
-                            'startedAt', 'startsAt')
+    broadcast = utils.inner(utils.datetime_from_millis, "startedAt", "startsAt")
 
 
 class RatingHistory(Model):
