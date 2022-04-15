@@ -1,10 +1,35 @@
 [tox]
 envlist = py37, py38, py39, py310, flake8
 skip_missing_interpreters = true
+<<<<<<< HEAD
+
+[travis]
+python =
+    3.7: py37
+    3.8: py38
+    3.9: py39
+
+[testenv:flake8]
+basepython = python
+deps = flake8
+commands = flake8 berserk
+||||||| 1b000a4
+
+[travis]
+python =
+    3.6: py36
+    3.7: py37
+
+[testenv:flake8]
+basepython = python
+deps = flake8
+commands = flake8 berserk
+=======
 requires =
     pip>=21.3
     setuptools>=40.6.2
     wheel
+>>>>>>> c7b05a8362234a0fcc9ad61c75b3d12e0ba3276b
 
 [testenv]
 setenv =
