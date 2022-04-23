@@ -9,29 +9,30 @@ from . import models
 
 
 __all__ = [
-    "Client",
-    "Account",
-    "Board",
-    "Bots",
-    "Broadcasts",
-    "Challenges",
-    "Games",
-    "Simuls",
-    "Studies",
-    "Teams",
-    "Tournaments",
-    "Users",
-    "TV",
-    "Puzzles",
-    "OpeningExplorer",
+    'Client',
+    'Account',
+    'Board',
+    'Bots',
+    'Broadcasts',
+    'Challenges',
+    'Games',
+    'Simuls',
+    'Studies',
+    'Teams',
+    'Tournaments',
+    'Users',
+    'TV',
+    'Puzzles',
+    'OpeningExplorer',
 ]
 
 
 # Base URL for the API
-API_URL = "https://lichess.org/"
+API_URL = 'https://lichess.org/'
 
 
 class BaseClient:
+
     def __init__(self, session, base_url=None):
         self._r = Requestor(session, base_url or API_URL, default_fmt=JSON)
 
@@ -99,15 +100,14 @@ class Client(BaseClient):
         self.challenges = Challenges(session, base_url)
         self.board = Board(session, base_url)
         self.bots = Bots(session, base_url)
-        self.tournaments = Tournaments(session, base_url, pgn_as_default=pgn_as_default)
+        self.tournaments = Tournaments(session, base_url,
+                                       pgn_as_default=pgn_as_default)
         self.broadcasts = Broadcasts(session, base_url)
         self.simuls = Simuls(session, base_url)
         self.studies = Studies(session, base_url)
         self.tv = TV(session, base_url)
         self.puzzles = Puzzles(session, base_url)
-        self.opening_explorer = OpeningExplorer(
-            session, "https://explorer.lichess.ovh/"
-        )
+        self.opening_explorer = OpeningExplorer(session, 'https://explorer.lichess.ovh/')
 
 
 class Account(BaseClient):
@@ -119,7 +119,7 @@ class Account(BaseClient):
         :return: public information about the authenticated user
         :rtype: dict
         """
-        path = "api/account"
+        path = 'api/account'
         return self._r.get(path, converter=models.Account.convert)
 
     def get_email(self):
@@ -128,8 +128,8 @@ class Account(BaseClient):
         :return: email address of the authenticated user
         :rtype: str
         """
-        path = "api/account/email"
-        return self._r.get(path)["email"]
+        path = 'api/account/email'
+        return self._r.get(path)['email']
 
     def get_preferences(self):
         """Get your account preferences.
@@ -137,8 +137,8 @@ class Account(BaseClient):
         :return: preferences of the authenticated user
         :rtype: dict
         """
-        path = "api/account/preferences"
-        return self._r.get(path)["prefs"]
+        path = 'api/account/preferences'
+        return self._r.get(path)['prefs']
 
     def get_kid_mode(self):
         """Get your kid mode status.
@@ -146,8 +146,8 @@ class Account(BaseClient):
         :return: current kid mode status
         :rtype: bool
         """
-        path = "api/account/kid"
-        return self._r.get(path)["kid"]
+        path = 'api/account/kid'
+        return self._r.get(path)['kid']
 
     def set_kid_mode(self, value):
         """Set your kid mode status.
@@ -156,11 +156,11 @@ class Account(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = "api/account/kid"
-        params = {"v": value}
-        return self._r.post(path, params=params)["ok"]
+        path = 'api/account/kid'
+        params = {'v': value}
+        return self._r.post(path, params=params)['ok']
 
-    @deprecated(version="1.0.0", reason="use Bots.upgrade_to_bot instead")
+    @deprecated(version='1.0.0', reason='use Bots.upgrade_to_bot instead')
     def upgrade_to_bot(self):
         """Upgrade your account to a bot account.
 
@@ -170,8 +170,8 @@ class Account(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = "api/bot/account/upgrade"
-        return self._r.post(path)["ok"]
+        path = 'api/bot/account/upgrade'
+        return self._r.post(path)['ok']
 
 
 class Users(BaseClient):
@@ -184,15 +184,10 @@ class Users(BaseClient):
         :return: puzzle activity history
         :rtype: iter
         """
-        path = "api/user/puzzle-activity"
-        params = {"max": max}
-        return self._r.get(
-            path,
-            params=params,
-            fmt=NDJSON,
-            stream=True,
-            converter=models.PuzzleActivity.convert,
-        )
+        path = 'api/user/puzzle-activity'
+        params = {'max': max}
+        return self._r.get(path, params=params, fmt=NDJSON, stream=True,
+                           converter=models.PuzzleActivity.convert)
 
     def get_realtime_statuses(self, *user_ids):
         """Get the online, playing, and streaming statuses of players.
@@ -203,8 +198,8 @@ class Users(BaseClient):
         :return: statuses of given players
         :rtype: list
         """
-        path = "api/users/status"
-        params = {"ids": ",".join(user_ids)}
+        path = 'api/users/status'
+        params = {'ids': ','.join(user_ids)}
         return self._r.get(path, params=params)
 
     def get_all_top_10(self):
@@ -213,7 +208,7 @@ class Users(BaseClient):
         :return: top 10 players in each speed and variant
         :rtype: dict
         """
-        path = "player"
+        path = 'player'
         return self._r.get(path, fmt=LIJSON)
 
     def get_leaderboard(self, perf_type, count=10):
@@ -225,8 +220,8 @@ class Users(BaseClient):
         :return: top players for one speed or variant
         :rtype: list
         """
-        path = f"player/top/{count}/{perf_type}"
-        return self._r.get(path, fmt=LIJSON)["users"]
+        path = f'player/top/{count}/{perf_type}'
+        return self._r.get(path, fmt=LIJSON)['users']
 
     def get_public_data(self, username):
         """Get the public data for a user.
@@ -235,7 +230,7 @@ class Users(BaseClient):
         :return: public data available for the given user
         :rtype: dict
         """
-        path = f"api/user/{username}"
+        path = f'api/user/{username}'
         return self._r.get(path, converter=models.User.convert)
 
     def get_activity_feed(self, username):
@@ -245,7 +240,7 @@ class Users(BaseClient):
         :return: activity feed of the given user
         :rtype: list
         """
-        path = f"api/user/{username}/activity"
+        path = f'api/user/{username}/activity'
         return self._r.get(path, converter=models.Activity.convert)
 
     def get_by_id(self, *usernames):
@@ -255,12 +250,11 @@ class Users(BaseClient):
         :return: user data for the given usernames
         :rtype: list
         """
-        path = "api/users"
-        return self._r.post(
-            path, data=",".join(usernames), converter=models.User.convert
-        )
+        path = 'api/users'
+        return self._r.post(path, data=','.join(usernames),
+                            converter=models.User.convert)
 
-    @deprecated(version="0.7.0", reason="use Teams.get_members(id) instead")
+    @deprecated(version='0.7.0', reason='use Teams.get_members(id) instead')
     def get_by_team(self, team_id):
         """Get members of a team.
 
@@ -268,8 +262,9 @@ class Users(BaseClient):
         :return: users on the given team
         :rtype: iter
         """
-        path = f"team/{team_id}/users"
-        return self._r.get(path, fmt=NDJSON, stream=True, converter=models.User.convert)
+        path = f'team/{team_id}/users'
+        return self._r.get(path, fmt=NDJSON, stream=True,
+                           converter=models.User.convert)
 
     def get_live_streamers(self):
         """Get basic information about currently streaming users.
@@ -277,10 +272,10 @@ class Users(BaseClient):
         :return: users currently streaming a game
         :rtype: list
         """
-        path = "streamer/live"
+        path = 'streamer/live'
         return self._r.get(path)
 
-    @deprecated(version="1.0.0", reason="moved to Relations")
+    @deprecated(version='1.0.0', reason='moved to Relations')
     def get_users_followed(self, username):
         """Stream users followed by a user.
 
@@ -288,10 +283,11 @@ class Users(BaseClient):
         :return: iterator over the users the given user follows
         :rtype: iter
         """
-        path = f"/api/user/{username}/following"
-        return self._r.get(path, stream=True, fmt=NDJSON, converter=models.User.convert)
+        path = f'/api/user/{username}/following'
+        return self._r.get(path, stream=True, fmt=NDJSON,
+                           converter=models.User.convert)
 
-    @deprecated(version="1.0.0", reason="moved to relations and removed")
+    @deprecated(version='1.0.0', reason='moved to relations and removed')
     def get_users_following(self, username):
         """Stream users who follow a user.
 
@@ -299,8 +295,9 @@ class Users(BaseClient):
         :return: iterator over the users that follow the given user
         :rtype: iter
         """
-        path = f"/api/user/{username}/followers"
-        return self._r.get(path, stream=True, fmt=NDJSON, converter=models.User.convert)
+        path = f'/api/user/{username}/followers'
+        return self._r.get(path, stream=True, fmt=NDJSON,
+                           converter=models.User.convert)
 
     def get_rating_history(self, username):
         """Get the rating history of a user.
@@ -309,7 +306,7 @@ class Users(BaseClient):
         :return: rating history for all game types
         :rtype: list
         """
-        path = f"/api/user/{username}/rating-history"
+        path = f'/api/user/{username}/rating-history'
         return self._r.get(path, converter=models.RatingHistory.convert)
 
     def get_performance_statistics(self, username, perf):
@@ -320,7 +317,7 @@ class Users(BaseClient):
         :return: performance history of username in perf
         :rtype: list
         """
-        path = f"/api/user/{username}/perf/{perf}"
+        path = f'/api/user/{username}/perf/{perf}'
         return self._r.get(path, converter=models.User.convert)
 
     def get_crosstable(self, user1, user2, matchup=False):
@@ -337,24 +334,23 @@ class Users(BaseClient):
         :rtype: dict
         """
         matchup = str(matchup).lower()
-        path = f"/api/crosstable/{user1}/{user2}?matchup={matchup}"
+        path = f'/api/crosstable/{user1}/{user2}?matchup={matchup}'
         result = self._r.get(path, converter=models.User.convert)
-        base = {
-            user1: result["users"][user1.lower()],
-            user2: result["users"][user2.lower()],
-            "nbGames": result["nbGames"],
-        }
+        base = {user1: result['users'][user1.lower()],
+                user2: result['users'][user2.lower()],
+                'nbGames': result['nbGames']}
         if matchup == "true":
-            if not base.get("matchup", False):
+            if not base.get('matchup', False):
                 return False
-            base["matchup"] = {}
-            base["matchup"][user1] = result["matchup"]["users"][user1.lower()]
-            base["matchup"][user2] = result["matchup"]["users"][user2.lower()]
-            base["matchup"]["nbGames"] = result["matchup"]["nbGames"]
+            base['matchup'] = {}
+            base['matchup'][user1] = result['matchup']['users'][user1.lower()]
+            base['matchup'][user2] = result['matchup']['users'][user2.lower()]
+            base['matchup']['nbGames'] = result['matchup']['nbGames']
         return base
 
 
 class Relations(BaseClient):
+
     def get_users_followed(self, username):
         """Stream users followed by a user.
 
@@ -362,10 +358,11 @@ class Relations(BaseClient):
         :return: iterator over the users the given user follows
         :rtype: iter
         """
-        path = f"/api/user/{username}/following"
-        return self._r.get(path, stream=True, fmt=NDJSON, converter=models.User.convert)
+        path = f'/api/user/{username}/following'
+        return self._r.get(path, stream=True, fmt=NDJSON,
+                           converter=models.User.convert)
 
-    @deprecated(version="1.0.0", reason="Removed from Lichess API.")
+    @deprecated(version='1.0.0', reason='Removed from Lichess API.')
     def get_users_following(self, username):
         """Stream users who follow a user.
 
@@ -373,8 +370,9 @@ class Relations(BaseClient):
         :return: iterator over the users that follow the given user
         :rtype: iter
         """
-        path = f"/api/user/{username}/followers"
-        return self._r.get(path, stream=True, fmt=NDJSON, converter=models.User.convert)
+        path = f'/api/user/{username}/followers'
+        return self._r.get(path, stream=True, fmt=NDJSON,
+                           converter=models.User.convert)
 
     def follow_user(self, username):
         """Follow a user.
@@ -383,8 +381,8 @@ class Relations(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"/api/rel/follow/{username}"
-        return self._r.post(path)["ok"]
+        path = f'/api/rel/follow/{username}'
+        return self._r.post(path)['ok']
 
     def unfollow_user(self, username):
         """Unfollow a user.
@@ -393,12 +391,14 @@ class Relations(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"/api/rel/unfollow/{username}"
-        return self._r.post(path)["ok"]
+        path = f'/api/rel/unfollow/{username}'
+        return self._r.post(path)['ok']
 
 
 class Teams(BaseClient):
-    def get_swiss_tournaments(self, team_id, max_tournaments=100, stream=False):
+    
+    def get_swiss_tournaments(self, team_id, max_tournaments=100,
+                             stream=False):
         """Get swiss tournaments of a team.
 
         :param str team_id: ID of a team
@@ -407,9 +407,10 @@ class Teams(BaseClient):
         :return: swiss tournaments of the given team
         :rtype: list or iter
         """
-        path = f"api/team/{team_id}/swiss"
-        params = {"max": max_tournaments}
-        return self._r.get(path, params=params, stream=stream, fmt=NDJSON)
+        path = f'api/team/{team_id}/swiss'
+        params = {'max': max_tournaments}
+        return self._r.get(path, params=params, stream=stream,
+                          fmt=NDJSON)
 
     def get_team(self, team_id):
         """Get a single team informations.
@@ -418,7 +419,7 @@ class Teams(BaseClient):
         :return: informations about the given team
         :rtype: dict
         """
-        path = f"api/team/{team_id}"
+        path = f'api/team/{team_id}'
         return self._r.get(path)
 
     def get_popular(self, page=1):
@@ -428,8 +429,8 @@ class Teams(BaseClient):
         :return: popular teams infos
         :rtype: dict
         """
-        path = f"api/team/all"
-        params = {"page": page}
+        path = f'api/team/all'
+        params = {'page': page}
         return self._r.get(path, params=params)
 
     def get_player_teams(self, username):
@@ -439,7 +440,7 @@ class Teams(BaseClient):
         :return: teams of the given user
         :rtype: list
         """
-        path = f"api/team/of/{username}"
+        path = f'api/team/of/{username}'
         return self._r.get(path)
 
     def search_teams(self, text, page=1):
@@ -450,8 +451,8 @@ class Teams(BaseClient):
         :return: search results
         :rtype: list
         """
-        path = "api/team/search"
-        params = {"text": text, "page": page}
+        path = 'api/team/search'
+        params = {'text': text, 'page': page}
         return self._r.get(path, params=params)
 
     def get_members(self, team_id):
@@ -461,10 +462,12 @@ class Teams(BaseClient):
         :return: users on the given team
         :rtype: iter
         """
-        path = f"api/team/{team_id}/users"
-        return self._r.get(path, fmt=NDJSON, stream=True, converter=models.User.convert)
+        path = f'api/team/{team_id}/users'
+        return self._r.get(path, fmt=NDJSON, stream=True,
+                           converter=models.User.convert)
 
-    def get_arena_tournaments(self, team_id, max_tournaments=100, stream=False):
+    def get_arena_tournaments(self, team_id, max_tournaments=100,
+                             stream=False):
         """Get Arena tournaments of a team.
 
         :param str team_id: ID of a team
@@ -473,9 +476,10 @@ class Teams(BaseClient):
         :return: arena tournaments of the given team
         :rtype: list or iter
         """
-        path = f"api/team/{team_id}/arena"
-        params = {"max": max_tournaments}
-        return self._r.get(path, params=params, stream=stream, fmt=NDJSON)
+        path = f'api/team/{team_id}/arena'
+        params = {'max': max_tournaments}
+        return self._r.get(path, params=params, stream=stream,
+                          fmt=NDJSON)
 
     def join(self, team_id, message=None, password=None):
         """Join a team.
@@ -486,12 +490,12 @@ class Teams(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"team/{team_id}/join"
+        path = f'team/{team_id}/join'
         payload = {
-            "message": message,
-            "password": password,
+            'message': message,
+            'password': password,
         }
-        return self._r.post(path, data=payload)["ok"]
+        return self._r.post(path, data=payload)['ok']
 
     def leave(self, team_id):
         """Leave a team.
@@ -500,8 +504,8 @@ class Teams(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"team/{team_id}/quit"
-        return self._r.post(path)["ok"]
+        path = f'team/{team_id}/quit'
+        return self._r.post(path)['ok']
 
     def kick_member(self, team_id, user_id):
         """Kick a member out of your team.
@@ -511,8 +515,8 @@ class Teams(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"team/{team_id}/kick/{user_id}"
-        return self._r.post(path)["ok"]
+        path = f'team/{team_id}/kick/{user_id}'
+        return self._r.post(path)['ok']
 
     def message_all(self, team_id, message):
         """Message all members of your team.
@@ -522,25 +526,16 @@ class Teams(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"team/{team_id}/pm-all"
-        payload = {"message": message}
-        return self._r.post(path, data=payload)["ok"]
+        path = f'team/{team_id}/pm-all'
+        payload = {'message': message}
+        return self._r.post(path, data=payload)['ok']
 
 
 class Games(FmtClient):
     """Client for games-related endpoints."""
 
-    def export(
-        self,
-        game_id,
-        as_pgn=None,
-        moves=None,
-        tags=None,
-        clocks=None,
-        evals=None,
-        opening=None,
-        literate=None,
-    ):
+    def export(self, game_id, as_pgn=None, moves=None, tags=None, clocks=None,
+               evals=None, opening=None, literate=None):
         """Get one finished game as PGN or JSON.
 
         :param str game_id: the ID of the game to export
@@ -554,30 +549,22 @@ class Games(FmtClient):
         :param bool literate: whether to include literate the PGN
         :return: exported game, as JSON or PGN
         """
-        path = f"game/export/{game_id}"
+        path = f'game/export/{game_id}'
         params = {
-            "moves": moves,
-            "tags": tags,
-            "clocks": clocks,
-            "evals": evals,
-            "opening": opening,
-            "literate": literate,
+            'moves': moves,
+            'tags': tags,
+            'clocks': clocks,
+            'evals': evals,
+            'opening': opening,
+            'literate': literate,
         }
         fmt = PGN if self._use_pgn(as_pgn) else JSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
 
-    def export_going(
-        self,
-        username,
-        moves=True,
-        pgn_in_json=False,
-        tags=True,
-        clocks=True,
-        evals=True,
-        opening=True,
-        literate=False,
-        players=None,
-    ):
+    def export_going(self, username, moves=True, pgn_in_json=False, tags=True,
+                     clocks=True, evals=True, opening=True, literate=False,
+                     players=None):
         """Get ongoing game of a player.
 
         :param str username: which player's games to return
@@ -597,37 +584,25 @@ class Games(FmtClient):
             ratings, to replace Lichess usernames and ratings in the PGN
         :return: exported game, as JSON or PGN
         """
-        path = f"api/user/{username}/current-game"
+        path = f'api/user/{username}/current-game'
         params = {
-            "moves": moves,
-            "pgnInJson": pgn_in_json,
-            "tags": tags,
-            "clocks": clocks,
-            "evals": evals,
-            "opening": opening,
-            "literate": literate,
-            "players": players,
+            'moves': moves,
+            'pgnInJson': pgn_in_json,
+            'tags': tags,
+            'clocks': clocks,
+            'evals': evals,
+            'opening': opening,
+            'literate': literate,
+            'players': players,
         }
         fmt = PGN if self._use_pgn(not pgn_in_json) else JSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
 
-    def export_by_player(
-        self,
-        username,
-        as_pgn=None,
-        since=None,
-        until=None,
-        max=None,
-        vs=None,
-        rated=None,
-        perf_type=None,
-        color=None,
-        analysed=None,
-        moves=None,
-        tags=None,
-        evals=None,
-        opening=None,
-    ):
+    def export_by_player(self, username, as_pgn=None, since=None, until=None,
+                         max=None, vs=None, rated=None, perf_type=None,
+                         color=None, analysed=None, moves=None, tags=None,
+                         evals=None, opening=None):
         """Get games by player.
 
         :param str username: which player's games to return
@@ -652,34 +627,27 @@ class Games(FmtClient):
         :param bool literate: whether to include literate the PGN
         :return: iterator over the exported games, as JSON or PGN
         """
-        path = f"api/games/user/{username}"
+        path = f'api/games/user/{username}'
         params = {
-            "since": since,
-            "until": until,
-            "max": max,
-            "vs": vs,
-            "rated": rated,
-            "perfType": perf_type,
-            "color": color,
-            "analysed": analysed,
-            "moves": moves,
-            "tags": tags,
-            "evals": evals,
-            "opening": opening,
+            'since': since,
+            'until': until,
+            'max': max,
+            'vs': vs,
+            'rated': rated,
+            'perfType': perf_type,
+            'color': color,
+            'analysed': analysed,
+            'moves': moves,
+            'tags': tags,
+            'evals': evals,
+            'opening': opening,
         }
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
 
-    def export_multi(
-        self,
-        *game_ids,
-        as_pgn=None,
-        moves=None,
-        tags=None,
-        clocks=None,
-        evals=None,
-        opening=None,
-    ):
+    def export_multi(self, *game_ids, as_pgn=None, moves=None, tags=None,
+                     clocks=None, evals=None, opening=None):
         """Get multiple games by ID.
 
         :param game_ids: one or more game IDs to export
@@ -692,24 +660,18 @@ class Games(FmtClient):
         :param bool opening: whether to include the opening name
         :return: iterator over the exported games, as JSON or PGN
         """
-        path = "games/export/_ids"
+        path = 'games/export/_ids'
         params = {
-            "moves": moves,
-            "tags": tags,
-            "clocks": clocks,
-            "evals": evals,
-            "opening": opening,
+            'moves': moves,
+            'tags': tags,
+            'clocks': clocks,
+            'evals': evals,
+            'opening': opening,
         }
-        payload = ",".join(game_ids)
+        payload = ','.join(game_ids)
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
-        yield from self._r.post(
-            path,
-            params=params,
-            data=payload,
-            fmt=fmt,
-            stream=True,
-            converter=models.Game.convert,
-        )
+        yield from self._r.post(path, params=params, data=payload, fmt=fmt,
+                                stream=True, converter=models.Game.convert)
 
     def get_among_players(self, *usernames):
         """Get the games currently being played among players.
@@ -720,11 +682,10 @@ class Games(FmtClient):
         :param usernames: two or more usernames
         :return: iterator over all games played among the given players
         """
-        path = "api/stream/games-by-users"
-        payload = ",".join(usernames)
-        yield from self._r.post(
-            path, data=payload, fmt=NDJSON, stream=True, converter=models.Game.convert
-        )
+        path = 'api/stream/games-by-users'
+        payload = ','.join(usernames)
+        yield from self._r.post(path, data=payload, fmt=NDJSON, stream=True,
+                                converter=models.Game.convert)
 
     # move this to Account?
     def get_ongoing(self, count=10):
@@ -734,18 +695,18 @@ class Games(FmtClient):
         :return: some number of currently ongoing games
         :rtype: list
         """
-        path = "api/account/playing"
-        params = {"nb": count}
-        return self._r.get(path, params=params)["nowPlaying"]
+        path = 'api/account/playing'
+        params = {'nb': count}
+        return self._r.get(path, params=params)['nowPlaying']
 
-    @deprecated(version="1.0.0", reason="moved to tv")
+    @deprecated(version='1.0.0', reason='moved to tv')
     def get_tv_channels(self):
         """Get basic information about the best games being played.
 
         :return: best ongoing games in each speed and variant
         :rtype: dict
         """
-        path = "tv/channels"
+        path = 'tv/channels'
         return self._r.get(path)
 
     def import_game(self, pgn):
@@ -755,8 +716,8 @@ class Games(FmtClient):
         :return: game id
         :rtype: str
         """
-        path = "api/import"
-        payload = {"pgn": pgn}
+        path = 'api/import'
+        payload = {'pgn': pgn}
         return self._r.post(path, data=payload)["id"]
 
     def stream_moves(self, id):
@@ -766,22 +727,14 @@ class Games(FmtClient):
         :return: game stream
         :rtype: dict
         """
-        path = f"api/stream/game/{id}"
+        path = f'api/stream/game/{id}'
         return self._r.get(path, stream=True)
 
 
 class Challenges(BaseClient):
-    def create(
-        self,
-        username,
-        rated,
-        clock_limit=None,
-        clock_increment=None,
-        days=None,
-        color=None,
-        variant=None,
-        position=None,
-    ):
+
+    def create(self, username, rated, clock_limit=None, clock_increment=None,
+               days=None, color=None, variant=None, position=None):
         """Challenge another player to a game.
 
         :param str username: username of the player to challege
@@ -799,30 +752,22 @@ class Challenges(BaseClient):
         :return: challenge data
         :rtype: dict
         """
-        path = f"api/challenge/{username}"
+        path = f'api/challenge/{username}'
         payload = {
-            "rated": rated,
-            "clock.limit": clock_limit,
-            "clock.increment": clock_increment,
-            "days": days,
-            "color": color,
-            "variant": variant,
-            "fen": position,
+            'rated': rated,
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'days': days,
+            'color': color,
+            'variant': variant,
+            'fen': position,
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
 
-    def create_with_accept(
-        self,
-        username,
-        rated,
-        token,
-        clock_limit=None,
-        clock_increment=None,
-        days=None,
-        color=None,
-        variant=None,
-        position=None,
-    ):
+    def create_with_accept(self, username, rated, token, clock_limit=None,
+                           clock_increment=None, days=None, color=None,
+                           variant=None, position=None):
         """Start a game with another player.
 
         This is just like the regular challenge create except it forces the
@@ -845,29 +790,22 @@ class Challenges(BaseClient):
         :return: game data
         :rtype: dict
         """
-        path = f"api/challenge/{username}"
+        path = f'api/challenge/{username}'
         payload = {
-            "rated": rated,
-            "acceptByToken": token,
-            "clock.limit": clock_limit,
-            "clock.increment": clock_increment,
-            "days": days,
-            "color": color,
-            "variant": variant,
-            "fen": position,
+            'rated': rated,
+            'acceptByToken': token,
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'days': days,
+            'color': color,
+            'variant': variant,
+            'fen': position,
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
 
-    def create_ai(
-        self,
-        level=8,
-        clock_limit=None,
-        clock_increment=None,
-        days=None,
-        color=None,
-        variant=None,
-        position=None,
-    ):
+    def create_ai(self, level=8, clock_limit=None, clock_increment=None,
+                  days=None, color=None, variant=None, position=None):
         """Challenge AI to a game.
 
         :param int level: level of the AI (1 to 8)
@@ -884,21 +822,21 @@ class Challenges(BaseClient):
         :return: success indicator
         :rtype: bool
         """
-        path = "api/challenge/ai"
+        path = 'api/challenge/ai'
         payload = {
-            "level": level,
-            "clock.limit": clock_limit,
-            "clock.increment": clock_increment,
-            "days": days,
-            "color": color,
-            "variant": variant,
-            "fen": position,
+            'level': level,
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'days': days,
+            'color': color,
+            'variant': variant,
+            'fen': position,
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
 
-    def create_open(
-        self, clock_limit=None, clock_increment=None, variant=None, position=None
-    ):
+    def create_open(self, clock_limit=None, clock_increment=None,
+                    variant=None, position=None):
         """Create a challenge that any two players can join.
 
         :param int clock_limit: clock initial time (in seconds)
@@ -911,14 +849,15 @@ class Challenges(BaseClient):
         :return: challenge data
         :rtype: dict
         """
-        path = "api/challenge/open"
+        path = 'api/challenge/open'
         payload = {
-            "clock.limit": clock_limit,
-            "clock.increment": clock_increment,
-            "variant": variant,
-            "fen": position,
+            'clock.limit': clock_limit,
+            'clock.increment': clock_increment,
+            'variant': variant,
+            'fen': position,
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
 
     def accept(self, challenge_id):
         """Accept an incoming challenge.
@@ -927,8 +866,8 @@ class Challenges(BaseClient):
         :return: success indicator
         :rtype: bool
         """
-        path = f"api/challenge/{challenge_id}/accept"
-        return self._r.post(path)["ok"]
+        path = f'api/challenge/{challenge_id}/accept'
+        return self._r.post(path)['ok']
 
     def decline(self, challenge_id):
         """Decline an incoming challenge.
@@ -937,8 +876,8 @@ class Challenges(BaseClient):
         :return: success indicator
         :rtype: bool
         """
-        path = f"api/challenge/{challenge_id}/decline"
-        return self._r.post(path)["ok"]
+        path = f'api/challenge/{challenge_id}/decline'
+        return self._r.post(path)['ok']
 
     def cancel(self, challenge_id, opponent_token=None):
         """Cancel a challenge you sent, or aborts the game if the
@@ -951,9 +890,9 @@ class Challenges(BaseClient):
         :return: success indicator
         :rtype: bool
         """
-        path = f"api/challenge/{challenge_id}/cancel"
-        params = {"opponentToken": opponent_token}
-        return self._r.post(path, params=params)["ok"]
+        path = f'api/challenge/{challenge_id}/cancel'
+        params = {'opponentToken': opponent_token}
+        return self._r.post(path, params=params)['ok']
 
 
 class Board(BaseClient):
@@ -965,18 +904,11 @@ class Board(BaseClient):
         :return: stream of incoming events
         :rtype: iterator over the stream of events
         """
-        path = "api/stream/event"
+        path = 'api/stream/event'
         yield from self._r.get(path, stream=True)
 
-    def seek(
-        self,
-        time,
-        increment,
-        rated=False,
-        variant="standard",
-        color="random",
-        rating_range=None,
-    ):
+    def seek(self, time, increment, rated=False, variant='standard',
+             color='random', rating_range=None):
         """Create a public seek to start a game with a random opponent.
 
         :param int time: intial clock time in minutes
@@ -990,16 +922,16 @@ class Board(BaseClient):
         """
         if isinstance(rating_range, (list, tuple)):
             low, high = rating_range
-            rating_range = f"{low}-{high}"
+            rating_range = f'{low}-{high}'
 
-        path = "/api/board/seek"
+        path = '/api/board/seek'
         payload = {
-            "rated": str(bool(rated)).lower(),
-            "time": time,
-            "increment": increment,
-            "variant": variant,
-            "color": color,
-            "ratingRange": rating_range or "",
+            'rated': str(bool(rated)).lower(),
+            'time': time,
+            'increment': increment,
+            'variant': variant,
+            'color': color,
+            'ratingRange': rating_range or '',
         }
 
         # we time the seek
@@ -1018,8 +950,9 @@ class Board(BaseClient):
         :param str game_id: ID of a game
         :return: iterator over game states
         """
-        path = f"api/board/game/stream/{game_id}"
-        yield from self._r.get(path, stream=True, converter=models.GameState.convert)
+        path = f'api/board/game/stream/{game_id}'
+        yield from self._r.get(path, stream=True,
+                               converter=models.GameState.convert)
 
     def make_move(self, game_id, move):
         """Make a move in a board game.
@@ -1029,8 +962,8 @@ class Board(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/board/game/{game_id}/move/{move}"
-        return self._r.post(path)["ok"]
+        path = f'api/board/game/{game_id}/move/{move}'
+        return self._r.post(path)['ok']
 
     def post_message(self, game_id, text, spectator=False):
         """Post a message in a board game.
@@ -1041,10 +974,10 @@ class Board(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/board/game/{game_id}/chat"
-        room = "spectator" if spectator else "player"
-        payload = {"room": room, "text": text}
-        return self._r.post(path, json=payload)["ok"]
+        path = f'api/board/game/{game_id}/chat'
+        room = 'spectator' if spectator else 'player'
+        payload = {'room': room, 'text': text}
+        return self._r.post(path, json=payload)['ok']
 
     def abort_game(self, game_id):
         """Abort a board game.
@@ -1053,8 +986,8 @@ class Board(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/board/game/{game_id}/abort"
-        return self._r.post(path)["ok"]
+        path = f'api/board/game/{game_id}/abort'
+        return self._r.post(path)['ok']
 
     def resign_game(self, game_id):
         """Resign a board game.
@@ -1063,8 +996,8 @@ class Board(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/board/game/{game_id}/resign"
-        return self._r.post(path)["ok"]
+        path = f'api/board/game/{game_id}/resign'
+        return self._r.post(path)['ok']
 
     def handle_draw_offer(self, game_id, accept):
         """Create, accept, or decline a draw offer.
@@ -1083,8 +1016,8 @@ class Board(BaseClient):
         :rtype: bool
         """
         accept = "yes" if accept else "no"
-        path = f"/api/board/game/{game_id}/draw/{accept}"
-        return self._r.post(path)["ok"]
+        path = f'/api/board/game/{game_id}/draw/{accept}'
+        return self._r.post(path)['ok']
 
     def offer_draw(self, game_id):
         """Offer a draw in the given game.
@@ -1123,7 +1056,7 @@ class Bots(BaseClient):
         :return: stream of incoming events
         :rtype: iterator over the stream of events
         """
-        path = "api/stream/event"
+        path = 'api/stream/event'
         yield from self._r.get(path, stream=True)
 
     def get_online(self, nb):
@@ -1133,9 +1066,10 @@ class Bots(BaseClient):
         :return: list of online bots
         :rtype: iter
         """
-        path = "api/bot/online"
-        params = {"nb": nb}
-        yield from self._r.get(path, stream=True, converter=models.User.convert)
+        path = 'api/bot/online'
+        params = {'nb': nb}
+        yield from self._r.get(path, stream=True,
+                               converter=models.User.convert)
 
     def upgrade_to_bot(self):
         """Upgrade your account to a bot account.
@@ -1143,8 +1077,8 @@ class Bots(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = "api/bot/account/upgrade"
-        return self._r.post(path)["ok"]
+        path = 'api/bot/account/upgrade'
+        return self._r.post(path)['ok']
 
     def stream_game_state(self, game_id):
         """Get the stream of events for a bot game.
@@ -1152,8 +1086,9 @@ class Bots(BaseClient):
         :param str game_id: ID of a game
         :return: iterator over game states
         """
-        path = f"api/bot/game/stream/{game_id}"
-        yield from self._r.get(path, stream=True, converter=models.GameState.convert)
+        path = f'api/bot/game/stream/{game_id}'
+        yield from self._r.get(path, stream=True,
+                               converter=models.GameState.convert)
 
     def make_move(self, game_id, move, offering_draw=False):
         """Make a move in a bot game.
@@ -1163,9 +1098,9 @@ class Bots(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/bot/game/{game_id}/move/{move}"
-        params = {"offeringDraw": offering_draw}
-        return self._r.post(path, params=params)["ok"]
+        path = f'api/bot/game/{game_id}/move/{move}'
+        params = {'offeringDraw': offering_draw}
+        return self._r.post(path, params=params)['ok']
 
     def post_message(self, game_id, text, spectator=False):
         """Post a message in a bot game.
@@ -1176,10 +1111,10 @@ class Bots(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/bot/game/{game_id}/chat"
-        room = "spectator" if spectator else "player"
-        payload = {"room": room, "text": text}
-        return self._r.post(path, json=payload)["ok"]
+        path = f'api/bot/game/{game_id}/chat'
+        room = 'spectator' if spectator else 'player'
+        payload = {'room': room, 'text': text}
+        return self._r.post(path, json=payload)['ok']
 
     def abort_game(self, game_id):
         """Abort a bot game.
@@ -1188,8 +1123,8 @@ class Bots(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/bot/game/{game_id}/abort"
-        return self._r.post(path)["ok"]
+        path = f'api/bot/game/{game_id}/abort'
+        return self._r.post(path)['ok']
 
     def resign_game(self, game_id):
         """Resign a bot game.
@@ -1198,10 +1133,10 @@ class Bots(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/bot/game/{game_id}/resign"
-        return self._r.post(path)["ok"]
+        path = f'api/bot/game/{game_id}/resign'
+        return self._r.post(path)['ok']
 
-    @deprecated(version="1.0.0", reason="use Challenges.accept_challenge instead")
+    @deprecated(version='1.0.0', reason='use Challenges.accept_challenge instead')
     def accept_challenge(self, challenge_id):
         """Accept an incoming challenge.
 
@@ -1209,10 +1144,10 @@ class Bots(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/challenge/{challenge_id}/accept"
-        return self._r.post(path)["ok"]
+        path = f'api/challenge/{challenge_id}/accept'
+        return self._r.post(path)['ok']
 
-    @deprecated(version="1.0.0", reason="use Challenges.decline_challenge instead")
+    @deprecated(version='1.0.0', reason='use Challenges.decline_challenge instead')
     def decline_challenge(self, challenge_id):
         """Decline an incoming challenge.
 
@@ -1220,8 +1155,8 @@ class Bots(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"api/challenge/{challenge_id}/decline"
-        return self._r.post(path)["ok"]
+        path = f'api/challenge/{challenge_id}/decline'
+        return self._r.post(path)['ok']
 
 
 class Tournaments(FmtClient):
@@ -1233,24 +1168,12 @@ class Tournaments(FmtClient):
         :return: current tournaments
         :rtype: list
         """
-        path = "api/tournament"
+        path = 'api/tournament'
         return self._r.get(path, converter=models.Tournaments.convert_values)
 
-    def create(
-        self,
-        clock_time,
-        clock_increment,
-        minutes,
-        name=None,
-        wait_minutes=None,
-        variant=None,
-        berserkable=None,
-        rated=None,
-        start_date=None,
-        position=None,
-        password=None,
-        conditions=None,
-    ):
+    def create(self, clock_time, clock_increment, minutes, name=None,
+               wait_minutes=None, variant=None, berserkable=None, rated=None,
+               start_date=None, position=None, password=None, conditions=None):
         """Create a new tournament.
 
         .. note::
@@ -1277,33 +1200,26 @@ class Tournaments(FmtClient):
         :return: created tournament info
         :rtype: dict
         """
-        path = "api/tournament"
+        path = 'api/tournament'
         payload = {
-            "name": name,
-            "clockTime": clock_time,
-            "clockIncrement": clock_increment,
-            "minutes": minutes,
-            "waitMinutes": wait_minutes,
-            "startDate": start_date,
-            "variant": variant,
-            "rated": rated,
-            "position": position,
-            "berserkable": berserkable,
-            "password": password,
-            **{f"conditions.{c}": v for c, v in (conditions or {}).items()},
+            'name': name,
+            'clockTime': clock_time,
+            'clockIncrement': clock_increment,
+            'minutes': minutes,
+            'waitMinutes': wait_minutes,
+            'startDate': start_date,
+            'variant': variant,
+            'rated': rated,
+            'position': position,
+            'berserkable': berserkable,
+            'password': password,
+            **{f'conditions.{c}': v for c, v in (conditions or {}).items()},
         }
-        return self._r.post(path, json=payload, converter=models.Tournament.convert)
+        return self._r.post(path, json=payload,
+                            converter=models.Tournament.convert)
 
-    def export_games(
-        self,
-        id_,
-        as_pgn=False,
-        moves=None,
-        tags=None,
-        clocks=None,
-        evals=None,
-        opening=None,
-    ):
+    def export_games(self, id_, as_pgn=False, moves=None, tags=None,
+                     clocks=None, evals=None, opening=None):
         """Export games from a tournament.
 
         :param str id_: tournament ID
@@ -1318,16 +1234,17 @@ class Tournaments(FmtClient):
         :return: games
         :rtype: list
         """
-        path = f"api/tournament/{id_}/games"
+        path = f'api/tournament/{id_}/games'
         params = {
-            "moves": moves,
-            "tags": tags,
-            "clocks": clocks,
-            "evals": evals,
-            "opening": opening,
+            'moves': moves,
+            'tags': tags,
+            'clocks': clocks,
+            'evals': evals,
+            'opening': opening,
         }
         fmt = PGN if self._use_pgn(as_pgn) else NDJSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
 
     def stream_results(self, id_, limit=None):
         """Stream the results of a tournament.
@@ -1341,8 +1258,8 @@ class Tournaments(FmtClient):
         :return: iterator over the stream of results
         :rtype: iter
         """
-        path = f"api/tournament/{id_}/results"
-        params = {"nb": limit}
+        path = f'api/tournament/{id_}/results'
+        params = {'nb': limit}
         return self._r.get(path, params=params, stream=True)
 
     def stream_by_creator(self, username):
@@ -1352,24 +1269,15 @@ class Tournaments(FmtClient):
         :return: tournaments
         :rtype: iter
         """
-        path = f"api/user/{username}/tournament/created"
+        path = f'api/user/{username}/tournament/created'
         return self._r.get(path, stream=True)
 
 
 class Broadcasts(BaseClient):
     """Broadcast of one or more games."""
 
-    def create(
-        self,
-        name,
-        description,
-        sync_url=None,
-        markdown=None,
-        credit=None,
-        starts_at=None,
-        official=None,
-        throttle=None,
-    ):
+    def create(self, name, description, sync_url=None, markdown=None,
+               credit=None, starts_at=None, official=None, throttle=None):
         """Create a new broadcast.
 
         .. note::
@@ -1388,20 +1296,21 @@ class Broadcasts(BaseClient):
         :return: created tournament info
         :rtype: dict
         """
-        path = "broadcast/new"
+        path = 'broadcast/new'
         payload = {
-            "name": name,
-            "description": description,
-            "syncUrl": sync_url,
-            "markdown": markdown,
-            "credit": credit,
-            "startsAt": starts_at,
-            "official": official,
-            "throttle": throttle,
+            'name': name,
+            'description': description,
+            'syncUrl': sync_url,
+            'markdown': markdown,
+            'credit': credit,
+            'startsAt': starts_at,
+            'official': official,
+            'throttle': throttle,
         }
-        return self._r.post(path, json=payload, converter=models.Broadcast.convert)
+        return self._r.post(path, json=payload,
+                            converter=models.Broadcast.convert)
 
-    def get(self, broadcast_id, slug="-"):
+    def get(self, broadcast_id, slug='-'):
         """Get a broadcast by ID.
 
         :param str broadcast_id: ID of a broadcast
@@ -1409,22 +1318,12 @@ class Broadcasts(BaseClient):
         :return: broadcast information
         :rtype: dict
         """
-        path = f"broadcast/{slug}/{broadcast_id}"
+        path = f'broadcast/{slug}/{broadcast_id}'
         return self._r.get(path, converter=models.Broadcast.convert)
 
-    def update(
-        self,
-        broadcast_id,
-        name,
-        description,
-        sync_url,
-        markdown=None,
-        credit=None,
-        starts_at=None,
-        official=None,
-        throttle=None,
-        slug="-",
-    ):
+    def update(self, broadcast_id, name, description, sync_url, markdown=None,
+               credit=None, starts_at=None, official=None, throttle=None,
+               slug='-'):
         """Update an existing broadcast by ID.
 
         .. note::
@@ -1444,19 +1343,21 @@ class Broadcasts(BaseClient):
         :return: updated broadcast information
         :rtype: dict
         """
-        path = f"broadcast/{slug}/{broadcast_id}"
+        path = f'broadcast/{slug}/{broadcast_id}'
         payload = {
-            "name": name,
-            "description": description,
-            "syncUrl": sync_url,
-            "markdown": markdown,
-            "credit": credit,
-            "startsAt": starts_at,
-            "official": official,
-        }
-        return self._r.post(path, json=payload, converter=models.Broadcast.convert)
+            'name': name,
+            'description': description,
+            'syncUrl': sync_url,
+            'markdown': markdown,
+            'credit': credit,
+            'startsAt': starts_at,
+            'official': official,
 
-    def push_pgn_update(self, broadcast_id, pgn_games, slug="-"):
+        }
+        return self._r.post(path, json=payload,
+                            converter=models.Broadcast.convert)
+
+    def push_pgn_update(self, broadcast_id, pgn_games, slug='-'):
         """Manually update an existing broadcast by ID.
 
         :param str broadcast_id: ID of a broadcast
@@ -1464,9 +1365,9 @@ class Broadcasts(BaseClient):
         :return: success
         :rtype: bool
         """
-        path = f"broadcast/{slug}/{broadcast_id}/push"
-        games = "\n\n".join(g.strip() for g in pgn_games)
-        return self._r.post(path, data=games)["ok"]
+        path = f'broadcast/{slug}/{broadcast_id}/push'
+        games = '\n\n'.join(g.strip() for g in pgn_games)
+        return self._r.post(path, data=games)['ok']
 
 
 class Simuls(BaseClient):
@@ -1478,7 +1379,7 @@ class Simuls(BaseClient):
         :return: current simuls
         :rtype: list
         """
-        path = "api/simul"
+        path = 'api/simul'
         return self._r.get(path)
 
 
@@ -1491,7 +1392,7 @@ class Studies(BaseClient):
         :return: chapter
         :rtype: PGN
         """
-        path = f"/study/{study_id}/{chapter_id}.pgn"
+        path = f'/study/{study_id}/{chapter_id}.pgn'
         return self._r.get(path, fmt=PGN)
 
     def export(self, study_id):
@@ -1500,7 +1401,7 @@ class Studies(BaseClient):
         :return: all chapters as PGN
         :rtype: list
         """
-        path = f"/study/{study_id}.pgn"
+        path = f'/study/{study_id}.pgn'
         return self._r.get(path, fmt=PGN, stream=True)
 
 
@@ -1513,7 +1414,7 @@ class TV(FmtClient):
         :return: best ongoing games in each speed and variant
         :rtype: dict
         """
-        path = "api/tv/channels"
+        path = 'api/tv/channels'
         return self._r.get(path)
 
     def stream_current(self):
@@ -1522,19 +1423,12 @@ class TV(FmtClient):
         :return: dict of positions and moves of the current TV game
         :rtype: dict
         """
-        path = "api/tv/feed"
+        path = 'api/tv/feed'
         return self._r.get(path, fmt=NDJSON, stream=True)
 
-    def get_best_ongoing(
-        self,
-        channel,
-        nb=10,
-        moves=True,
-        pgn_in_json=False,
-        tags=True,
-        clocks=False,
-        opening=False,
-    ):
+    def get_best_ongoing(self, channel, nb=10, moves=True,
+                         pgn_in_json=False, tags=True,
+                         clocks=False, opening=False):
         """Get a list of ongoing games for a given TV channel.
 
         :param bool moves: whether to include the PGN moves
@@ -1548,16 +1442,17 @@ class TV(FmtClient):
         :return: exported game, as JSON or PGN
         :rtype: str or dict
         """
-        path = f"api/tv/{channel}"
+        path = f'api/tv/{channel}'
         params = {
-            "moves": moves,
-            "pgnInJson": pgn_in_json,
-            "tags": tags,
-            "clocks": clocks,
-            "opening": opening,
+            'moves': moves,
+            'pgnInJson': pgn_in_json,
+            'tags': tags,
+            'clocks': clocks,
+            'opening': opening,
         }
         fmt = PGN if self._use_pgn(not pgn_in_json) else NDJSON
-        return self._r.get(path, params=params, fmt=fmt, converter=models.Game.convert)
+        return self._r.get(path, params=params, fmt=fmt,
+                           converter=models.Game.convert)
 
 
 class Puzzles(BaseClient):
@@ -1569,7 +1464,7 @@ class Puzzles(BaseClient):
         :return: daily puzzle
         :rtype: dict
         """
-        path = "api/puzzle/daily"
+        path = 'api/puzzle/daily'
         return self._r.get(path, fmt=JSON)
 
     def get_activity(self, max_entries=None):
@@ -1579,8 +1474,8 @@ class Puzzles(BaseClient):
         :return: your puzzle activity
         :rtype: dict
         """
-        path = "api/puzzle/activity"
-        params = {"max": max_entries}
+        path = 'api/puzzle/activity'
+        params = {'max': max_entries}
         return self._r.get(path, params=params, fmt=NDJSON)
 
     def get_dashboard(self, days=30):
@@ -1590,7 +1485,7 @@ class Puzzles(BaseClient):
         :return: your puzzle dashboard
         :rtype: dict
         """
-        path = f"api/puzzle/dashboard/{days}"
+        path = f'api/puzzle/dashboard/{days}'
         return self._r.get(path, fmt=JSON)
 
     def get_storm_dashboard(self, username, days=30):
@@ -1601,17 +1496,16 @@ class Puzzles(BaseClient):
         :return: a player storm dashboard
         :rtype: dict
         """
-        path = f"api/storm/dashboard/{username}"
-        params = {"days": days}
+        path = f'api/storm/dashboard/{username}'
+        params = {'days': days}
         return self._r.get(path, params=params, fmt=JSON)
 
 
 class OpeningExplorer(BaseClient):
     """Chess openings explorer."""
 
-    def masters(
-        self, fen=None, play=None, since=1952, until=None, moves=12, top_games=15
-    ):
+    def masters(self, fen=None, play=None, since=1952, until=None, moves=12,
+                top_games=15):
         """Get from masters database.
 
         :param str fen: FEN of the root position
@@ -1624,30 +1518,20 @@ class OpeningExplorer(BaseClient):
         :return: masters database search results
         :rtype: dict
         """
-        path = "masters"
+        path = 'masters'
         params = {
-            "fen": fen,
-            "play": play,
-            "since": since,
-            "until": until,
-            "moves": moves,
-            "topGames": top_games,
+            'fen': fen,
+            'play': play,
+            'since': since,
+            'until': until,
+            'moves': moves,
+            'topGames': top_games,
         }
         return self._r.get(path, params=params)
 
-    def lichess(
-        self,
-        variant="standard",
-        fen=None,
-        play=None,
-        speeds=None,
-        ratings=None,
-        since="0000-01",
-        until=None,
-        moves=12,
-        top_games=15,
-        recent_games=4,
-    ):
+    def lichess(self, variant='standard', fen=None, play=None, speeds=None,
+                ratings=None, since='0000-01', until=None, moves=12,
+                top_games=15, recent_games=4):
         """Get from masters database.
 
         :param str variant: variant
@@ -1666,35 +1550,24 @@ class OpeningExplorer(BaseClient):
         :return: lichess database search results
         :rtype: dict
         """
-        path = "lichess"
+        path = 'lichess'
         params = {
-            "variant": variant,
-            "fen": fen,
-            "play": play,
-            "speeds": speeds,
-            "ratings": ratings,
-            "since": since,
-            "until": until,
-            "moves": moves,
-            "topGames": top_games,
-            "recentGames": recent_games,
+            'variant': variant,
+            'fen': fen,
+            'play': play,
+            'speeds': speeds,
+            'ratings': ratings,
+            'since': since,
+            'until': until,
+            'moves': moves,
+            'topGames': top_games,
+            'recentGames': recent_games,
         }
         return self._r.get(path, params=params)
 
-    def player(
-        self,
-        player,
-        color,
-        variant="standard",
-        fen=None,
-        play=None,
-        speeds=None,
-        modes=None,
-        since="0000-01",
-        until=None,
-        moves=12,
-        recent_games=4,
-    ):
+    def player(self, player, color, variant='standard', fen=None, play=None,
+               speeds=None, modes=None, since='0000-01', until=None, moves=12,
+               recent_games=4):
         """Get from masters database.
 
         :param str player: a username
@@ -1712,18 +1585,19 @@ class OpeningExplorer(BaseClient):
         :return: player database search results
         :rtype: dict
         """
-        path = "player"
+        path = 'player'
         params = {
-            "player": player,
-            "color": color,
-            "variant": variant,
-            "fen": fen,
-            "play": play,
-            "speeds": speeds,
-            "modes": modes,
-            "since": since,
-            "until": until,
-            "moves": moves,
-            "recentGames": recent_games,
+            'player': player,
+            'color': color,
+            'variant': variant,
+            'fen': fen,
+            'play': play,
+            'speeds': speeds,
+            'modes': modes,
+            'since': since,
+            'until': until,
+            'moves': moves,
+            'recentGames': recent_games,
         }
         return self._r.get(path, params=params, fmt=NDJSON)
+

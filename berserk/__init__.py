@@ -3,8 +3,8 @@
 
 
 __author__ = """Robert Grant"""
-__email__ = "rhgrant10@gmail.com"
-__version__ = "0.10.0"
+__email__ = 'rhgrant10@gmail.com'
+__version__ = '0.10.0'
 
 
 from .clients import Client  # noqa: F401
