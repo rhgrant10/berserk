@@ -65,7 +65,9 @@ class Tournaments(Model):
 
 
 class Broadcast(Model):
-    broadcast = utils.inner(utils.datetime_from_millis, 'startedAt', 'startsAt')
+    broadcast = utils.inner(
+        utils.datetime_from_millis, 'startedAt', 'startsAt'
+    )
 
 
 class RatingHistory(Model):

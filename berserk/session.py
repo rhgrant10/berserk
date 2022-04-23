@@ -26,7 +26,9 @@ class Requestor:
         self.base_url = base_url
         self.default_fmt = default_fmt
 
-    def request(self, method, path, *args, fmt=None, converter=utils.noop, **kwargs):
+    def request(
+        self, method, path, *args, fmt=None, converter=utils.noop, **kwargs
+    ):
         """Make a request for a resource in a paticular format.
 
         :param str method: HTTP verb
