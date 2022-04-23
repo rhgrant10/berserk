@@ -131,7 +131,6 @@ class PgnHandler(FormatHandler):
 
 
 class TextHandler(FormatHandler):
-
     def __init__(self):
         super().__init__(mime_type='text/plain')
 

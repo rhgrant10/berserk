@@ -64,6 +64,7 @@ def inner(func, *keys):
             except KeyError:
                 pass  # normal for keys to not be present sometimes
         return data
+
     return convert
 
 
@@ -73,6 +74,7 @@ def listing(func):
         for item in items:
             result.append(func(item))
         return result
+
     return convert
 
 
@@ -117,6 +119,7 @@ def build_adapter(mapper, sep='.'):
     :return: adapted data
     :rtype: dict
     """
+
     def get(data, location):
         for key in location.split(sep):
             data = data[key]
