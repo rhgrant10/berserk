@@ -26,8 +26,9 @@ class Requestor:
         self.base_url = base_url
         self.default_fmt = default_fmt
 
-    def request(self, method, path, *args, fmt=None, converter=utils.noop,
-                **kwargs):
+    def request(
+        self, method, path, *args, fmt=None, converter=utils.noop, **kwargs
+    ):
         """Make a request for a resource in a paticular format.
 
         :param str method: HTTP verb
@@ -43,9 +44,15 @@ class Requestor:
         url = urllib.parse.urljoin(self.base_url, path)
 
         is_stream = kwargs.get('stream')
-        LOG.debug('%s %s %s params=%s data=%s json=%s',
-                  'stream' if is_stream else 'request', method, url,
-                  kwargs.get('params'), kwargs.get('data'), kwargs.get('json'))
+        LOG.debug(
+            '%s %s %s params=%s data=%s json=%s',
+            'stream' if is_stream else 'request',
+            method,
+            url,
+            kwargs.get('params'),
+            kwargs.get('data'),
+            kwargs.get('json'),
+        )
         try:
             response = self.session.request(method, url, *args, **kwargs)
         except requests.RequestException as e:
