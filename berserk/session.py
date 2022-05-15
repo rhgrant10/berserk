@@ -4,9 +4,10 @@ import urllib
 
 import requests
 
-from . import utils
-from . import exceptions
-
+from . import (
+    exceptions,
+    utils,
+)
 
 LOG = logging.getLogger(__name__)
 

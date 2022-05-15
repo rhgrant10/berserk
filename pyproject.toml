@@ -4,3 +4,9 @@ requires = [
     "setuptools >= 40.6.2",
     "wheel",
 ]
+
+[tool.isort]
+multi_line_output = 3
+use_parentheses = true
+include_trailing_comma = true
+force_grid_wrap = 2

@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 from time import time as now
+
 import requests
 from deprecated import deprecated
 
-from .session import Requestor
-from .formats import JSON, LIJSON, PGN, NDJSON, TEXT
 from . import models
-
+from .formats import (
+    JSON,
+    LIJSON,
+    NDJSON,
+    PGN,
+    TEXT,
+)
+from .session import Requestor
 
 __all__ = [
     'Client',
