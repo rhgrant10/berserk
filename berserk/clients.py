@@ -785,14 +785,14 @@ class Games(FmtClient):
         payload = {'pgn': pgn}
         return self._r.post(path, data=payload)['id']
 
-    def stream_moves(self, id):
+    def stream_moves(self, game_id):
         """Stream moves of a game as NDJSON.
 
         :param str id: the ID of the game to stream
         :return: game stream
         :rtype: dict
         """
-        path = f'api/stream/game/{id}'
+        path = f'api/stream/game/{game_id}'
         return self._r.get(path, stream=True)
 
 
