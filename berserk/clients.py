@@ -1679,7 +1679,7 @@ class OpeningExplorer(BaseClient):
         moves=12,
         top_games=15,
     ):
-        """Get from masters database.
+        """Get openings from the masters database.
 
         :param str fen: FEN of the root position
         :param str play: comma separated sequence of legal moves in UCI
@@ -1715,7 +1715,7 @@ class OpeningExplorer(BaseClient):
         top_games=15,
         recent_games=4,
     ):
-        """Get from masters database.
+        """Get openings sampled from all lichess games.
 
         :param str variant: variant
         :param str fen: FEN of the root position
@@ -1762,7 +1762,7 @@ class OpeningExplorer(BaseClient):
         moves=12,
         recent_games=4,
     ):
-        """Get from masters database.
+        """Get openings of a particular lichess player.
 
         :param str player: a username
         :param str color: white or black
