@@ -1607,6 +1607,7 @@ class TV(FmtClient):
         """
         path = f'api/tv/{channel}'
         params = {
+            'nb': nb,
             'moves': moves,
             'pgnInJson': pgn_in_json,
             'tags': tags,
