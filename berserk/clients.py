@@ -488,7 +488,10 @@ class Teams(BaseClient):
         """
         path = f'api/team/{team_id}/arena'
         params = {'max': max_tournaments}
-        return self._r.get(path, params=params, stream=stream, fmt=NDJSON)
+        return self._r.get(
+            path, params=params, converter=models.Tournaments.convert,
+            stream=stream, fmt=NDJSON,
+        )
 
     def join(self, team_id, message=None, password=None):
         """Join a team.
