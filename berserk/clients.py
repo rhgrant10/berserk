@@ -168,7 +168,7 @@ class Account(BaseClient):
         params = {'v': value}
         return self._r.post(path, params=params)['ok']
 
-    @deprecated(version='1.0.0', reason='use Bots.upgrade_to_bot instead')
+    @deprecated(version='0.11.0', reason='use Bots.upgrade_to_bot instead')
     def upgrade_to_bot(self):
         """Upgrade your account to a bot account.
 
@@ -290,7 +290,7 @@ class Users(BaseClient):
         path = 'streamer/live'
         return self._r.get(path)
 
-    @deprecated(version='1.0.0', reason='moved to Relations')
+    @deprecated(version='0.11.0', reason='moved to Relations')
     def get_users_followed(self, username):
         """Stream users followed by a user.
 
@@ -303,7 +303,7 @@ class Users(BaseClient):
             path, stream=True, fmt=NDJSON, converter=models.User.convert
         )
 
-    @deprecated(version='1.0.0', reason='moved to relations and removed')
+    @deprecated(version='0.11.0', reason='moved to relations and removed')
     def get_users_following(self, username):
         """Stream users who follow a user.
 
@@ -367,7 +367,7 @@ class Relations(BaseClient):
             path, stream=True, fmt=NDJSON, converter=models.User.convert
         )
 
-    @deprecated(version='1.0.0', reason='Removed from Lichess API.')
+    @deprecated(version='0.11.0', reason='Removed from Lichess API.')
     def get_users_following(self, username):
         """Stream users who follow a user.
 
@@ -761,7 +761,7 @@ class Games(FmtClient):
         params = {'nb': count}
         return self._r.get(path, params=params)['nowPlaying']
 
-    @deprecated(version='1.0.0', reason='moved to tv')
+    @deprecated(version='0.11.0', reason='moved to tv')
     def get_tv_channels(self):
         """Get basic information about the best games being played.
 
