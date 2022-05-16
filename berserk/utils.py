@@ -138,3 +138,23 @@ def build_adapter(mapper, sep='.'):
         return result
 
     return adapter
+
+
+def page(
+    get_page,
+    args=None,
+    kwargs=None,
+    results_key='currentPageResults',
+    page_param='page',
+    first_page=1,
+    page_increment=1,
+    last_page=None,
+):
+    results = True
+    kwargs = kwargs or {}
+    kwargs.setdefault(page_param, first_page)
+    while results and not last_page or kwargs[page_param] <= last_page:
+        page = get_page(*args, **kwargs)
+        results = page[results_key]
+        yield from results
+        kwargs[page_param] += page_increment
