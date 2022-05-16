@@ -415,7 +415,10 @@ class Teams(BaseClient):
         """
         path = f'api/team/{team_id}/swiss'
         params = {'max': max_tournaments}
-        return self._r.get(path, params=params, stream=stream, fmt=NDJSON)
+        return self._r.get(
+            path, params=params, converter=models.Tournament.convert,
+            stream=stream, fmt=NDJSON,
+        )
 
     def get_team(self, team_id):
         """Get a single team informations.
