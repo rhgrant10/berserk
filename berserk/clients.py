@@ -338,34 +338,20 @@ class Users(BaseClient):
         return self._r.get(path, converter=models.User.convert)
 
     def get_crosstable(self, user1, user2, matchup=False):
-        """Get the crosstable between user1 and user2.
+        """Get the number of games and current score of any two users.
 
-        When using matchup it adds
+        Matchup information is only returned if the two given users are
+        playing at the moment of the request.
 
-        :param str user1: a username
-        :param str user2: a username
-        :param bool matchup: get matchup
-        :return: dict {"user1": ..., "user2": ..., "nbGames": ...
-            [, "matchup": {"user1": ..., "user2": ..., "nbGames": ...}]}
-            or False if failed.
+        :param str user1: user1
+        :param str user2: user2
+        :param bool matchup: whether to include current match data
+        :return: total number of games and current score of the given users
         :rtype: dict
         """
-        matchup = str(matchup).lower()
-        path = f'/api/crosstable/{user1}/{user2}?matchup={matchup}'
-        result = self._r.get(path, converter=models.User.convert)
-        base = {
-            user1: result['users'][user1.lower()],
-            user2: result['users'][user2.lower()],
-            'nbGames': result['nbGames'],
-        }
-        if matchup == 'true':
-            if not base.get('matchup', False):
-                return False
-            base['matchup'] = {}
-            base['matchup'][user1] = result['matchup']['users'][user1.lower()]
-            base['matchup'][user2] = result['matchup']['users'][user2.lower()]
-            base['matchup']['nbGames'] = result['matchup']['nbGames']
-        return base
+        path = f'/api/crosstable/{user1}/{user2}'
+        params = {'matchup': str(bool(matchup)).lower()}
+        return self._r.get(path, params=params)
 
 
 class Relations(BaseClient):
