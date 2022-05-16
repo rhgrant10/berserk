@@ -1154,6 +1154,26 @@ class Board(BaseClient):
         """
         return self.handle_draw_offer(game_id, False)
 
+    def accept_challenge(self, challenge_id):
+        """Accept an incoming challenge.
+
+        :param str challenge_id: ID of a challenge
+        :return: success
+        :rtype: bool
+        """
+        path = f'api/challenge/{challenge_id}/accept'
+        return self._r.post(path)['ok']
+
+    def decline_challenge(self, challenge_id):
+        """Decline an incoming challenge.
+
+        :param str challenge_id: ID of a challenge
+        :return: success
+        :rtype: bool
+        """
+        path = f'api/challenge/{challenge_id}/decline'
+        return self._r.post(path)['ok']
+
 
 class Bots(BaseClient):
     """Client for bot-related endpoints."""
