@@ -979,13 +979,14 @@ class Challenges(BaseClient):
         return self._r.post(path)['ok']
 
     def cancel(self, challenge_id, opponent_token=None):
-        """Cancel a challenge you sent, or aborts the game if the
-        challenge was accepted, but the game was not yet played.
+        """Cancel a challenge you sent.
+
+        A challenge that has been accepted but not yet played is aborted.
+        If the ``opponent_token`` is set, the game can be canceled even if
+        both players have moved.
 
         :param str challenge_id: id of the challenge to cancel
-        :param str opponent_token: optional ``challenge:write`` token of the
-            opponent. If set, the game can be canceled even if both players
-            have moved
+        :param str opponent_token: the opponent's ``challenge:write`` token
         :return: success indicator
         :rtype: bool
         """
