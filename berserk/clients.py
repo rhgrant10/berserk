@@ -584,7 +584,7 @@ class Games(FmtClient):
             path, params=params, fmt=fmt, converter=models.Game.convert
         )
 
-    def export_going(
+    def export_ongoing(
         self,
         username,
         moves=True,
