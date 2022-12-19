@@ -1062,6 +1062,15 @@ class Board(BaseClient):
             path, stream=True, converter=models.GameState.convert
         )
 
+    def stream_tv_game(self):
+        """Get the stream of events for the current game on Lichess TV.
+
+        :return iterator over game states
+        """
+        path = 'api/tv/feed'
+        yield from self._r.get(path, stream=True,
+                               converter=models.GameState.convert)
+
     def make_move(self, game_id, move):
         """Make a move in a board game.
 
