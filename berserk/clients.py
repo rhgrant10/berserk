@@ -1019,7 +1019,7 @@ class Board(BaseClient):
         """Create a public seek to start a game with a random opponent.
 
         :param int time: intial clock time in minutes
-        :param int increment: clock increment in minutes
+        :param int increment: clock increment in seconds
         :param bool rated: whether the game is rated (impacts ratings)
         :param str variant: game variant to use
         :param str color: color to play
