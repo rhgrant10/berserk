@@ -195,6 +195,17 @@ Leaderboards
     {'id': 'philippesaner',
      'perfs': {'horde': {'progress': 10, 'rating': 2230}},
      'username': 'PhilippeSaner'}
+     
+Rating History
+------------ 
+
+.. code-block:: python
+
+    >>> client.users.get_rating_history(username = 'kartikneti')[0]
+    {'name': 'Bullet',
+    'points': [Entry(year=2022, month=7, day=21, rating=1179),
+     Entry(year=2023, month=3, day=4, rating=1305)]}
+
 
 Public Data
 -----------
