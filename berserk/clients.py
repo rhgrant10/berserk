@@ -1623,6 +1623,17 @@ class TV(FmtClient):
 class Puzzles(BaseClient):
     """Chess puzzles."""
 
+    def get_puzzle(self, puzzle_id: str):
+        """Get a puzzle by its id.
+
+        :param puzzle_id : the id of the puzzle to retrieve
+            results
+        :return: the puzzle
+        :rtype: dict
+        """
+        path = f'api/puzzle/{puzzle_id}'
+        return self._r.get(path, fmt=JSON)
+
     def get_daily(self):
         """Get the daily Lichess puzzle.
 
